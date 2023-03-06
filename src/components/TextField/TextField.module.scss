@@ -1,0 +1,48 @@
+.field {
+  font-size: 0.88rem;
+  .label {
+    display: block;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .input {
+    padding: 0.75rem 1rem;
+    width: 100%;
+    border-radius: 100rem;
+    border: 1px solid var(--clr-grey-main);
+    font-size: inherit;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: text;
+
+    input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: inherit;
+    }
+
+    &::placeholder {
+      color: var(--clr-grey-main);
+    }
+
+    &.error {
+      border-color: var(--clr-red-main);
+    }
+  }
+
+  .helperText {
+    display: block;
+    font-size: 0.75rem;
+    min-height: 1.13rem;
+    margin-top: 0.2rem;
+
+    &.error {
+      color: var(--clr-red-main);
+    }
+  }
+}

@@ -1,0 +1,22 @@
+:root {
+  // ==== Colors ==== //
+  // Grey-scale
+  --clr-white-main: #ffffff;
+  --clr-grey-light: #9c9c9c33;
+  --clr-grey-main: #d1d5dc;
+  // Blue-scale
+  --clr-blue-main: #091f3d;
+  --clr-blue-dark: #091f3db3;
+  // Green-scale
+  --clr-green-main: #4bb29e;
+  --clr-green-light: #e6f4f1;
+  // Red-scale
+  --clr-red-main: #ff334f;
+
+  // ==== Shadows ==== //
+  --box-shadow: 0px 3px 6px var(--clr-grey-light);
+
+  // ==== Borders ==== //
+  --border-radius-main: 1rem;
+  --border-radius-max: 100rem;
+}

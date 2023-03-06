@@ -1,15 +1,29 @@
 {
-  "name": "next-netlify-starter",
+  "name": "ai-sustainability-goals",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "next": "9.4.0",
-    "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "@types/node": "18.14.4",
+    "@types/react": "18.0.28",
+    "@types/react-dom": "18.0.11",
+    "clsx": "^1.2.1",
+    "eslint": "8.35.0",
+    "eslint-config-next": "13.2.3",
+    "final-form": "^4.20.9",
+    "next": "13.2.3",
+    "react": "18.2.0",
+    "react-click-away-listener": "^2.2.2",
+    "react-dom": "18.2.0",
+    "react-final-form": "^6.5.9",
+    "typescript": "4.9.5"
+  },
+  "devDependencies": {
+    "sass": "^1.58.3"
   }
 }

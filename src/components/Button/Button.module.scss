@@ -1,0 +1,39 @@
+.button {
+  cursor: pointer;
+  border: 0;
+  color: var(--clr-white-main);
+  background: var(--clr-blue-main);
+  border-radius: var(--border-radius-max);
+  border: 1px solid var(--clr-blue-main);
+}
+
+.small {
+  padding: 0.5rem 1.8rem;
+  font-size: 0.8rem;
+}
+
+.medium {
+  padding: 1rem 2.6rem;
+  font-size: 0.88rem;
+}
+
+.large {
+  padding: 1.13rem 3.13rem;
+  font-size: 1rem;
+}
+
+.contained {
+  background: var(--clr-blue-main);
+  color: var(--clr-white-main);
+}
+
+.outlined {
+  background: var(--clr-white-main);
+  color: var(--clr-blue-main);
+}
+
+.disabled {
+  background: var(--clr-grey-main);
+  cursor: not-allowed;
+  border: 1px solid var(--clr-grey-main);
+}
