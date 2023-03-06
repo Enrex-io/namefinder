@@ -10,3 +10,21 @@
   width: fit-content;
   height: fit-content;
 }
+
+.disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+.processing {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -2,9 +2,9 @@ import { Form, Field } from "react-final-form";
 import Button from "@/components/Button/Button";
 import TextField from "@/components/TextField/TextField";
 import SelectField from "@/components/SelectField/SelectField";
-import { COUNTRY_OPTIONS } from "@/consts/countries";
+import { countries, COUNTRY_OPTIONS } from "@/consts/countries";
 import { INDUSTRY_OPTIONS } from "@/consts/industries";
-import { COMPANY_SIZE_OPTIONS } from "@/consts/companySizes";
+import { CompanySizes, COMPANY_SIZE_OPTIONS } from "@/consts/companySizes";
 import { CompanyDetails } from "@/types";
 import classes from "./SustainabilityCompanyDetails.module.scss";
 import {
@@ -19,7 +19,7 @@ const HEADING_TEXT = "Fill company information";
 const SUBMIT_BUTTON_TEXT = "Generate goals";
 
 interface Props {
-  onSubmitCompanyDetails: (companyDetails: CompanyDetails) => void;
+  onSubmitCompanyDetails: (companyDetails: CompanyDetails) => Promise<void>;
   isCompleted?: boolean;
 }
 
@@ -28,14 +28,18 @@ const SustainabilityCompanyDetails = ({
   isCompleted,
 }: Props) => {
   // TODO: Remove any and add proper types from initialValues
-  const handleSubmit = (values: Record<string, any>) => {
+  const handleSubmit = async (values: Record<string, any>) => {
     const result: CompanyDetails = {
       companyName: values.companyName,
       industry: values.sectorAndIndustry,
-      country: values.country,
-      companySize: values.companySize,
+      country:
+        countries.find((country) => country.code === values.country)?.label ||
+        values.country,
+      companySize:
+        CompanySizes[values.companySize as keyof typeof CompanySizes] ||
+        values.companySize,
     };
-    onSubmitCompanyDetails(result);
+    await onSubmitCompanyDetails(result);
   };
 
   return (
@@ -44,7 +48,7 @@ const SustainabilityCompanyDetails = ({
       <Form
         // TODO: Add initial values
         onSubmit={handleSubmit}
-        render={({ handleSubmit, dirty, errors }) => (
+        render={({ handleSubmit, dirty, errors, submitting }) => (
           <form onSubmit={handleSubmit} className={classes.form}>
             <Paper className={classes.paper}>
               <div className={classes.fieldsContainer}>
@@ -56,7 +60,7 @@ const SustainabilityCompanyDetails = ({
                       tabIndex={1}
                       label="Company Name"
                       hasAsterisk
-                      placeholder="Enrex"
+                      placeholder="Company name"
                       isError={meta.touched && meta.error}
                       helperMessage={meta.touched && meta.error}
                       {...input}
@@ -71,7 +75,7 @@ const SustainabilityCompanyDetails = ({
                       tabIndex={1}
                       label="Sector - Industry"
                       hasAsterisk
-                      placeholder="Technology - Support"
+                      placeholder="Select"
                       options={INDUSTRY_OPTIONS}
                       isError={meta.touched && meta.error}
                       helperMessage={meta.touched && meta.error}
@@ -87,7 +91,7 @@ const SustainabilityCompanyDetails = ({
                       tabIndex={1}
                       hasAsterisk
                       label="Country"
-                      placeholder="Angola"
+                      placeholder="Select"
                       options={COUNTRY_OPTIONS}
                       isError={meta.touched && meta.error}
                       helperMessage={meta.touched && meta.error}
@@ -103,7 +107,7 @@ const SustainabilityCompanyDetails = ({
                       tabIndex={1}
                       label="Company Size"
                       hasAsterisk
-                      placeholder="Medium 100 to 500 employees"
+                      placeholder="Select"
                       options={COMPANY_SIZE_OPTIONS}
                       isError={meta.touched && meta.error}
                       helperMessage={meta.touched && meta.error}
@@ -119,6 +123,7 @@ const SustainabilityCompanyDetails = ({
                 type="submit"
                 className={classes.button}
                 isDisabled={!dirty || !!Object.keys(errors || {}).length}
+                isSubmitting={submitting}
               >
                 {SUBMIT_BUTTON_TEXT}
               </Button>

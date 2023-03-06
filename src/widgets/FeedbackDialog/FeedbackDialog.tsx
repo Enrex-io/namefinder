@@ -7,21 +7,20 @@ import TextField from "@/components/TextField/TextField";
 import SelectField from "@/components/SelectField/SelectField";
 import { SUSTAINABILITY_GOALS_REASONS_OPTIONS } from "@/consts/sustainabilityGoalsReasons";
 import { validateEmail, validateReason } from "@/utils/validators";
+import { Feedback } from "@/types";
 
 const FEEDBACK_DIALOG_HEADING =
   "You are one step away. Drop in your email and the reason of wanting to try to generate the sustainability goals";
 const BUTTON_TEXT = "Let's go";
 
 interface Props {
-  onSubmit?: (values: unknown) => void;
+  onSubmit?: (values: Feedback) => void;
   onClose?: () => void;
 }
 
-// TODO: Add react-final-form
 const FeedbackDialog = ({ onSubmit, onClose }: Props) => {
-  const handleSubmitForm = (values: unknown) => {
-    // onSubmit?.(values);
-    onClose?.();
+  const handleSubmitForm = (values: Feedback) => {
+    onSubmit?.(values);
   };
 
   return (

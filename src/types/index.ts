@@ -23,3 +23,28 @@ export type Goal = {
   name: Lowercase<`${string}-${string}`>;
   label: Label;
 };
+
+export type GoalDescription = {
+  goal: string;
+  description: string;
+};
+
+export type CompanyDetailsWithGoals = {
+  goals: Array<string>;
+  companyDetails: CompanyDetails;
+};
+
+export type GoalsResponsePayload = {
+  result?: Array<string>;
+  errors?: Array<string>;
+};
+
+export type GoalsDescriptionsResponsePayload = {
+  result?: Array<GoalDescription>;
+  errors?: Array<string>;
+};
+
+export type Feedback = {
+  email: string;
+  reason: string;
+};

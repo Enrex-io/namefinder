@@ -11,9 +11,9 @@ const HEADING_TEXT = "Select sustainability goals that interest you";
 const SUBMIT_BUTTON_TEXT = "Generate descriptions";
 
 interface Props {
-  goals: Array<Goal>;
-  onSubmitGoals: (goals: Array<Goal>) => void;
-  onRegenerate: () => void;
+  goals: Array<string>;
+  onSubmitGoals: (goals: Array<string>) => Promise<void>;
+  onRegenerate: () => Promise<void>;
   isCompleted?: boolean;
 }
 
@@ -25,17 +25,17 @@ const SustainabilityGoals = ({
 }: Props) => {
   const initialValues = useMemo(() => {
     return goals.reduce((acc, goal) => {
-      acc[goal.name] = false;
+      acc[goal] = false;
       return acc;
     }, {} as Record<string, boolean>);
   }, [goals]);
 
-  const handleSubmitForm = (
+  const handleSubmitForm = async (
     values: Record<string, boolean>
     // form: { reset: Function }
   ) => {
-    const selectedGoals = goals.filter((goal) => values[goal.name]);
-    onSubmitGoals(selectedGoals);
+    const selectedGoals = goals.filter((goal) => values[goal]);
+    await onSubmitGoals(selectedGoals);
     // form.reset();
   };
 
@@ -45,7 +45,7 @@ const SustainabilityGoals = ({
       <Form
         initialValues={initialValues}
         onSubmit={handleSubmitForm}
-        render={({ handleSubmit, dirty, errors }) => (
+        render={({ handleSubmit, dirty, errors, submitting }) => (
           <form onSubmit={handleSubmit} className={classes.form}>
             <Paper
               direction="row"
@@ -57,13 +57,13 @@ const SustainabilityGoals = ({
             >
               {goals.map((goal) => (
                 <Field
-                  key={goal.name}
-                  name={goal.name}
+                  key={goal}
+                  name={goal}
                   type="checkbox"
                   render={({ input }) => (
                     <Chip
                       tabIndex={1}
-                      label={goal.label}
+                      label={goal}
                       isActive={input.checked}
                       onChange={(value: boolean) => {
                         const event = {
@@ -80,7 +80,7 @@ const SustainabilityGoals = ({
               ))}
               <RestartButton
                 type="button"
-                onClick={onRegenerate}
+                onRestart={async () => await onRegenerate()}
                 tabIndex={1}
               />
             </Paper>
@@ -90,6 +90,7 @@ const SustainabilityGoals = ({
                 type="submit"
                 className={classes.button}
                 isDisabled={!dirty || !!Object.keys(errors || {}).length}
+                isSubmitting={submitting}
               >
                 {SUBMIT_BUTTON_TEXT}
               </Button>

@@ -6,6 +6,7 @@ interface Props extends Omit<ComponentProps<"button">, "disabled"> {
   isDisabled?: boolean;
   size?: "small" | "medium" | "large";
   variant?: "contained" | "outlined";
+  isSubmitting?: boolean;
 }
 
 const Button = ({
@@ -14,6 +15,7 @@ const Button = ({
   isDisabled,
   size = "medium",
   variant = "contained",
+  isSubmitting,
   ...rest
 }: PropsWithChildren<Props>) => {
   const computed = clsx(
@@ -22,13 +24,14 @@ const Button = ({
     classes[size],
     {
       [classes.disabled]: isDisabled,
+      [classes.submitting]: isSubmitting,
     },
     className
   );
 
   return (
     <button disabled={isDisabled} className={computed} {...rest}>
-      {children}
+      {isSubmitting ? "Submitting..." : children}
     </button>
   );
 };

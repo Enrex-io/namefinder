@@ -4,6 +4,7 @@ import {
   MouseEvent,
   PropsWithChildren,
   useCallback,
+  useRef,
   useState,
 } from "react";
 import ClickAwayListener from "react-click-away-listener";
@@ -114,6 +115,7 @@ const SelectField = ({
       onChange={handleSearch}
       valueClassName={classes.selectField}
       value={searchValue}
+      inputMode="none"
       endAdornment={
         <ToggleButton isToggled={isOpen} onToggle={onClickToggleButton} />
       }

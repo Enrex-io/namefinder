@@ -1,4 +1,4 @@
-import { ComponentProps, PropsWithChildren, useRef } from "react";
+import { ComponentProps, forwardRef, PropsWithChildren, useRef } from "react";
 import clsx from "clsx";
 import classes from "./TextField.module.scss";
 
@@ -15,44 +15,57 @@ interface Props extends ComponentProps<"input"> {
   valueClassName?: string;
 }
 
-const TextField = ({
-  label,
-  isError,
-  hasAsterisk,
-  helperMessage,
-  className,
-  startAdornment,
-  endAdornment,
-  children,
-  fieldClassName,
-  valueClassName,
-  autoComplete = "off",
-  ...props
-}: PropsWithChildren<Props>) => {
-  const computedLabel = `${label}${hasAsterisk ? " *" : ""}`;
+const TextField = forwardRef<HTMLInputElement, PropsWithChildren<Props>>(
+  (
+    {
+      label,
+      isError,
+      hasAsterisk,
+      helperMessage,
+      className,
+      startAdornment,
+      endAdornment,
+      children,
+      fieldClassName,
+      valueClassName,
+      autoComplete = "off",
+      inputMode = "text",
+      ...props
+    }: PropsWithChildren<Props>,
+    ref: React.Ref<HTMLInputElement>
+  ) => {
+    const computedLabel = `${label}${hasAsterisk ? " *" : ""}`;
 
-  return (
-    <label className={clsx(classes.field, fieldClassName)}>
-      {label && <span className={classes.label}>{computedLabel}</span>}
-      <div
-        className={clsx(valueClassName, classes.input, className, {
-          [classes.error]: isError,
-        })}
-      >
-        {startAdornment}
-        <input autoComplete={autoComplete} {...props} />
-        {children}
-        {endAdornment}
-      </div>
-      <span
-        className={clsx(classes.helperText, {
-          [classes.error]: isError,
-        })}
-      >
-        {helperMessage}
-      </span>
-    </label>
-  );
-};
+    return (
+      <label className={clsx(classes.field, fieldClassName)}>
+        {label && <span className={classes.label}>{computedLabel}</span>}
+        <div
+          className={clsx(valueClassName, classes.input, className, {
+            [classes.error]: isError,
+          })}
+        >
+          {startAdornment}
+          <input
+            autoComplete={autoComplete}
+            {...props}
+            inputMode={inputMode}
+            ref={ref}
+          />
+          {children}
+          {endAdornment}
+        </div>
+        <span
+          className={clsx(classes.helperText, {
+            [classes.error]: isError,
+          })}
+        >
+          {helperMessage}
+        </span>
+      </label>
+    );
+  }
+);
+
+TextField.displayName = "TextField";
 
 export default TextField;
