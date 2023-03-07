@@ -22,6 +22,9 @@
 .fieldsContainer {
   width: 100%;
   padding: 1.88rem;
+  @media screen and (max-width: 768px) {
+    padding: 1.88rem 1.25rem;
+  }
 }
 
 .button {
