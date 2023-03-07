@@ -1,4 +1,4 @@
-import { CompanyDetails, GoalDescription } from "@/types";
+import { CompanyDetails, GoalDescription, ParsedCompanyDetails } from "@/types";
 import axios from "axios";
 
 const fetcher = axios.create({
@@ -8,7 +8,7 @@ const fetcher = axios.create({
 
 export class OpenAIApi {
   public static getGoalsByCompanyDetails = async (
-    companyDetails: CompanyDetails
+    companyDetails: ParsedCompanyDetails
   ): Promise<Array<string>> => {
     try {
       const response = await fetcher.post("/generateGoals", companyDetails);
@@ -21,7 +21,7 @@ export class OpenAIApi {
 
   public static getDescriptionsByGoals = async (
     goals: Array<string>,
-    companyDetails: CompanyDetails
+    companyDetails: ParsedCompanyDetails
   ): Promise<Array<GoalDescription>> => {
     try {
       const response = await fetcher.post("/generateDescriptions", {

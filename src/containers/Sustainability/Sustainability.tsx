@@ -4,27 +4,41 @@ import FeedbackDialog from "@/widgets/FeedbackDialog/FeedbackDialog";
 import SustainabilityGoals from "@/widgets/SustainabilityGoals/SustainabilityGoals";
 import SustainabilityDescriptions from "@/widgets/SustainabilityDescriptions/SustainabilityDescriptions";
 import SustainabilityCompanyDetails from "@/widgets/SustainabilityCompanyDetails/SustainabilityCompanyDetails";
-import { CompanyDetails, Feedback, GoalDescription } from "@/types";
+import {
+  CompanyDetails,
+  Feedback,
+  GoalDescription,
+  ParsedCompanyDetails,
+} from "@/types";
 import { OpenAIApi } from "@/services/OpenAIService.client";
-import { FeedbackService } from "@/services/FeedbackService.client";
 import classes from "./Sustainability.module.scss";
+import { MailchimpService } from "@/services/Mailchimp.client";
+import { SustainabilityGoalsReasons } from "@/consts/sustainabilityGoalsReasons";
 
 const Sustainability = () => {
   const [isDialogPassed, setIsDialogPassed] = useState<boolean>(false);
   const [isDetailsFilled, setIsDetailsFilled] = useState<boolean>(false);
   const [isGoalsFilled, setIsGoalsFilled] = useState<boolean>(false);
 
-  const [companyDetails, setCompanyDetails] = useState<CompanyDetails>();
   const [goals, setGoals] = useState<Array<string>>();
   const [descriptions, setDescriptions] = useState<Array<GoalDescription>>();
+  const [companyDetails, setCompanyDetails] = useState<ParsedCompanyDetails>();
 
   const handleSubmitFeedbackDialog = async (values: Feedback) => {
-    const isSuccess = await FeedbackService.sendFeedback(values);
-    if (!isSuccess) console.error("Error while sending feedback");
+    await MailchimpService.addSubscriber(
+      values.email,
+      companyDetails?.companyName || "Unknown",
+      companyDetails?.industry || "Unknown",
+      companyDetails?.country || "Unknown",
+      companyDetails?.companySize || "Unknown",
+      SustainabilityGoalsReasons[
+        values.reason as keyof typeof SustainabilityGoalsReasons
+      ] || "Unknown"
+    );
     setIsDialogPassed(true);
   };
 
-  const handleSubmitCompanyDetails = async (details: CompanyDetails) => {
+  const handleSubmitCompanyDetails = async (details: ParsedCompanyDetails) => {
     if (details !== companyDetails) setCompanyDetails(details);
     const generatedGoals = await OpenAIApi.getGoalsByCompanyDetails(details);
     if (!generatedGoals.length) {

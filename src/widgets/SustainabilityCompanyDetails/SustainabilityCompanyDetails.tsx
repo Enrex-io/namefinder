@@ -5,7 +5,7 @@ import SelectField from "@/components/SelectField/SelectField";
 import { countries, COUNTRY_OPTIONS } from "@/consts/countries";
 import { INDUSTRY_OPTIONS } from "@/consts/industries";
 import { CompanySizes, COMPANY_SIZE_OPTIONS } from "@/consts/companySizes";
-import { CompanyDetails } from "@/types";
+import { CompanyDetails, ParsedCompanyDetails } from "@/types";
 import classes from "./SustainabilityCompanyDetails.module.scss";
 import {
   validateCompanyName,
@@ -19,7 +19,9 @@ const HEADING_TEXT = "Fill company information";
 const SUBMIT_BUTTON_TEXT = "Generate goals";
 
 interface Props {
-  onSubmitCompanyDetails: (companyDetails: CompanyDetails) => Promise<void>;
+  onSubmitCompanyDetails: (
+    companyDetails: ParsedCompanyDetails
+  ) => Promise<void>;
   isCompleted?: boolean;
 }
 
@@ -29,7 +31,7 @@ const SustainabilityCompanyDetails = ({
 }: Props) => {
   // TODO: Remove any and add proper types from initialValues
   const handleSubmit = async (values: Record<string, any>) => {
-    const result: CompanyDetails = {
+    const result = {
       companyName: values.companyName,
       industry: values.sectorAndIndustry,
       country:

@@ -48,3 +48,7 @@ export type Feedback = {
   email: string;
   reason: string;
 };
+
+export type ParsedCompanyDetails = Omit<CompanyDetails, "country"> & {
+  country: string;
+};
