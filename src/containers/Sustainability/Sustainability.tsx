@@ -9,7 +9,6 @@ import { OpenAIApi } from "@/services/OpenAIService.client";
 import classes from "./Sustainability.module.scss";
 import { MailchimpService } from "@/services/Mailchimp.client";
 import { SustainabilityGoalsReasons } from "@/consts/sustainabilityGoalsReasons";
-import { usePostSizes } from "@/hooks/usePostSizes";
 
 const Sustainability = () => {
   const [isDialogPassed, setIsDialogPassed] = useState<boolean>(false);
@@ -19,15 +18,6 @@ const Sustainability = () => {
   const [goals, setGoals] = useState<Array<string>>();
   const [descriptions, setDescriptions] = useState<Array<GoalDescription>>();
   const [companyDetails, setCompanyDetails] = useState<ParsedCompanyDetails>();
-
-  usePostSizes(
-    goals,
-    descriptions,
-    companyDetails,
-    isDialogPassed,
-    isDetailsFilled,
-    isGoalsFilled
-  );
 
   const handleSubmitFeedbackDialog = async (values: Feedback) => {
     await MailchimpService.addSubscriber(
