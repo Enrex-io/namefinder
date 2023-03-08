@@ -28,10 +28,9 @@ export class OpenAIService {
   public static getGoalsByCompanyDetails = async (
     companyDetails: CompanyDetails
   ): Promise<Array<string>> => {
-    try {
-      const { companyName, industry, country, companySize } = companyDetails;
+    const { companyName, industry, country, companySize } = companyDetails;
 
-      const prompt = `Generate 20 sustainability goal titles (up to 4-5 words) based on company details:
+    const prompt = `Generate 20 sustainability goal titles (up to 4-5 words) based on company details:
 Company name: ${companyName}
 Sector Industry: ${industry}
 Country: ${country}
@@ -39,30 +38,25 @@ Company Size: ${companySize}
 
 Goals:\n`;
 
-      const options = {
-        prompt,
-        ...DEFAULT_OPTIONS,
-      };
-      const response = await openai.createCompletion(options);
-      const goals = getGoalsByResponseString(response.data.choices[0].text);
-      const shuffledGoals = shuffleArray(goals).slice(0, 10);
-      return shuffledGoals as Array<string>;
-    } catch (error) {
-      console.error("OpenAIService.getGoalsByCompanyDetails: ", error);
-      return [];
-    }
+    const options = {
+      prompt,
+      ...DEFAULT_OPTIONS,
+    };
+    const response = await openai.createCompletion(options);
+    const goals = getGoalsByResponseString(response.data.choices[0].text);
+    const shuffledGoals = shuffleArray(goals).slice(0, 10);
+    return shuffledGoals as Array<string>;
   };
 
   public static getDescriptionsByGoals = async (
     goals: Array<string>,
     companyDetails: CompanyDetails
   ): Promise<Array<GoalDescription>> => {
-    try {
-      const { companyName, industry, country, companySize } = companyDetails;
+    const { companyName, industry, country, companySize } = companyDetails;
 
-      return await Promise.all(
-        goals.map(async (goal: string) => {
-          const prompt = `Generate sustainability goal description (up to 160 words) for the goal provided below based on company details:
+    return await Promise.all(
+      goals.map(async (goal: string) => {
+        const prompt = `Generate sustainability goal description (up to 160 words) for the goal provided below based on company details:
 Company name: ${companyName}
 Sector Industry: ${industry}
 Country: ${country}
@@ -71,21 +65,17 @@ Goal: ${goal}
 
 Descriptions for the goal:\n`;
 
-          const options = {
-            prompt,
-            ...DEFAULT_OPTIONS,
-            temperature: 1,
-          };
-          const response = await openai.createCompletion(options);
-          return {
-            goal,
-            description: response.data.choices[0].text,
-          };
-        })
-      );
-    } catch (error) {
-      console.error("OpenAIService.getDescriptionsByGoals: ", error);
-      return [];
-    }
+        const options = {
+          prompt,
+          ...DEFAULT_OPTIONS,
+          temperature: 1,
+        };
+        const response = await openai.createCompletion(options);
+        return {
+          goal,
+          description: response.data.choices[0].text,
+        };
+      })
+    );
   };
 }

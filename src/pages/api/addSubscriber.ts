@@ -10,17 +10,14 @@ export default async function handler(
     merge_fields: { COMP_NAME, SECT_INDUS, COUNTRY, COMP_SIZE, AI_REASON },
   } = req.body;
 
-  try {
-    const response = await MailchimpService.addSubscriber(
-      email_address,
-      COMP_NAME,
-      SECT_INDUS,
-      COUNTRY,
-      COMP_SIZE,
-      AI_REASON
-    );
-    res.status(200).json(response);
-  } catch (error) {
-    res.status(500).json(error);
-  }
+  await MailchimpService.addSubscriber(
+    email_address,
+    COMP_NAME,
+    SECT_INDUS,
+    COUNTRY,
+    COMP_SIZE,
+    AI_REASON
+  )
+    .then((response) => res.status(200).json(response))
+    .catch((error) => res.status(500).json(error));
 }

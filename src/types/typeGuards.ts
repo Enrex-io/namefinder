@@ -1,5 +1,5 @@
-import { CompanyDetailsWithGoals } from "./index";
-import { CompanyDetails } from ".";
+import { CompanyDetails, CompanyDetailsWithGoals } from ".";
+import { AxiosError } from "axios";
 
 export const isCompanyDetails = (body: any): body is CompanyDetails => {
   const { companyName, industry, country, companySize } = body;
@@ -11,4 +11,8 @@ export const isCompanyDetailsWithGoals = (
 ): body is CompanyDetailsWithGoals => {
   const { goals, companyDetails } = body;
   return isCompanyDetails(companyDetails) && goals?.length;
+};
+
+export const isAxiosError = (error: any): error is AxiosError => {
+  return !!error?.isAxiosError;
 };

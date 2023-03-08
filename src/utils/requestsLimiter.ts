@@ -1,6 +1,6 @@
 import { rateLimit } from "express-rate-limit";
 
-const DEFAULT_TIME_WINDOW = 60 * 1000; // 1 minute;
+const DEFAULT_TIME_WINDOW = 60 * 1000 * 5; // 3 minutes;
 const DEFAULT_MAX_REQUESTS = 10; // limit each IP to 10 requests per windowMs
 const DEFAULT_MESSAGE =
   "Too many requests from this IP, please try again later";

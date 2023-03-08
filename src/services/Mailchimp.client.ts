@@ -7,22 +7,22 @@ const fetcher = axios.create({
 export class MailchimpService {
   public static addSubscriber = async (
     email: string,
-    companyName: string,
-    sectorIndustry: string,
-    country: string,
-    companySize: string,
-    reasonForAIInterest: string
+    companyName?: string,
+    sectorIndustry?: string,
+    country?: string,
+    companySize?: string,
+    reasonForAIInterest?: string
   ) => {
     try {
       const requestData = {
         email_address: email,
         status: "subscribed",
         merge_fields: {
-          COMP_NAME: companyName,
-          SECT_INDUS: sectorIndustry,
-          COUNTRY: country,
-          COMP_SIZE: companySize,
-          AI_REASON: reasonForAIInterest,
+          COMP_NAME: companyName || "Unknown",
+          SECT_INDUS: sectorIndustry || "Unknown",
+          COUNTRY: country || "Unknown",
+          COMP_SIZE: companySize || "Unknown",
+          AI_REASON: reasonForAIInterest || "Unknown",
         },
       };
 

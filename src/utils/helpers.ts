@@ -5,3 +5,7 @@ export const shuffleArray = (array: Array<unknown>) => {
   }
   return array;
 };
+
+export const delay = (fn: Function, ms: number, ...args: Array<unknown>) => {
+  return setTimeout(fn, ms, ...args);
+};

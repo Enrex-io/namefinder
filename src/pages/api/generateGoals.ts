@@ -1,12 +1,13 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import { OpenAIService } from "@/services/OpenAIService.server";
-import { CompanyDetails, GoalsResponsePayload } from "@/types";
+import { CompanyDetails, ResponsePayload } from "@/types";
 import { isCompanyDetails } from "@/types/typeGuards";
 import { limiter } from "@/utils/requestsLimiter";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { applyTaskTimeout } from "@/utils/taskTimeout";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<GoalsResponsePayload>
+  res: NextApiResponse<ResponsePayload>
 ) {
   await new Promise((resolve) => {
     limiter(req, res, async () => {
@@ -14,20 +15,34 @@ export default async function handler(
       const BODY = req.body;
 
       if (METHOD !== "POST") {
-        res.status(405).json({ errors: ["Method not allowed"] });
-        return;
+        return resolve(res.status(405).json({ error: "Method not allowed" }));
       }
-
       if (!isCompanyDetails(BODY)) {
-        res.status(400).json({ errors: ["Company details are required"] });
-        return;
+        return resolve(
+          res.status(400).json({ error: "Company details are required" })
+        );
       }
 
       const companyDetails: CompanyDetails = BODY;
-      const generatedResponse = await OpenAIService.getGoalsByCompanyDetails(
-        companyDetails
+
+      const openAIServicePromise: Promise<ResponsePayload> =
+        OpenAIService.getGoalsByCompanyDetails(companyDetails)
+          .then((goals) => ({ result: goals }))
+          .catch((error) => ({ error: error.message }));
+
+      const result = await applyTaskTimeout<ResponsePayload>(
+        openAIServicePromise,
+        () => ({ error: "Request timed out" })
       );
-      resolve(res.status(200).json({ result: generatedResponse }));
+
+      const hasError = !!result.error;
+      let status: number = hasError
+        ? result.error === "Request timed out"
+          ? 408
+          : 400
+        : 200;
+
+      return resolve(res.status(status).json(result));
     });
   });
 }

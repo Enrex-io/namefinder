@@ -1,4 +1,4 @@
-import { ComponentProps, PropsWithChildren } from "react";
+import { ComponentProps, PropsWithChildren, forwardRef } from "react";
 
 interface Props extends ComponentProps<"div"> {
   spacing?: number;
@@ -15,30 +15,37 @@ interface Props extends ComponentProps<"div"> {
   wrap?: "nowrap" | "wrap" | "wrap-reverse";
 }
 
-const Stack = ({
-  spacing: gap = 0,
-  direction: flexDirection = "row",
-  alignItems = "stretch",
-  justifyContent = "stretch",
-  wrap: flexWrap = "nowrap",
-  style,
-  children,
-  ...props
-}: Props) => {
-  const innerStyle = {
-    display: "flex",
-    gap: `${gap}rem`,
-    flexDirection,
-    flexWrap,
-    alignItems,
-    justifyContent,
-  };
+const Stack = forwardRef<HTMLDivElement, PropsWithChildren<Props>>(
+  (
+    {
+      spacing: gap = 0,
+      direction: flexDirection = "row",
+      alignItems = "stretch",
+      justifyContent = "stretch",
+      wrap: flexWrap = "nowrap",
+      style,
+      children,
+      ...props
+    }: Props,
+    ref
+  ) => {
+    const innerStyle = {
+      display: "flex",
+      gap: `${gap}rem`,
+      flexDirection,
+      flexWrap,
+      alignItems,
+      justifyContent,
+    };
 
-  return (
-    <div style={{ ...innerStyle, ...style }} {...props}>
-      {children}
-    </div>
-  );
-};
+    return (
+      <div style={{ ...innerStyle, ...style }} {...props} ref={ref}>
+        {children}
+      </div>
+    );
+  }
+);
+
+Stack.displayName = "Stack";
 
 export default Stack;

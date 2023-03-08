@@ -1,0 +1,31 @@
+.container {
+  background-color: var(--clr-white-main);
+  width: 100%;
+  border-radius: var(--border-radius-main);
+
+  .wrapper {
+    border-radius: 1rem;
+    border: 1px solid var(--clr-grey-main);
+    padding: 1.88rem;
+    display: flex;
+    gap: 0.88rem;
+    flex-direction: column;
+    align-self: center;
+    justify-content: center;
+
+    .fieldsContainer {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.88rem;
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .heading {
+      font-size: 1.13rem;
+      font-weight: 500;
+      text-align: left;
+    }
+  }
+}

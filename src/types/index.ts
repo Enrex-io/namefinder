@@ -52,3 +52,8 @@ export type Feedback = {
 export type ParsedCompanyDetails = Omit<CompanyDetails, "country"> & {
   country: string;
 };
+
+export type ResponsePayload<T = unknown> = {
+  result?: T;
+  error?: string;
+};
