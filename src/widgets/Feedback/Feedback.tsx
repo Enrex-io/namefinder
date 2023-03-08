@@ -12,19 +12,19 @@ const FEEDBACK_HEADING =
 const BUTTON_TEXT = "Let's go";
 
 interface Props {
-  onSubmit?: (values: Feedback) => void;
+  onSubmit?: (values: Feedback) => Promise<void>;
 }
 
 const Feedback = ({ onSubmit }: Props) => {
-  const handleSubmitForm = (values: Feedback) => {
-    onSubmit?.(values);
+  const handleSubmitForm = async (values: Feedback) => {
+    await onSubmit?.(values);
   };
 
   return (
     <div className={classes.container}>
       <Form
         onSubmit={handleSubmitForm}
-        render={({ handleSubmit, dirty, errors }) => (
+        render={({ handleSubmit, dirty, errors, submitting }) => (
           <form onSubmit={handleSubmit} className={classes.wrapper}>
             <h2 className={classes.heading}>{FEEDBACK_HEADING}</h2>
             <div className={classes.fieldsContainer}>
@@ -63,6 +63,7 @@ const Feedback = ({ onSubmit }: Props) => {
             <Button
               type="submit"
               isDisabled={!dirty || !!Object.keys(errors || {}).length}
+              isSubmitting={submitting}
             >
               {BUTTON_TEXT}
             </Button>

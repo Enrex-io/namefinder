@@ -14,14 +14,18 @@ interface Props {
   goals: Array<string>;
   onSubmitGoals: (goals: Array<string>) => Promise<void>;
   onRegenerate: () => Promise<void>;
-  isCompleted?: boolean;
+  isHiddenButton?: boolean;
+  onGenerateDescriptions?: () => Promise<void>;
+  isGeneratingDescriptions?: boolean;
 }
 
 const SustainabilityGoals = ({
   goals,
   onSubmitGoals,
   onRegenerate,
-  isCompleted,
+  isHiddenButton = false,
+  onGenerateDescriptions,
+  isGeneratingDescriptions,
 }: Props) => {
   const initialValues = useMemo(() => {
     return goals.reduce((acc, goal) => {
@@ -73,6 +77,7 @@ const SustainabilityGoals = ({
                           },
                         };
                         input.onChange(event);
+                        handleSubmit();
                       }}
                     />
                   )}
@@ -84,13 +89,14 @@ const SustainabilityGoals = ({
                 tabIndex={1}
               />
             </Paper>
-            {!isCompleted && (
+            {!isHiddenButton && (
               <Button
+                type="button"
                 tabIndex={1}
-                type="submit"
                 className={classes.button}
                 isDisabled={!dirty || !!Object.keys(errors || {}).length}
-                isSubmitting={submitting}
+                isSubmitting={isGeneratingDescriptions}
+                onClick={onGenerateDescriptions}
               >
                 {SUBMIT_BUTTON_TEXT}
               </Button>

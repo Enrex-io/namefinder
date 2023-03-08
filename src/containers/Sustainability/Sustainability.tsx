@@ -26,131 +26,134 @@ const scrollDown = () => {
 };
 
 const Sustainability = () => {
-  const [isFeedbackFulfilled, setIsFeedbackFulfilled] =
-    useState<boolean>(false);
-  const [isDetailsFilled, setIsDetailsFilled] = useState<boolean>(false);
-  const [isGoalsFilled, setIsGoalsFilled] = useState<boolean>(false);
-
   const [error, setError] = useState<string | null>(null);
 
-  const [goals, setGoals] = useState<Array<string>>();
-  const [descriptions, setDescriptions] = useState<Array<GoalDescription>>();
-  const [companyDetails, setCompanyDetails] = useState<ParsedCompanyDetails>();
+  const [isGeneratingDescriptions, setIsGeneratingDescriptions] =
+    useState<boolean>(false);
+  const [hasSubmittedFeedback, setHasSubmittedFeedback] =
+    useState<boolean>(false);
+  const [hasSubmittedCompanyDetails, setHasSubmittedCompanyDetails] =
+    useState<boolean>(false);
+  const [submittedCompanyDetails, setSubmittedCompanyDetails] =
+    useState<ParsedCompanyDetails | null>(null);
 
-  const handleSubmitFeedbackDialog = async (values: FeedbackType) => {
-    await MailchimpService.addSubscriber(
-      values.email,
-      companyDetails?.companyName,
-      companyDetails?.industry,
-      companyDetails?.country,
-      companyDetails?.companySize,
-      SustainabilityGoalsReasons[
-        values.reason as keyof typeof SustainabilityGoalsReasons
-      ]
-    );
-    setIsFeedbackFulfilled(true);
+  const [selectedGoals, setSelectedGoals] = useState<Array<string>>();
+  const [generatedDescriptions, setGeneratedDescriptions] =
+    useState<Array<GoalDescription>>();
+  const [generatedGoals, setGeneratedGoals] = useState<Array<string>>();
+
+  const handleSubmitCompanyDetails = async (
+    companyDetails: ParsedCompanyDetails
+  ) => {
+    const response = await OpenAIApi.getGoalsByCompanyDetails(companyDetails);
+    if (response.error) return setError(response.error);
+    setError(null);
+    setGeneratedGoals(response.result);
+    setHasSubmittedCompanyDetails(true);
+    setSubmittedCompanyDetails(companyDetails);
+    delay(scrollDown, 500);
   };
 
-  const handleSubmitCompanyDetails = async (details: ParsedCompanyDetails) => {
-    if (details !== companyDetails) setCompanyDetails(details);
-    const payload = await OpenAIApi.getGoalsByCompanyDetails(details);
-    if (payload.error) {
-      setError(payload.error);
-      return;
+  const handleSummitFeedback = async (feedback: FeedbackType) => {
+    if (!submittedCompanyDetails || !selectedGoals?.length) return;
+    const responseFeedback = await MailchimpService.addSubscriber(
+      feedback.email,
+      submittedCompanyDetails.companyName,
+      submittedCompanyDetails.industry,
+      submittedCompanyDetails.country,
+      submittedCompanyDetails.companySize,
+      feedback.reason
+    );
+    if (responseFeedback?.error) return setError(responseFeedback.error);
+    const responseDescriptions = await OpenAIApi.getDescriptionsByGoals(
+      selectedGoals,
+      submittedCompanyDetails
+    );
+    if (responseDescriptions.error) return setError(responseDescriptions.error);
+    setGeneratedDescriptions(responseDescriptions.result);
+    setError(null);
+    setHasSubmittedFeedback(true);
+    delay(scrollDown, 500);
+  };
+
+  const handleRegenerateSingleGoal = async (
+    goalDescription: GoalDescription
+  ) => {
+    if (!submittedCompanyDetails) return;
+    const response = await OpenAIApi.getDescriptionsByGoals(
+      [goalDescription.goal],
+      submittedCompanyDetails
+    );
+    if (response.error) return;
+    const newDescriptions = generatedDescriptions?.map((description) => {
+      if (description.goal === goalDescription.goal && response.result?.[0])
+        return response.result[0];
+      return description;
+    });
+    setGeneratedDescriptions(newDescriptions);
+    delay(scrollDown, 500);
+  };
+
+  const handleRegenerateAllGoals = async () => {
+    if (!submittedCompanyDetails) return;
+    const response = await OpenAIApi.getGoalsByCompanyDetails(
+      submittedCompanyDetails
+    );
+    if (response.error) return setError(response.error);
+    setError(null);
+    setGeneratedGoals(response.result);
+    setSelectedGoals([]);
+  };
+
+  const handleGenerateDescriptions = async () => {
+    setIsGeneratingDescriptions(true);
+    if (!submittedCompanyDetails || !selectedGoals?.length) return;
+    const response = await OpenAIApi.getDescriptionsByGoals(
+      selectedGoals,
+      submittedCompanyDetails
+    );
+    if (response.error) {
+      setIsGeneratingDescriptions(false);
+      return setError(response.error);
     }
     setError(null);
-    setGoals(payload.result);
-    setIsGoalsFilled(false);
-    setIsDetailsFilled(true);
-    delay(scrollDown, 100);
-  };
-
-  const handleSubmitGoals = async (goals: Array<string>) => {
-    if (!companyDetails) {
-      const error = "Company details are not set";
-      console.error(error);
-      setError(error);
-      return;
-    }
-    if (!goals.length) {
-      const error = "Goals are not set";
-      console.error(error);
-      setError(error);
-      return;
-    }
-    const payload = await OpenAIApi.getDescriptionsByGoals(
-      goals,
-      companyDetails
-    );
-    if (payload.error) {
-      setError(payload.error);
-      return;
-    }
-    setError(null);
-    setDescriptions(payload.result);
-    payload.result?.length && setIsGoalsFilled(true);
-    delay(scrollDown, 100);
-  };
-
-  const handleRegenerateSingleGoal = async (goal: GoalDescription) => {
-    if (!companyDetails) {
-      const error = "Company details are not set";
-      console.error(error);
-      setError(error);
-      return;
-    }
-    const payload = await OpenAIApi.getDescriptionsByGoals(
-      [goal.goal],
-      companyDetails
-    );
-    if (payload.error) {
-      setError(payload.error);
-      return;
-    }
-    if (payload.result?.length) {
-      const newDescription = payload.result[0];
-      setDescriptions((prev) =>
-        prev?.map((description) =>
-          description.goal === goal.goal ? newDescription : description
-        )
-      );
-      setError(null);
-      return;
-    }
-    console.error("Error while generating description");
-    setError("Error while generating description");
-    return;
+    setGeneratedDescriptions(response.result);
+    setIsGeneratingDescriptions(false);
+    delay(scrollDown, 500);
   };
 
   return (
     <Paper spacing={1.25} direction="column" className={classes.container}>
       <SustainabilityCompanyDetails
         onSubmitCompanyDetails={handleSubmitCompanyDetails}
-        isCompleted={isDetailsFilled}
+        isHiddenButton={hasSubmittedCompanyDetails}
       />
-      {isDetailsFilled && (
+      {generatedGoals?.length && (
         <>
           <SustainabilityGoals
-            goals={goals || []}
-            onSubmitGoals={handleSubmitGoals}
-            onRegenerate={async () =>
-              companyDetails &&
-              (await handleSubmitCompanyDetails(companyDetails))
-            }
-            isCompleted={!isFeedbackFulfilled}
+            goals={generatedGoals}
+            onSubmitGoals={async (goals) => {
+              if (!selectedGoals?.length && !hasSubmittedFeedback)
+                delay(scrollDown, 500);
+              setSelectedGoals(goals);
+            }}
+            onRegenerate={handleRegenerateAllGoals}
+            isHiddenButton={!hasSubmittedFeedback}
+            onGenerateDescriptions={handleGenerateDescriptions}
+            isGeneratingDescriptions={isGeneratingDescriptions}
           />
-          {!isFeedbackFulfilled && (
-            <Feedback onSubmit={handleSubmitFeedbackDialog} />
+          {!hasSubmittedFeedback && !!selectedGoals?.length && (
+            <Feedback onSubmit={handleSummitFeedback} />
           )}
-          {isGoalsFilled && !!descriptions?.length && (
+          {generatedDescriptions?.length && (
             <SustainabilityDescriptions
-              descriptions={descriptions}
+              descriptions={generatedDescriptions}
               regenerateSingleGoal={handleRegenerateSingleGoal}
             />
           )}
         </>
       )}
-      {!!error && (
+      {error && (
         <Stack
           className={classes.errorContainer}
           alignItems="center"

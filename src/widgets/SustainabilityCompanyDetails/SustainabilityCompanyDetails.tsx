@@ -22,12 +22,12 @@ interface Props {
   onSubmitCompanyDetails: (
     companyDetails: ParsedCompanyDetails
   ) => Promise<void>;
-  isCompleted?: boolean;
+  isHiddenButton?: boolean;
 }
 
 const SustainabilityCompanyDetails = ({
   onSubmitCompanyDetails,
-  isCompleted,
+  isHiddenButton = false,
 }: Props) => {
   // TODO: Remove any and add proper types from initialValues
   const handleSubmit = async (values: Record<string, any>) => {
@@ -119,7 +119,7 @@ const SustainabilityCompanyDetails = ({
                 />
               </div>
             </Paper>
-            {!isCompleted && (
+            {!isHiddenButton && (
               <Button
                 tabIndex={1}
                 type="submit"
