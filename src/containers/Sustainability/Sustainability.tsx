@@ -38,6 +38,7 @@ const Sustainability = () => {
     useState<ParsedCompanyDetails | null>(null);
 
   const [selectedGoals, setSelectedGoals] = useState<Array<string>>();
+  const [isGenerateDescriptionsClicked, setIsGenerateDescriptionsClicked] = useState<boolean>(false)
   const [generatedDescriptions, setGeneratedDescriptions] =
     useState<Array<GoalDescription>>();
   const [generatedGoals, setGeneratedGoals] = useState<Array<string>>();
@@ -106,6 +107,10 @@ const Sustainability = () => {
   };
 
   const handleGenerateDescriptions = async () => {
+    if (!isGenerateDescriptionsClicked) {
+      return setIsGenerateDescriptionsClicked(true);
+    }
+
     setIsGeneratingDescriptions(true);
     if (!submittedCompanyDetails || !selectedGoals?.length) return;
     const response = await OpenAIApi.getDescriptionsByGoals(
@@ -138,11 +143,11 @@ const Sustainability = () => {
               setSelectedGoals(goals);
             }}
             onRegenerate={handleRegenerateAllGoals}
-            isHiddenButton={!hasSubmittedFeedback}
+            isHiddenButton={false}
             onGenerateDescriptions={handleGenerateDescriptions}
             isGeneratingDescriptions={isGeneratingDescriptions}
           />
-          {!hasSubmittedFeedback && !!selectedGoals?.length && (
+          {!hasSubmittedFeedback && isGenerateDescriptionsClicked && (
             <Feedback onSubmit={handleSummitFeedback} />
           )}
           {generatedDescriptions?.length && (

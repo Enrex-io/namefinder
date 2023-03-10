@@ -115,7 +115,7 @@ const SelectField = ({
       onChange={handleSearch}
       valueClassName={classes.selectField}
       value={searchValue}
-      inputMode="none"
+      // inputMode="none"
       endAdornment={
         <ToggleButton isToggled={isOpen} onToggle={onClickToggleButton} />
       }
