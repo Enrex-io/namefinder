@@ -8,7 +8,7 @@ import classes from "./SustainabilityGoals.module.scss";
 import Paper from "@/components/Paper/Paper";
 
 const HEADING_TEXT = "Select sustainability goals that interest you";
-const SUBMIT_BUTTON_TEXT = "Generate descriptions";
+const SUBMIT_BUTTON_TEXT = "Select & Generate descriptions";
 
 interface Props {
   goals: Array<string>;
