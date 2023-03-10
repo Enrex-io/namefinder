@@ -1,4 +1,5 @@
 import { CompanySizes } from "@/consts/companySizes";
+import { SustainabilityGoalsReasons } from "@/consts/sustainabilityGoalsReasons";
 
 export type Phone = `${number}` | `${number}-${number}`;
 export type Label = Capitalize<string>;
@@ -46,7 +47,7 @@ export type GoalsDescriptionsResponsePayload = {
 
 export type Feedback = {
   email: string;
-  reason: string;
+  reason: keyof typeof SustainabilityGoalsReasons;
 };
 
 export type ParsedCompanyDetails = Omit<CompanyDetails, "country"> & {

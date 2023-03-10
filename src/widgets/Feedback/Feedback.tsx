@@ -40,6 +40,7 @@ const Feedback = ({ onSubmit }: Props) => {
                     isError={meta.touched && meta.error}
                     helperMessage={meta.touched && meta.error}
                     autoComplete="email"
+                    inputMode="email"
                     {...input}
                   />
                 )}
@@ -55,6 +56,7 @@ const Feedback = ({ onSubmit }: Props) => {
                     options={SUSTAINABILITY_GOALS_REASONS_OPTIONS}
                     isError={meta.touched && meta.error}
                     helperMessage={meta.touched && meta.error}
+                    inputMode="none"
                     {...input}
                   />
                 )}
