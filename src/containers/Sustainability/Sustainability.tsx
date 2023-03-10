@@ -63,7 +63,7 @@ const Sustainability = () => {
       submittedCompanyDetails.industry,
       submittedCompanyDetails.country,
       submittedCompanyDetails.companySize,
-      feedback.reason
+      SustainabilityGoalsReasons[feedback.reason]
     );
     if (responseFeedback?.error) return setError(responseFeedback.error);
     const responseDescriptions = await OpenAIApi.getDescriptionsByGoals(
