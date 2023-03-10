@@ -113,6 +113,7 @@ const SustainabilityCompanyDetails = ({
                       options={COMPANY_SIZE_OPTIONS}
                       isError={meta.touched && meta.error}
                       helperMessage={meta.touched && meta.error}
+                      inputMode="none"
                       {...input}
                     />
                   )}
