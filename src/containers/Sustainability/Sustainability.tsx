@@ -127,6 +127,12 @@ const Sustainability = () => {
     delay(scrollDown, 500);
   };
 
+  useEffect(() => {
+    if (!hasSubmittedFeedback && isGenerateDescriptionsClicked) {
+      delay(scrollDown, 500);
+    }
+  }, [isGenerateDescriptionsClicked, hasSubmittedFeedback])
+
   return (
     <Paper spacing={1.25} direction="column" className={classes.container}>
       <SustainabilityCompanyDetails
