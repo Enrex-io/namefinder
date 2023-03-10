@@ -34,14 +34,13 @@ const Sustainability = () => {
     useState<boolean>(false);
   const [hasSubmittedCompanyDetails, setHasSubmittedCompanyDetails] =
     useState<boolean>(false);
-  const [submittedCompanyDetails, setSubmittedCompanyDetails] =
-    useState<ParsedCompanyDetails | null>(null);
 
   const [selectedGoals, setSelectedGoals] = useState<Array<string>>();
   const [isGenerateDescriptionsClicked, setIsGenerateDescriptionsClicked] = useState<boolean>(false)
   const [generatedDescriptions, setGeneratedDescriptions] =
     useState<Array<GoalDescription>>();
   const [generatedGoals, setGeneratedGoals] = useState<Array<string>>();
+  const companyDetailsRef = useRef<ParsedCompanyDetails | null>(null)
 
   const handleSubmitCompanyDetails = async (
     companyDetails: ParsedCompanyDetails
@@ -51,24 +50,23 @@ const Sustainability = () => {
     setError(null);
     setGeneratedGoals(response.result);
     setHasSubmittedCompanyDetails(true);
-    setSubmittedCompanyDetails(companyDetails);
     delay(scrollDown, 500);
   };
 
   const handleSummitFeedback = async (feedback: FeedbackType) => {
-    if (!submittedCompanyDetails || !selectedGoals?.length) return;
+    if (!companyDetailsRef.current || !selectedGoals?.length) return;
     const responseFeedback = await MailchimpService.addSubscriber(
       feedback.email,
-      submittedCompanyDetails.companyName,
-      submittedCompanyDetails.industry,
-      submittedCompanyDetails.country,
-      submittedCompanyDetails.companySize,
+      companyDetailsRef.current.companyName,
+      companyDetailsRef.current.industry,
+      companyDetailsRef.current.country,
+      companyDetailsRef.current.companySize,
       SustainabilityGoalsReasons[feedback.reason]
     );
     if (responseFeedback?.error) return setError(responseFeedback.error);
     const responseDescriptions = await OpenAIApi.getDescriptionsByGoals(
       selectedGoals,
-      submittedCompanyDetails
+      companyDetailsRef.current
     );
     if (responseDescriptions.error) return setError(responseDescriptions.error);
     setGeneratedDescriptions(responseDescriptions.result);
@@ -80,10 +78,10 @@ const Sustainability = () => {
   const handleRegenerateSingleGoal = async (
     goalDescription: GoalDescription
   ) => {
-    if (!submittedCompanyDetails) return;
+    if (!companyDetailsRef.current) return;
     const response = await OpenAIApi.getDescriptionsByGoals(
       [goalDescription.goal],
-      submittedCompanyDetails
+      companyDetailsRef.current
     );
     if (response.error) return;
     const newDescriptions = generatedDescriptions?.map((description) => {
@@ -96,9 +94,9 @@ const Sustainability = () => {
   };
 
   const handleRegenerateAllGoals = async () => {
-    if (!submittedCompanyDetails) return;
+    if (!companyDetailsRef.current) return;
     const response = await OpenAIApi.getGoalsByCompanyDetails(
-      submittedCompanyDetails
+      companyDetailsRef?.current
     );
     if (response.error) return setError(response.error);
     setError(null);
@@ -112,10 +110,10 @@ const Sustainability = () => {
     }
 
     setIsGeneratingDescriptions(true);
-    if (!submittedCompanyDetails || !selectedGoals?.length) return;
+    if (!companyDetailsRef.current || !selectedGoals?.length) return;
     const response = await OpenAIApi.getDescriptionsByGoals(
       selectedGoals,
-      submittedCompanyDetails
+      companyDetailsRef.current
     );
     if (response.error) {
       setIsGeneratingDescriptions(false);
@@ -138,6 +136,7 @@ const Sustainability = () => {
       <SustainabilityCompanyDetails
         onSubmitCompanyDetails={handleSubmitCompanyDetails}
         isHiddenButton={hasSubmittedCompanyDetails}
+        valuesRef={companyDetailsRef}
       />
       {generatedGoals?.length && (
         <>

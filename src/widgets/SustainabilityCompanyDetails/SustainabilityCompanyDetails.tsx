@@ -14,6 +14,8 @@ import {
   validateSectorAndIndustry,
 } from "@/utils/validators";
 import Paper from "@/components/Paper/Paper";
+import { MutableRefObject, useRef } from "react";
+import { parseCompanyDetails } from "@/utils/helpers";
 
 const HEADING_TEXT = "Fill company information";
 const SUBMIT_BUTTON_TEXT = "Generate goals";
@@ -23,24 +25,19 @@ interface Props {
     companyDetails: ParsedCompanyDetails
   ) => Promise<void>;
   isHiddenButton?: boolean;
+  valuesRef?: MutableRefObject<Record<string, any> | null>;
 }
 
 const SustainabilityCompanyDetails = ({
   onSubmitCompanyDetails,
   isHiddenButton = false,
+  valuesRef
 }: Props) => {
+  const innerRef = useRef<Record<string, any> | null>(null);
+  const ref = valuesRef || innerRef;
   // TODO: Remove any and add proper types from initialValues
   const handleSubmit = async (values: Record<string, any>) => {
-    const result = {
-      companyName: values.companyName,
-      industry: values.sectorAndIndustry,
-      country:
-        countries.find((country) => country.code === values.country)?.label ||
-        values.country,
-      companySize:
-        CompanySizes[values.companySize as keyof typeof CompanySizes] ||
-        values.companySize,
-    };
+    const result = parseCompanyDetails(values);
     await onSubmitCompanyDetails(result);
   };
 
@@ -50,89 +47,84 @@ const SustainabilityCompanyDetails = ({
       <Form
         // TODO: Add initial values
         onSubmit={handleSubmit}
-        render={({ handleSubmit, dirty, errors, submitting }) => (
-          <form onSubmit={handleSubmit} className={classes.form}>
-            <Paper className={classes.paper}>
-              <div className={classes.fieldsContainer}>
-                <Field
-                  name="companyName"
-                  validate={validateCompanyName}
-                  render={({ input, meta }) => (
-                    <TextField
-                      tabIndex={1}
-                      label="Company Name"
-                      hasAsterisk
-                      placeholder="Company name"
-                      isError={meta.touched && meta.error}
-                      helperMessage={meta.touched && meta.error}
-                      {...input}
-                    />
-                  )}
-                />
-                <Field
-                  name="sectorAndIndustry"
-                  validate={validateSectorAndIndustry}
-                  render={({ input, meta }) => (
-                    <SelectField
-                      tabIndex={1}
-                      label="Sector - Industry"
-                      hasAsterisk
-                      placeholder="Select"
-                      options={INDUSTRY_OPTIONS}
-                      isError={meta.touched && meta.error}
-                      helperMessage={meta.touched && meta.error}
-                      {...input}
-                    />
-                  )}
-                />
-                <Field
-                  name="country"
-                  validate={validateCountry}
-                  render={({ input, meta }) => (
-                    <SelectField
-                      tabIndex={1}
-                      hasAsterisk
-                      label="Country"
-                      placeholder="Select"
-                      options={COUNTRY_OPTIONS}
-                      isError={meta.touched && meta.error}
-                      helperMessage={meta.touched && meta.error}
-                      {...input}
-                    />
-                  )}
-                />
-                <Field
-                  name="companySize"
-                  validate={validateCompanySize}
-                  render={({ input, meta }) => (
-                    <SelectField
-                      tabIndex={1}
-                      label="Company Size"
-                      hasAsterisk
-                      placeholder="Select"
-                      options={COMPANY_SIZE_OPTIONS}
-                      isError={meta.touched && meta.error}
-                      helperMessage={meta.touched && meta.error}
-                      inputMode="none"
-                      {...input}
-                    />
-                  )}
-                />
-              </div>
-            </Paper>
-            {!isHiddenButton && (
-              <Button
-                tabIndex={1}
-                type="submit"
-                className={classes.button}
-                isDisabled={!dirty || !!Object.keys(errors || {}).length}
-                isSubmitting={submitting}
-              >
-                {SUBMIT_BUTTON_TEXT}
-              </Button>
-            )}
-          </form>
-        )}
+        render={({ handleSubmit, dirty, errors, submitting, values }) => {
+          ref.current = parseCompanyDetails(values);
+          return (
+            <form onSubmit={handleSubmit} className={classes.form}>
+              <Paper className={classes.paper}>
+                <div className={classes.fieldsContainer}>
+                  <Field
+                    name="companyName"
+                    validate={validateCompanyName}
+                    render={({ input, meta }) => (
+                      <TextField
+                        tabIndex={1}
+                        label="Company Name"
+                        hasAsterisk
+                        placeholder="Company name"
+                        isError={meta.touched && meta.error}
+                        helperMessage={meta.touched && meta.error}
+                        {...input} />
+                    )} />
+                  <Field
+                    name="sectorAndIndustry"
+                    validate={validateSectorAndIndustry}
+                    render={({ input, meta }) => (
+                      <SelectField
+                        tabIndex={1}
+                        label="Sector - Industry"
+                        hasAsterisk
+                        placeholder="Select"
+                        options={INDUSTRY_OPTIONS}
+                        isError={meta.touched && meta.error}
+                        helperMessage={meta.touched && meta.error}
+                        {...input} />
+                    )} />
+                  <Field
+                    name="country"
+                    validate={validateCountry}
+                    render={({ input, meta }) => (
+                      <SelectField
+                        tabIndex={1}
+                        hasAsterisk
+                        label="Country"
+                        placeholder="Select"
+                        options={COUNTRY_OPTIONS}
+                        isError={meta.touched && meta.error}
+                        helperMessage={meta.touched && meta.error}
+                        {...input} />
+                    )} />
+                  <Field
+                    name="companySize"
+                    validate={validateCompanySize}
+                    render={({ input, meta }) => (
+                      <SelectField
+                        tabIndex={1}
+                        label="Company Size"
+                        hasAsterisk
+                        placeholder="Select"
+                        options={COMPANY_SIZE_OPTIONS}
+                        isError={meta.touched && meta.error}
+                        helperMessage={meta.touched && meta.error}
+                        inputMode="none"
+                        {...input} />
+                    )} />
+                </div>
+              </Paper>
+              {!isHiddenButton && (
+                <Button
+                  tabIndex={1}
+                  type="submit"
+                  className={classes.button}
+                  isDisabled={!dirty || !!Object.keys(errors || {}).length}
+                  isSubmitting={submitting}
+                >
+                  {SUBMIT_BUTTON_TEXT}
+                </Button>
+              )}
+            </form>
+          );
+        }}
       />
     </div>
   );
