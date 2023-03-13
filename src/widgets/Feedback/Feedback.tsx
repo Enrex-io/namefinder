@@ -8,7 +8,7 @@ import { validateEmail, validateReason } from "@/utils/validators";
 import { Feedback } from "@/types";
 
 const FEEDBACK_HEADING =
-  "We will also send your goals and their descriptions to your email after each goal description generation";
+  "You're almost there. Enter your email address below to receive your personalised sustainability goals.";
 const BUTTON_TEXT = "Let's go";
 
 interface Props {
