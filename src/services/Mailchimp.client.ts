@@ -1,3 +1,4 @@
+import { GoalDescription } from './../types/index';
 import axios from "axios";
 
 const fetcher = axios.create({
@@ -30,6 +31,21 @@ export class MailchimpService {
       return response.data;
     } catch (error) {
       console.error("Error adding subscriber to Mailchimp audience:", error);
+    }
+  };
+  public static sendGoals = async (
+    email: string,
+    goalDescriptions?: GoalDescription[]
+  ) => {
+    try {
+      const requestData = {
+        email_address: email,
+      };
+
+      const response = await fetcher.post("/sendGoals", requestData);
+      return response.data;
+    } catch (error) {
+      console.error("Error sending generated goals by email:", error);
     }
   };
 }

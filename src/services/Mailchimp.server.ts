@@ -1,23 +1,26 @@
-import axios from "axios";
-// import mailchimp, {
-//   ApiClient,
-//   MergeVar,
-//   MessagesSendRequest,
-// } from "@mailchimp/mailchimp_transactional";
-import client, { Status } from "@mailchimp/mailchimp_marketing";
+import mailchimp, {
+  ApiClient,
+  MergeVar,
+  MessagesSendRequest,
+} from "@mailchimp/mailchimp_transactional";
+import clientMarketing, { Status } from "@mailchimp/mailchimp_marketing";
 import { EMAIL_TYPES, EMAIL_TYPES_MESSAGES } from "@/consts/mail";
 
 const DEFAULT_SENDER_EMAIL = "no-reply@greenifs.com";
-const apiKey = process.env.MAILCHIMP_API_KEY;
+const apiKeyMarketing = process.env.MAILCHIMP_API_KEY;
+const apiKeyTransactional = process.env.MAILCHIMP_API_KEY;
 const dataCenter = process.env.MAILCHIMP_DATA_CENTER;
 const audienceId = process.env.MAILCHIMP_AUDIENCE_ID;
 
-client.setConfig({
-  apiKey,
+clientMarketing.setConfig({
+  apiKey: apiKeyMarketing,
   server: dataCenter,
 });
 
 export class MailchimpService {
+  private static clientTransactional: ApiClient = mailchimp(apiKeyTransactional || '');
+  private static clientMarketing = clientMarketing;
+
   public static addSubscriber = async (
     email: string,
     companyName: string,
@@ -38,34 +41,35 @@ export class MailchimpService {
       },
     };
 
-    const response = await client.lists.addListMember(audienceId || '', requestData);
+    const response = await this.clientMarketing.lists.addListMember(audienceId || '', requestData);
 
     return response;
   };
 
-  // public static async sendSingleMail(
-  //   receiver: string,
-  //   emailType: EMAIL_TYPES,
-  //   customContent?: string
-  // ): Promise<void> {
-  //   try {
-  //     const { subject, content } = EMAIL_TYPES_MESSAGES[emailType];
-  //     if (!content && !customContent) {
-  //       throw new Error("No content for the email was provided");
-  //     }
-  //     const request: MessagesSendRequest = {
-  //       message: {
-  //         from_email: DEFAULT_SENDER_EMAIL,
-  //         to: [{ email: receiver }],
-  //         subject,
-  //         text: customContent || content,
-  //       },
-  //     };
-  //     await this.client.messages.send(request);
-  //   } catch (error: unknown) {
-  //     console.error("error", { error });
-  //   }
-  // }
+  public static async sendSingleMail(
+    receiver: string,
+    emailType: EMAIL_TYPES,
+    customContent?: string
+  ): Promise<void> {
+    const { subject, content } = EMAIL_TYPES_MESSAGES[emailType];
+    if (!content && !customContent) {
+      throw new Error("No content for the email was provided");
+    }
+    const request: MessagesSendRequest = {
+      message: {
+        from_email: DEFAULT_SENDER_EMAIL,
+        to: [{ email: receiver }],
+        subject,
+        text: customContent || content,
+      },
+    };
+
+    const res = await this.clientTransactional.messages.send(request);
+
+    if (res instanceof Error) {
+      throw new Error('Mailchimp service error', res);
+    }
+  }
 
   // public static async sendSingleTemplate(
   //   receiver: string,

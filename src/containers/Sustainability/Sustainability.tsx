@@ -17,6 +17,7 @@ import { delay } from "@/utils/helpers";
 import Feedback from "@/widgets/Feedback/Feedback";
 import WindowScrollControls from "@/components/WindowScrollControls/WindowScrollControls";
 import StatusDisplay from "@/components/StatusDisplay/StatusDisplay";
+import Sendme from "@/widgets/Sendme/Sendme";
 
 const scrollDown = () => {
   window.scrollTo({
@@ -30,8 +31,7 @@ const Sustainability = () => {
 
   const [isGeneratingDescriptions, setIsGeneratingDescriptions] =
     useState<boolean>(false);
-  const [hasSubmittedFeedback, setHasSubmittedFeedback] =
-    useState<boolean>(false);
+  const [submittedFeedback, setSubmittedFeedback] = useState<FeedbackType>();
   const [hasSubmittedCompanyDetails, setHasSubmittedCompanyDetails] =
     useState<boolean>(false);
 
@@ -41,6 +41,7 @@ const Sustainability = () => {
     useState<Array<GoalDescription>>();
   const [generatedGoals, setGeneratedGoals] = useState<Array<string>>();
   const companyDetailsRef = useRef<ParsedCompanyDetails | null>(null)
+  const hasSubmittedFeedback = Boolean(submittedFeedback);
 
   const handleSubmitCompanyDetails = async (
     companyDetails: ParsedCompanyDetails
@@ -71,7 +72,7 @@ const Sustainability = () => {
     if (responseDescriptions.error) return setError(responseDescriptions.error);
     setGeneratedDescriptions(responseDescriptions.result);
     setError(null);
-    setHasSubmittedFeedback(true);
+    setSubmittedFeedback(feedback);
     delay(scrollDown, 500);
   };
 
@@ -161,6 +162,16 @@ const Sustainability = () => {
               regenerateSingleGoal={handleRegenerateSingleGoal}
             />
           )}
+          {
+            generatedDescriptions?.length && (
+              <Sendme 
+              descriptions={generatedDescriptions} 
+              feedback={submittedFeedback} 
+              companyDetailsRef={companyDetailsRef} 
+              setError={setError} 
+              />
+            )
+          }
         </>
       )}
       {error && (
