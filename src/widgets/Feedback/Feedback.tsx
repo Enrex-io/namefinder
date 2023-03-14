@@ -2,13 +2,13 @@ import { Field, Form } from "react-final-form";
 import Button from "@/components/Button/Button";
 import classes from "./Feedback.module.scss";
 import TextField from "@/components/TextField/TextField";
-import SelectField from "@/components/SelectField/SelectField";
+import MultipleSelectField from "@/components/MultipleSelectField/MultipleSelectField";
 import { SUSTAINABILITY_GOALS_REASONS_OPTIONS } from "@/consts/sustainabilityGoalsReasons";
 import { validateEmail, validateReason } from "@/utils/validators";
 import { Feedback } from "@/types";
 
 const FEEDBACK_HEADING =
-  "We will also send your goals and their descriptions to your email after each goal description generation";
+  "You're almost there. Enter your email address below to receive your personalised sustainability goals and updates on sustainability-related events.";
 const BUTTON_TEXT = "Let's go";
 
 interface Props {
@@ -35,6 +35,7 @@ const Feedback = ({ onSubmit }: Props) => {
                 render={({ input, meta }) => (
                   <TextField
                     label="Email"
+                    hasAsterisk
                     placeholder="mail@example.com"
                     type="email"
                     isError={meta.touched && meta.error}
@@ -50,9 +51,10 @@ const Feedback = ({ onSubmit }: Props) => {
                 initialValue=""
                 validate={validateReason}
                 render={({ input, meta }) => (
-                  <SelectField
-                    label="Reason you want to try GreenGoalsAI"
-                    placeholder="I want to try it out"
+                  <MultipleSelectField
+                    label="Please indicate your level of interest."
+                    hasAsterisk
+                    placeholder="I would like to recieve"
                     options={SUSTAINABILITY_GOALS_REASONS_OPTIONS}
                     isError={meta.touched && meta.error}
                     helperMessage={meta.touched && meta.error}
@@ -63,6 +65,7 @@ const Feedback = ({ onSubmit }: Props) => {
               />
             </div>
             <Button
+              className={classes.button}
               type="submit"
               isDisabled={!dirty || !!Object.keys(errors || {}).length}
               isSubmitting={submitting}
