@@ -1,6 +1,7 @@
 import { ComponentProps, PropsWithChildren } from "react";
 import clsx from "clsx";
 import classes from "./Button.module.scss";
+import Loader from "../Loader/Loader";
 
 interface Props extends Omit<ComponentProps<"button">, "disabled"> {
   isDisabled?: boolean;
@@ -31,7 +32,7 @@ const Button = ({
 
   return (
     <button disabled={isDisabled} className={computed} {...rest}>
-      {isSubmitting ? "Submitting..." : children}
+      {isSubmitting ? <Loader height={21} /> : children}
     </button>
   );
 };
