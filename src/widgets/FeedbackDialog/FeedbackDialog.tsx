@@ -4,7 +4,7 @@ import Button from "@/components/Button/Button";
 import Dialog from "@/components/Dialog/Dialog";
 import classes from "./FeedbackDialog.module.scss";
 import TextField from "@/components/TextField/TextField";
-import SelectField from "@/components/SelectField/SelectField";
+import MultipleSelectField from "@/components/MultipleSelectField/MultipleSelectField";
 import { SUSTAINABILITY_GOALS_REASONS_OPTIONS } from "@/consts/sustainabilityGoalsReasons";
 import { validateEmail, validateReason } from "@/utils/validators";
 import { Feedback } from "@/types";
@@ -54,9 +54,10 @@ const FeedbackDialog = ({ onSubmit, onClose }: Props) => {
                 initialValue=""
                 validate={validateReason}
                 render={({ input, meta }) => (
-                  <SelectField
-                    label="Reason you want to try GreenGoalsAI"
-                    placeholder="I want to try it out"
+                  <MultipleSelectField
+                    label="Please indicate your level of interest."
+                    hasAsterisk
+                    placeholder="I would like to recieve"
                     options={SUSTAINABILITY_GOALS_REASONS_OPTIONS}
                     isError={meta.touched && meta.error}
                     helperMessage={meta.touched && meta.error}
@@ -65,6 +66,7 @@ const FeedbackDialog = ({ onSubmit, onClose }: Props) => {
                 )}
               />
               <Button
+                className={classes.button}
                 type="submit"
                 isDisabled={!dirty || !!Object.keys(errors || {}).length}
               >
