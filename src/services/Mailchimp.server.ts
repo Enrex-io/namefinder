@@ -9,6 +9,7 @@ import { EMAIL_TYPES, EMAIL_TYPES_MESSAGES } from "@/consts/mail";
 const DEFAULT_SENDER_EMAIL = "no-reply@greenifs.com";
 const apiKeyMarketing = process.env.MAILCHIMP_API_KEY;
 const apiKeyTransactional = process.env.MAILCHIMP_API_KEY;
+const apiKeyMandrill = process.env.MANDRILL_API_KEY;
 const dataCenter = process.env.MAILCHIMP_DATA_CENTER;
 const audienceId = process.env.MAILCHIMP_AUDIENCE_ID;
 
@@ -19,6 +20,7 @@ clientMarketing.setConfig({
 
 export class MailchimpService {
   private static clientTransactional: ApiClient = mailchimp(apiKeyTransactional || '');
+  private static clientMandrill: ApiClient = mailchimp(apiKeyMandrill || '');
   private static clientMarketing = clientMarketing;
 
   public static addSubscriber = async (
@@ -71,33 +73,33 @@ export class MailchimpService {
     }
   }
 
-  // public static async sendSingleTemplate(
-  //   receiver: string,
-  //   emailType: EMAIL_TYPES,
-  //   templateVariables: MergeVar[]
-  // ): Promise<void> {
-  //   try {
-  //     const { subject, template } = EMAIL_TYPES_MESSAGES[emailType];
+  public static async sendSingleTemplate(
+    receiver: string,
+    emailType: EMAIL_TYPES,
+    templateVariables: MergeVar[]
+  ): Promise<void> {
+    const { subject, template } = EMAIL_TYPES_MESSAGES[emailType];
 
-  //     if (!template) throw new Error("No template was provided");
+    if (!template) throw new Error("No template was provided");
 
-  //     await this.client.messages.sendTemplate({
-  //       template_name: template,
-  //       message: {
-  //         from_email: DEFAULT_SENDER_EMAIL,
-  //         to: [{ email: receiver }],
-  //         subject,
-  //         merge_vars: [
-  //           {
-  //             rcpt: receiver,
-  //             vars: templateVariables,
-  //           },
-  //         ],
-  //       },
-  //       template_content: [],
-  //     });
-  //   } catch (error: unknown) {
-  //     logger.error("error", { error });
-  //   }
-  // }
+    const res = await this.clientMandrill.messages.sendTemplate({
+      template_name: template,
+      message: {
+        from_email: DEFAULT_SENDER_EMAIL,
+        to: [{ email: receiver }],
+        subject,
+        merge_vars: [
+          {
+            rcpt: receiver,
+            vars: templateVariables,
+          },
+        ],
+      },
+      template_content: [],
+    });
+
+    if (res instanceof Error) {
+      throw new Error('Mailchimp service error', res);
+    }
+  }
 }

@@ -8,11 +8,13 @@ export default async function handler(
 ) {
   const {
     email_address,
+    template_variables
   } = req.body;
 
-  await MailchimpService.sendSingleMail(
+  await MailchimpService.sendSingleTemplate(
     email_address,
-    EMAIL_TYPES.SEND_GOALS_WITHOUT_TEMPLATE,
+    EMAIL_TYPES.SEND_GOALS,
+    template_variables
   )
     .then((response) => res.status(200).json(response))
     .catch((error) => res.status(500).json(error));

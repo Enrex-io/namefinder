@@ -1,8 +1,8 @@
 import Button from "@/components/Button/Button";
 import Stack from "@/components/Stack/Stack";
-import sendGoals from "@/pages/api/sendGoals";
 import { MailchimpService } from "@/services/Mailchimp.client";
 import { Feedback, GoalDescription, ParsedCompanyDetails } from "@/types";
+import { goalsToHTML } from "@/utils/formatters";
 import { Dispatch, MutableRefObject, SetStateAction, useState } from "react";
 import classes from "./Sendme.module.scss";
 
@@ -27,7 +27,7 @@ function Sendme({
       return setError("Email is not provided");
     }
     setIsSubmitting(true);
-    await MailchimpService.sendGoals(feedback?.email);
+    await MailchimpService.sendGoals(feedback?.email, goalsToHTML(descriptions));
     setIsSubmitting(false);
   }
   return (
@@ -37,7 +37,6 @@ function Sendme({
           type="submit"
           className={classes.button}
           onClick={handleSendmeClick}
-          // isDisabled={!dirty || !!Object.keys(errors || {}).length}
           isSubmitting={isSubmitting}
         >
           {SENDME_BUTTON_TEXT}

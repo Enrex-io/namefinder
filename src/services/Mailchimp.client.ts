@@ -35,11 +35,21 @@ export class MailchimpService {
   };
   public static sendGoals = async (
     email: string,
-    goalDescriptions?: GoalDescription[]
+    goalDescriptions: string,
   ) => {
     try {
       const requestData = {
         email_address: email,
+        template_variables: [
+          {
+            name: 'FNAME',
+            content: email,
+          },
+          {
+            name: 'GOALS',
+            content: goalDescriptions,
+          }
+        ]
       };
 
       const response = await fetcher.post("/sendGoals", requestData);

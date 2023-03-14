@@ -6,7 +6,6 @@ type MessageDetails = {
 
 export enum EMAIL_TYPES {
   SEND_GOALS,
-  SEND_GOALS_WITHOUT_TEMPLATE,
 }
 
 export const EMAIL_TYPES_MESSAGES: Record<EMAIL_TYPES, MessageDetails> = {
@@ -14,9 +13,5 @@ export const EMAIL_TYPES_MESSAGES: Record<EMAIL_TYPES, MessageDetails> = {
     subject: "Generated goals",
     content: "Your goals here",
     template: "greengoalsai",
-  },
-  [EMAIL_TYPES.SEND_GOALS_WITHOUT_TEMPLATE]: {
-    subject: "Generated goals",
-    content: "Your goals here",
   },
 };
