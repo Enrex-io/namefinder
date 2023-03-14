@@ -8,7 +8,7 @@ import { validateEmail, validateReason } from "@/utils/validators";
 import { Feedback } from "@/types";
 
 const FEEDBACK_HEADING =
-  "You're almost there. Enter your email address below to receive your personalised sustainability goals.";
+  "You're almost there. Enter your email address below to receive your personalised sustainability goals and updates on sustainability-related events.";
 const BUTTON_TEXT = "Let's go";
 
 interface Props {
@@ -35,6 +35,7 @@ const Feedback = ({ onSubmit }: Props) => {
                 render={({ input, meta }) => (
                   <TextField
                     label="Email"
+                    hasAsterisk
                     placeholder="mail@example.com"
                     type="email"
                     isError={meta.touched && meta.error}

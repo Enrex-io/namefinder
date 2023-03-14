@@ -38,13 +38,14 @@ const FeedbackDialog = ({ onSubmit, onClose }: Props) => {
                 validate={validateEmail}
                 render={({ input, meta }) => (
                   <TextField
-                    label="Email"
-                    placeholder="mail@example.com"
-                    type="email"
-                    isError={meta.touched && meta.error}
-                    helperMessage={meta.touched && meta.error}
-                    autoComplete="email"
-                    {...input}
+                  label="Email"
+                  hasAsterisk
+                  placeholder="mail@example.com"
+                  type="email"
+                  isError={meta.touched && meta.error}
+                  helperMessage={meta.touched && meta.error}
+                  autoComplete="email"
+                  {...input}
                   />
                 )}
               />
