@@ -148,8 +148,7 @@ const Sustainability = () => {
           <SustainabilityGoals
             goals={generatedGoals}
             onSubmitGoals={async (goals) => {
-              if (!selectedGoals?.length && !hasSubmittedFeedback)
-                setSelectedGoals(goals);
+              setSelectedGoals(goals);
             }}
             onRegenerate={handleRegenerateAllGoals}
             isHiddenButton={false}
