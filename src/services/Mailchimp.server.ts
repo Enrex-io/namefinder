@@ -6,7 +6,9 @@ import mailchimp, {
 } from "@mailchimp/mailchimp_transactional";
 import clientMarketing, { Status } from "@mailchimp/mailchimp_marketing";
 import { EMAIL_TYPES, EMAIL_TYPES_MESSAGES } from "@/consts/mail";
-import { md5 } from "@/utils/helpers";
+import { createHash } from 'node:crypto';
+
+export const md5 = (data: string) => createHash('md5').update(data).digest("hex")
 
 const DEFAULT_SENDER_EMAIL = "no-reply@greenifs.com";
 const apiKeyMarketing = process.env.MAILCHIMP_API_KEY;
