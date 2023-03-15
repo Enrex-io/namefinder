@@ -144,31 +144,30 @@ const Sustainability = () => {
       />
       {generatedGoals?.length && (
         <>
-          <div ref={goalsRef} />
+          <div ref={goalsRef} id="goalsAnchor"/>
           <SustainabilityGoals
             goals={generatedGoals}
             onSubmitGoals={async (goals) => {
               if (!selectedGoals?.length && !hasSubmittedFeedback)
-                delay(() => scrollTo(descriptionsRef), 500);
-              setSelectedGoals(goals);
+                setSelectedGoals(goals);
             }}
             onRegenerate={handleRegenerateAllGoals}
             isHiddenButton={false}
             onGenerateDescriptions={handleGenerateDescriptions}
             isGeneratingDescriptions={isGeneratingDescriptions}
           />
-          <div ref={feedbackRef} />
+          <div ref={feedbackRef} id="feedbackAnchor" />
           {!hasSubmittedFeedback && isGenerateDescriptionsClicked && (
             <Feedback onSubmit={handleSummitFeedback} />
           )}
-          <div ref={descriptionsRef}/>
+          <div ref={descriptionsRef} id="descriptionsAnchor"/>
           {generatedDescriptions?.length && (
             <SustainabilityDescriptions
               descriptions={generatedDescriptions}
               regenerateSingleGoal={handleRegenerateSingleGoal}
             />
           )}
-          <div ref={sendmeRef}/>
+          <div ref={sendmeRef} id="sendmeAnchor"/>
           {
             generatedDescriptions?.length && (
               <Sendme
