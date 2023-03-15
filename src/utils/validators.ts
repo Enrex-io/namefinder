@@ -37,8 +37,6 @@ export const validateEmail = (value: string) => {
 };
 
 export const validateReason = (value: {label: string, value: string }[]) => {
-  console.log('validation time value:');
-  console.log(value);
   if (!value) return "Reason is required";
   const found = value.every(({ value }) => {
     return SUSTAINABILITY_GOALS_REASONS_OPTIONS.some((option) => option.value === value)
