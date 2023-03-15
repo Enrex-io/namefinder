@@ -1,6 +1,7 @@
 import { CompanySizes } from '@/consts/companySizes';
 import { countries } from '@/consts/countries';
 import { ParsedCompanyDetails } from '@/types';
+import crypto from 'node:crypto';
 
 export const shuffleArray = (array: Array<unknown>) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -26,3 +27,5 @@ export const parseCompanyDetails = (values: Record<string, any>) : ParsedCompany
       values.companySize,
   };
 }
+
+export const md5 = (data: string) => crypto.createHash('md5').update(data).digest("hex")

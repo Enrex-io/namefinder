@@ -36,10 +36,13 @@ export const validateEmail = (value: string) => {
     return "Email doesn't look like a valid email";
 };
 
-export const validateReason = (value: string) => {
+export const validateReason = (value: {label: string, value: string }[]) => {
+  console.log('validation time value:');
+  console.log(value);
   if (!value) return "Reason is required";
-  const foundValue = SUSTAINABILITY_GOALS_REASONS_OPTIONS.find(
-    (option) => option.value === value
-  );
-  if (!foundValue) return "Company size doesn't match with options";
+  const found = value.every(({ value }) => {
+    return SUSTAINABILITY_GOALS_REASONS_OPTIONS.some((option) => option.value === value)
+  })
+
+  if (!found) return "Reason doesn't match with options";
 };

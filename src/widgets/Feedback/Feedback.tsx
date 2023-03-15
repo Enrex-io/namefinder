@@ -48,20 +48,22 @@ const Feedback = ({ onSubmit }: Props) => {
               />
               <Field
                 name="reason"
-                initialValue=""
+                initialValue={SUSTAINABILITY_GOALS_REASONS_OPTIONS}
                 validate={validateReason}
-                render={({ input, meta }) => (
-                  <MultipleSelectField
-                    label="Please indicate your level of interest."
-                    hasAsterisk
-                    placeholder="I would like to recieve"
-                    options={SUSTAINABILITY_GOALS_REASONS_OPTIONS}
-                    isError={meta.touched && meta.error}
-                    helperMessage={meta.touched && meta.error}
-                    inputMode="none"
-                    {...input}
-                  />
-                )}
+                render={({ input, meta }) => {
+                  return (
+                    <MultipleSelectField
+                      label="Please indicate your level of interest."
+                      hasAsterisk
+                      placeholder="I would like to recieve"
+                      options={SUSTAINABILITY_GOALS_REASONS_OPTIONS}
+                      isError={meta.touched && meta.error}
+                      helperMessage={meta.touched && meta.error}
+                      inputMode="none"
+                      {...input}
+                    />
+                  );
+                }}
               />
             </div>
             <Button

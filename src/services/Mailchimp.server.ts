@@ -1,3 +1,4 @@
+import { SustainabilityGoalsReasons } from '@/consts/sustainabilityGoalsReasons';
 import mailchimp, {
   ApiClient,
   MergeVar,
@@ -5,6 +6,7 @@ import mailchimp, {
 } from "@mailchimp/mailchimp_transactional";
 import clientMarketing, { Status } from "@mailchimp/mailchimp_marketing";
 import { EMAIL_TYPES, EMAIL_TYPES_MESSAGES } from "@/consts/mail";
+import { md5 } from "@/utils/helpers";
 
 const DEFAULT_SENDER_EMAIL = "no-reply@greenifs.com";
 const apiKeyMarketing = process.env.MAILCHIMP_API_KEY;
@@ -45,6 +47,15 @@ export class MailchimpService {
 
     const response = await this.clientMarketing.lists.addListMember(audienceId || '', requestData);
 
+    return response;
+  };
+
+  public static updateSubscriberTags = async (
+    email: string,
+    tags: keyof typeof SustainabilityGoalsReasons
+  ) => {
+    const formattedTags = [{name: "NEWSLETTER", status: "active"}];
+    const response = await this.clientMarketing.lists.updateListMemberTags(audienceId || '', md5(email), { tags: formattedTags });
     return response;
   };
 
