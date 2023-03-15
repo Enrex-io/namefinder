@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { MutableRefObject, ReactHTMLElement, useCallback, useEffect, useRef, useState } from "react";
 import Paper from "@/components/Paper/Paper";
 import SustainabilityGoals from "@/widgets/SustainabilityGoals/SustainabilityGoals";
 import SustainabilityDescriptions from "@/widgets/SustainabilityDescriptions/SustainabilityDescriptions";
@@ -19,14 +19,17 @@ import WindowScrollControls from "@/components/WindowScrollControls/WindowScroll
 import StatusDisplay from "@/components/StatusDisplay/StatusDisplay";
 import Sendme from "@/widgets/Sendme/Sendme";
 
-const scrollDown = () => {
-  window.scrollTo({
-    top: document.body.scrollHeight,
-    behavior: "smooth",
-  });
-};
+const scrollTo = (ref: MutableRefObject<any>) => {
+  if (!ref.current) return;
+  ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+}
 
 const Sustainability = () => {
+  const goalsRef = useRef<HTMLDivElement | null>(null);
+  const feedbackRef = useRef<HTMLDivElement | null>(null);
+  const descriptionsRef = useRef<HTMLDivElement | null>(null);
+  const sendmeRef = useRef<HTMLDivElement | null>(null);
+
   const [error, setError] = useState<string | null>(null);
 
   const [isGeneratingDescriptions, setIsGeneratingDescriptions] =
@@ -51,7 +54,7 @@ const Sustainability = () => {
     setError(null);
     setGeneratedGoals(response.result);
     setHasSubmittedCompanyDetails(true);
-    delay(scrollDown, 500);
+    delay(() => scrollTo(goalsRef), 500);
   };
 
   const handleSummitFeedback = async (feedback: FeedbackType) => {
@@ -73,7 +76,7 @@ const Sustainability = () => {
     setGeneratedDescriptions(responseDescriptions.result);
     setError(null);
     setSubmittedFeedback(feedback);
-    delay(scrollDown, 500);
+    delay(() => scrollTo(descriptionsRef), 500);
   };
 
   const handleRegenerateSingleGoal = async (
@@ -91,7 +94,7 @@ const Sustainability = () => {
       return description;
     });
     setGeneratedDescriptions(newDescriptions);
-    delay(scrollDown, 500);
+    // delay(() => scrollTo(), 500);
   };
 
   const handleRegenerateAllGoals = async () => {
@@ -123,12 +126,12 @@ const Sustainability = () => {
     setError(null);
     setGeneratedDescriptions(response.result);
     setIsGeneratingDescriptions(false);
-    delay(scrollDown, 500);
+    delay(() => scrollTo(feedbackRef), 500);
   };
 
   useEffect(() => {
     if (!hasSubmittedFeedback && isGenerateDescriptionsClicked) {
-      delay(scrollDown, 500);
+      delay(() => scrollTo(feedbackRef), 500);
     }
   }, [isGenerateDescriptionsClicked, hasSubmittedFeedback])
 
@@ -141,11 +144,10 @@ const Sustainability = () => {
       />
       {generatedGoals?.length && (
         <>
+          <div ref={goalsRef} id="goalsAnchor"/>
           <SustainabilityGoals
             goals={generatedGoals}
             onSubmitGoals={async (goals) => {
-              if (!selectedGoals?.length && !hasSubmittedFeedback)
-                delay(scrollDown, 500);
               setSelectedGoals(goals);
             }}
             onRegenerate={handleRegenerateAllGoals}
@@ -153,22 +155,25 @@ const Sustainability = () => {
             onGenerateDescriptions={handleGenerateDescriptions}
             isGeneratingDescriptions={isGeneratingDescriptions}
           />
+          <div ref={feedbackRef} id="feedbackAnchor" />
           {!hasSubmittedFeedback && isGenerateDescriptionsClicked && (
             <Feedback onSubmit={handleSummitFeedback} />
           )}
+          <div ref={descriptionsRef} id="descriptionsAnchor"/>
           {generatedDescriptions?.length && (
             <SustainabilityDescriptions
               descriptions={generatedDescriptions}
               regenerateSingleGoal={handleRegenerateSingleGoal}
             />
           )}
+          <div ref={sendmeRef} id="sendmeAnchor"/>
           {
             generatedDescriptions?.length && (
-              <Sendme 
-              descriptions={generatedDescriptions} 
-              feedback={submittedFeedback} 
-              companyDetailsRef={companyDetailsRef} 
-              setError={setError} 
+              <Sendme
+              descriptions={generatedDescriptions}
+              feedback={submittedFeedback}
+              companyDetailsRef={companyDetailsRef}
+              setError={setError}
               />
             )
           }
