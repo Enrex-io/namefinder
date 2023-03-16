@@ -57,7 +57,8 @@ const Sustainability = () => {
     delay(() => scrollTo(goalsRef), 500);
   };
 
-  const handleSummitFeedback = async (feedback: FeedbackType) => {
+  const handleSubmitFeedback = async (feedback: FeedbackType) => {
+    console.log(feedback);
     if (!companyDetailsRef.current || !selectedGoals?.length) return;
     const responseFeedback = await MailchimpService.addSubscriber(
       feedback.email,
@@ -65,7 +66,11 @@ const Sustainability = () => {
       companyDetailsRef.current.industry,
       companyDetailsRef.current.country,
       companyDetailsRef.current.companySize,
-      SustainabilityGoalsReasons[feedback.reason]
+    );
+  
+    const responseUpdateTags = await MailchimpService.updateTags(
+      feedback.email, 
+      feedback.reason.map(({ value }) => value as keyof typeof SustainabilityGoalsReasons)
     );
     if (responseFeedback?.error) return setError(responseFeedback.error);
     const responseDescriptions = await OpenAIApi.getDescriptionsByGoals(
@@ -157,7 +162,7 @@ const Sustainability = () => {
           />
           <div ref={feedbackRef} id="feedbackAnchor" />
           {!hasSubmittedFeedback && isGenerateDescriptionsClicked && (
-            <Feedback onSubmit={handleSummitFeedback} />
+            <Feedback onSubmit={handleSubmitFeedback} />
           )}
           <div ref={descriptionsRef} id="descriptionsAnchor"/>
           {generatedDescriptions?.length && (

@@ -6,9 +6,6 @@ import mailchimp, {
 } from "@mailchimp/mailchimp_transactional";
 import clientMarketing, { Status } from "@mailchimp/mailchimp_marketing";
 import { EMAIL_TYPES, EMAIL_TYPES_MESSAGES } from "@/consts/mail";
-import { createHash } from 'node:crypto';
-
-export const md5 = (data: string) => createHash('md5').update(data).digest("hex")
 
 const DEFAULT_SENDER_EMAIL = "no-reply@greenifs.com";
 const apiKeyMarketing = process.env.MAILCHIMP_API_KEY;
@@ -33,7 +30,6 @@ export class MailchimpService {
     sectorIndustry: string,
     country: string,
     companySize: string,
-    reasonForAIInterest: string
   ) => {
     const requestData = {
       email_address: email,
@@ -43,7 +39,6 @@ export class MailchimpService {
         SECT_INDUS: sectorIndustry,
         COUNTRY: country,
         COMP_SIZE: companySize,
-        AI_REASON: reasonForAIInterest,
       },
     };
 
@@ -53,11 +48,13 @@ export class MailchimpService {
   };
 
   public static updateSubscriberTags = async (
-    email: string,
-    tags: keyof typeof SustainabilityGoalsReasons
+    emailHash: string,
+    tags: (keyof typeof SustainabilityGoalsReasons)[],
   ) => {
-    const formattedTags = [{name: "NEWSLETTER", status: "active"}];
-    const response = await this.clientMarketing.lists.updateListMemberTags(audienceId || '', md5(email), { tags: formattedTags });
+    console.log(emailHash);
+    const formattedTags = tags.map((tag) => ({ name: tag, status: 'active' }));
+    const response = await this.clientMarketing.lists.updateListMemberTags(audienceId || '', emailHash, { tags: formattedTags });
+    console.log(response);
     return response;
   };
 

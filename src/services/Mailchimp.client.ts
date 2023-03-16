@@ -1,5 +1,5 @@
-import { GoalDescription } from './../types/index';
 import axios from "axios";
+import { SustainabilityGoalsReasons } from '@/consts/sustainabilityGoalsReasons';
 
 const fetcher = axios.create({
   baseURL: "/api",
@@ -12,7 +12,6 @@ export class MailchimpService {
     sectorIndustry?: string,
     country?: string,
     companySize?: string,
-    reasonForAIInterest?: string
   ) => {
     try {
       const requestData = {
@@ -23,7 +22,6 @@ export class MailchimpService {
           SECT_INDUS: sectorIndustry || "Unknown",
           COUNTRY: country || "Unknown",
           COMP_SIZE: companySize || "Unknown",
-          AI_REASON: reasonForAIInterest || "Unknown",
         },
       };
 
@@ -56,6 +54,17 @@ export class MailchimpService {
       return response.data;
     } catch (error) {
       console.error("Error sending generated goals by email:", error);
+    }
+  };
+  public static updateTags = async (
+    email: string,
+    tags: (keyof typeof SustainabilityGoalsReasons)[],
+  ) => {
+    try {
+      const response = await fetcher.post("/updateSubscriberTags", { email, tags });
+      return response.data;
+    } catch (error) {
+      console.error("Error updating subscriber tags:", error);
     }
   };
 }
