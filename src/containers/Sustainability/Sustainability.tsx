@@ -145,7 +145,7 @@ const Sustainability = () => {
 
   const handleSendmeClick = () => {
     setIsSendmeClicked(true);
-    delay(() => scrollTo(descriptionsRef), 500);
+    delay(() => scrollTo(shareRef), 500);
   }
 
   useEffect(() => {
