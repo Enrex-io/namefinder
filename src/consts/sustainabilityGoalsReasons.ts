@@ -1,4 +1,12 @@
 export type FeedbackTags = "NEWSLETTER" | "DEMO" | "COLLABORATE";
+export enum TagStatus {
+  inactive = 'inactive',
+  active = 'active',
+};
+export interface TagsToUpdate {
+  name: FeedbackTags,
+  status: TagStatus,
+}
 
 export enum SustainabilityGoalsReasons {
   NEWSLETTER = "Get weekly/monthly updates",

@@ -1,5 +1,5 @@
+import { TagsToUpdate } from './../consts/sustainabilityGoalsReasons';
 import axios from "axios";
-import { SustainabilityGoalsReasons } from '@/consts/sustainabilityGoalsReasons';
 
 const fetcher = axios.create({
   baseURL: "/api",
@@ -58,7 +58,7 @@ export class MailchimpService {
   };
   public static updateTags = async (
     email: string,
-    tags: (keyof typeof SustainabilityGoalsReasons)[],
+    tags: TagsToUpdate[],
   ) => {
     try {
       const response = await fetcher.post("/updateSubscriberTags", { email, tags });

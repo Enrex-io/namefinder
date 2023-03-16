@@ -11,7 +11,7 @@ import {
 import { OpenAIApi } from "@/services/OpenAIService.client";
 import classes from "./Sustainability.module.scss";
 import { MailchimpService } from "@/services/Mailchimp.client";
-import { FeedbackTags, SustainabilityGoalsReasons } from "@/consts/sustainabilityGoalsReasons";
+import { FeedbackTags, SustainabilityGoalsReasons, TagStatus } from "@/consts/sustainabilityGoalsReasons";
 import Stack from "@/components/Stack/Stack";
 import { delay } from "@/utils/helpers";
 import Feedback from "@/widgets/Feedback/Feedback";
@@ -68,10 +68,10 @@ const Sustainability = () => {
       companyDetailsRef.current.companySize,
     );
 
-    const tagsToSend = Object.keys(SustainabilityGoalsReasons).filter((next) => {
+    const tagsToSend = Object.keys(SustainabilityGoalsReasons).map((next) => {
       const nextTyped = next as FeedbackTags;
-      return feedback[nextTyped];
-    }) as FeedbackTags[];
+      return { name: nextTyped, status: feedback[nextTyped] ? TagStatus.active : TagStatus.inactive };
+    });
       
     const responseUpdateTags = await MailchimpService.updateTags(
       feedback.email,

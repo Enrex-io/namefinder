@@ -1,4 +1,4 @@
-import { SustainabilityGoalsReasons } from '@/consts/sustainabilityGoalsReasons';
+import { TagsToUpdate } from './../consts/sustainabilityGoalsReasons';
 import mailchimp, {
   ApiClient,
   MergeVar,
@@ -49,11 +49,9 @@ export class MailchimpService {
 
   public static updateSubscriberTags = async (
     emailHash: string,
-    tags: (keyof typeof SustainabilityGoalsReasons)[],
+    tags: TagsToUpdate[],
   ) => {
-    console.log(emailHash);
-    const formattedTags = tags.map((tag) => ({ name: tag, status: 'active' }));
-    const response = await this.clientMarketing.lists.updateListMemberTags(audienceId || '', emailHash, { tags: formattedTags });
+    const response = await this.clientMarketing.lists.updateListMemberTags(audienceId || '', emailHash, { tags });
     console.log(response);
     return response;
   };
