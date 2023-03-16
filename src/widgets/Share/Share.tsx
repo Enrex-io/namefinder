@@ -30,6 +30,7 @@ const Share = ({}: Props) => {
         direction="row"
         wrap="wrap"
         alignItems="center"
+        justifyContent="center"
         spacing={1}
         hasBorder
         className={classes.fieldsContainer}
@@ -39,14 +40,14 @@ const Share = ({}: Props) => {
           hashtag={`#${HASHTAG}`}
           url={LINK}
         >
-          <FacebookIcon />
+          <FacebookIcon round={true} />
         </FacebookShareButton>
         <TwitterShareButton 
           url={LINK}
           hashtags={[HASHTAG]}
           title={MESSAGE}
         >
-          <TwitterIcon />
+          <TwitterIcon round={true} />
         </TwitterShareButton>
         <LinkedinShareButton 
           url={LINK}
@@ -54,13 +55,13 @@ const Share = ({}: Props) => {
           summary={MESSAGE}
           title={TITLE}
         >
-          <LinkedinIcon />
+          <LinkedinIcon round={true} />
         </LinkedinShareButton>
         <TelegramShareButton 
           url={LINK}
           title={MESSAGE}
         >
-          <TelegramIcon />
+          <TelegramIcon round={true} />
         </TelegramShareButton>
       </Paper>
     </div>
