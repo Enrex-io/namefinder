@@ -16,7 +16,6 @@ export default async function handler(
     SECT_INDUS,
     COUNTRY,
     COMP_SIZE,
-    AI_REASON
   )
     .then((response) => res.status(200).json(response))
     .catch((error) => res.status(500).json(error));
