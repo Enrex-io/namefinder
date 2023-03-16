@@ -1,0 +1,13 @@
+.field {
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  margin-right: 1rem;
+  .label {
+    display: block;
+    cursor: pointer;
+    user-select: none;
+    margin-left: 0.5rem;
+  }
+}

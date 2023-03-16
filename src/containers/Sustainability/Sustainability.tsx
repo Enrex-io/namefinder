@@ -11,13 +11,14 @@ import {
 import { OpenAIApi } from "@/services/OpenAIService.client";
 import classes from "./Sustainability.module.scss";
 import { MailchimpService } from "@/services/Mailchimp.client";
-import { SustainabilityGoalsReasons } from "@/consts/sustainabilityGoalsReasons";
+import { FeedbackTags, SustainabilityGoalsReasons, TagStatus } from "@/consts/sustainabilityGoalsReasons";
 import Stack from "@/components/Stack/Stack";
 import { delay } from "@/utils/helpers";
 import Feedback from "@/widgets/Feedback/Feedback";
 import WindowScrollControls from "@/components/WindowScrollControls/WindowScrollControls";
 import StatusDisplay from "@/components/StatusDisplay/StatusDisplay";
 import Sendme from "@/widgets/Sendme/Sendme";
+import Share from "@/widgets/Share/Share";
 
 const scrollTo = (ref: MutableRefObject<any>) => {
   if (!ref.current) return;
@@ -29,6 +30,7 @@ const Sustainability = () => {
   const feedbackRef = useRef<HTMLDivElement | null>(null);
   const descriptionsRef = useRef<HTMLDivElement | null>(null);
   const sendmeRef = useRef<HTMLDivElement | null>(null);
+  const shareRef = useRef<HTMLDivElement | null>(null);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -43,6 +45,7 @@ const Sustainability = () => {
   const [generatedDescriptions, setGeneratedDescriptions] =
     useState<Array<GoalDescription>>();
   const [generatedGoals, setGeneratedGoals] = useState<Array<string>>();
+  const [isSendmeClicked, setIsSendmeClicked] = useState<boolean>(false);
   const companyDetailsRef = useRef<ParsedCompanyDetails | null>(null)
   const hasSubmittedFeedback = Boolean(submittedFeedback);
 
@@ -57,7 +60,8 @@ const Sustainability = () => {
     delay(() => scrollTo(goalsRef), 500);
   };
 
-  const handleSummitFeedback = async (feedback: FeedbackType) => {
+  const handleSubmitFeedback = async (feedback: FeedbackType) => {
+    console.log(feedback);
     if (!companyDetailsRef.current || !selectedGoals?.length) return;
     const responseFeedback = await MailchimpService.addSubscriber(
       feedback.email,
@@ -65,8 +69,18 @@ const Sustainability = () => {
       companyDetailsRef.current.industry,
       companyDetailsRef.current.country,
       companyDetailsRef.current.companySize,
-      SustainabilityGoalsReasons[feedback.reason]
     );
+
+    const tagsToSend = Object.keys(SustainabilityGoalsReasons).map((next) => {
+      const nextTyped = next as FeedbackTags;
+      return { name: nextTyped, status: feedback[nextTyped] ? TagStatus.active : TagStatus.inactive };
+    });
+      
+    const responseUpdateTags = await MailchimpService.updateTags(
+      feedback.email,
+      tagsToSend
+    );
+    
     if (responseFeedback?.error) return setError(responseFeedback.error);
     const responseDescriptions = await OpenAIApi.getDescriptionsByGoals(
       selectedGoals,
@@ -129,6 +143,11 @@ const Sustainability = () => {
     delay(() => scrollTo(feedbackRef), 500);
   };
 
+  const handleSendmeClick = () => {
+    setIsSendmeClicked(true);
+    delay(() => scrollTo(descriptionsRef), 500);
+  }
+
   useEffect(() => {
     if (!hasSubmittedFeedback && isGenerateDescriptionsClicked) {
       delay(() => scrollTo(feedbackRef), 500);
@@ -157,7 +176,7 @@ const Sustainability = () => {
           />
           <div ref={feedbackRef} id="feedbackAnchor" />
           {!hasSubmittedFeedback && isGenerateDescriptionsClicked && (
-            <Feedback onSubmit={handleSummitFeedback} />
+            <Feedback onSubmit={handleSubmitFeedback} />
           )}
           <div ref={descriptionsRef} id="descriptionsAnchor"/>
           {generatedDescriptions?.length && (
@@ -174,8 +193,12 @@ const Sustainability = () => {
               feedback={submittedFeedback}
               companyDetailsRef={companyDetailsRef}
               setError={setError}
+              onClick={handleSendmeClick}
               />
             )
+          }
+          <div ref={shareRef} id="shareAnchor"/>
+          { isSendmeClicked && <Share />
           }
         </>
       )}

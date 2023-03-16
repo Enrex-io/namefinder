@@ -1,3 +1,4 @@
+import { TagsToUpdate } from './../consts/sustainabilityGoalsReasons';
 import mailchimp, {
   ApiClient,
   MergeVar,
@@ -29,7 +30,6 @@ export class MailchimpService {
     sectorIndustry: string,
     country: string,
     companySize: string,
-    reasonForAIInterest: string
   ) => {
     const requestData = {
       email_address: email,
@@ -39,12 +39,20 @@ export class MailchimpService {
         SECT_INDUS: sectorIndustry,
         COUNTRY: country,
         COMP_SIZE: companySize,
-        AI_REASON: reasonForAIInterest,
       },
     };
 
     const response = await this.clientMarketing.lists.addListMember(audienceId || '', requestData);
 
+    return response;
+  };
+
+  public static updateSubscriberTags = async (
+    emailHash: string,
+    tags: TagsToUpdate[],
+  ) => {
+    const response = await this.clientMarketing.lists.updateListMemberTags(audienceId || '', emailHash, { tags });
+    console.log(response);
     return response;
   };
 

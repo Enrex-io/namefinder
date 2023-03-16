@@ -35,11 +35,3 @@ export const validateEmail = (value: string) => {
   if (!value.match(EMAIL_VALIDATION_REGEX))
     return "Email doesn't look like a valid email";
 };
-
-export const validateReason = (value: string) => {
-  if (!value) return "Reason is required";
-  const foundValue = SUSTAINABILITY_GOALS_REASONS_OPTIONS.find(
-    (option) => option.value === value
-  );
-  if (!foundValue) return "Company size doesn't match with options";
-};

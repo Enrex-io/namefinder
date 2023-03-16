@@ -12,6 +12,7 @@ interface Props {
   descriptions: Array<GoalDescription>;
   setError: Dispatch<SetStateAction<string | null>>;
   companyDetailsRef: MutableRefObject<ParsedCompanyDetails | null>;
+  onClick: () => void;
   feedback?: Feedback;
 }
 
@@ -19,6 +20,7 @@ function Sendme({
   descriptions,
   setError,
   feedback,
+  onClick,
   companyDetailsRef,
 }: Props) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -26,6 +28,7 @@ function Sendme({
     if (!feedback?.email) {
       return setError("Email is not provided");
     }
+    onClick();
     setIsSubmitting(true);
     await MailchimpService.sendGoals(feedback?.email, goalsToHTML(descriptions));
     setIsSubmitting(false);
