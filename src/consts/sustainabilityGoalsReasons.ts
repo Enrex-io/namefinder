@@ -1,3 +1,5 @@
+export type FeedbackTags = "NEWSLETTER" | "DEMO" | "COLLABORATE";
+
 export enum SustainabilityGoalsReasons {
   NEWSLETTER = "Get weekly/monthly updates",
   DEMO = "Greenifs registration and demo",

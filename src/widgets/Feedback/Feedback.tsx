@@ -24,58 +24,62 @@ const Feedback = ({ onSubmit }: Props) => {
     <div className={classes.container}>
       <Form
         onSubmit={handleSubmitForm}
-        render={({ handleSubmit, dirty, errors, submitting }) => (
-          <form onSubmit={handleSubmit} className={classes.wrapper}>
-            <h2 className={classes.heading}>{FEEDBACK_HEADING}</h2>
-            <div className={classes.fieldsContainer}>
-              <Field
-                name="email"
-                initialValue=""
-                validate={validateEmail}
-                render={({ input, meta }) => (
-                  <TextField
-                    label="Email"
-                    hasAsterisk
-                    placeholder="mail@example.com"
-                    type="email"
-                    isError={meta.touched && meta.error}
-                    helperMessage={meta.touched && meta.error}
-                    autoComplete="email"
-                    inputMode="email"
-                    {...input}
-                  />
-                )}
-              />
-              <Field
-                name="reason"
-                initialValue={SUSTAINABILITY_GOALS_REASONS_OPTIONS}
-                validate={validateReason}
-                render={({ input, meta }) => {
-                  return (
-                    <MultipleSelectField
-                      label="Please indicate your level of interest."
+        render={({ handleSubmit, dirty, errors, submitting }) => {
+          return (
+            <form onSubmit={handleSubmit} className={classes.wrapper}>
+              <h2 className={classes.heading}>{FEEDBACK_HEADING}</h2>
+              <div className={classes.fieldsContainer}>
+                <Field
+                  name="email"
+                  initialValue=""
+                  validate={validateEmail}
+                  render={({ input, meta }) => (
+                    <TextField
+                      label="Email"
                       hasAsterisk
-                      placeholder="I would like to recieve"
-                      options={SUSTAINABILITY_GOALS_REASONS_OPTIONS}
+                      placeholder="mail@example.com"
+                      type="email"
                       isError={meta.touched && meta.error}
                       helperMessage={meta.touched && meta.error}
-                      inputMode="none"
-                      {...input}
-                    />
-                  );
-                }}
-              />
-            </div>
-            <Button
-              className={classes.button}
-              type="submit"
-              isDisabled={!dirty || !!Object.keys(errors || {}).length}
-              isSubmitting={submitting}
-            >
-              {BUTTON_TEXT}
-            </Button>
-          </form>
-        )}
+                      autoComplete="email"
+                      inputMode="email"
+                      {...input} />
+                  )} />
+                {"Please indicate your level of interest."}
+                {SUSTAINABILITY_GOALS_REASONS_OPTIONS.map(({ label, value }) => {
+                  return (<Field
+                    key={value}
+                    name={value}
+                    initialValue={true}
+                    type="checkbox"
+                    // validate={validateReason}
+                    render={({ input, meta }) => {
+                      return (
+                        <label>
+                          <input
+                            type="checkbox"
+                            id={input.name}
+                            checked={input.value}
+                            onChange={input.onChange}
+                            defaultChecked={true}
+                            />
+                          {label}
+                        </label>
+                      );
+                    } } />);
+                })}
+              </div>
+              <Button
+                className={classes.button}
+                type="submit"
+                isDisabled={!dirty || !!Object.keys(errors || {}).length}
+                isSubmitting={submitting}
+              >
+                {BUTTON_TEXT}
+              </Button>
+            </form>
+          );
+        }}
       />
     </div>
   );

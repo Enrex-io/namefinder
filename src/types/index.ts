@@ -45,9 +45,12 @@ export type GoalsDescriptionsResponsePayload = {
   errors?: Array<string>;
 };
 
-export type Feedback = {
+
+export interface Feedback {
   email: string;
-  reason: typeof SUSTAINABILITY_GOALS_REASONS_OPTIONS;
+  COLLABORATE: boolean,
+  NEWSLETTER: boolean,
+  DEMO: boolean,
 };
 
 export type ParsedCompanyDetails = Omit<CompanyDetails, "country"> & {
