@@ -50,9 +50,9 @@ const Share = ({}: Props) => {
         </TwitterShareButton>
         <LinkedinShareButton 
           url={LINK}
-          source={LINK}
-          summary={MESSAGE}
-          title={TITLE}
+          // source={LINK}
+          // summary={MESSAGE}
+          // title={TITLE}
         >
           <LinkedinIcon />
         </LinkedinShareButton>
