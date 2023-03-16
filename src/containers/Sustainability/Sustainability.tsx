@@ -18,6 +18,7 @@ import Feedback from "@/widgets/Feedback/Feedback";
 import WindowScrollControls from "@/components/WindowScrollControls/WindowScrollControls";
 import StatusDisplay from "@/components/StatusDisplay/StatusDisplay";
 import Sendme from "@/widgets/Sendme/Sendme";
+import Share from "@/widgets/Share/Share";
 
 const scrollTo = (ref: MutableRefObject<any>) => {
   if (!ref.current) return;
@@ -29,6 +30,7 @@ const Sustainability = () => {
   const feedbackRef = useRef<HTMLDivElement | null>(null);
   const descriptionsRef = useRef<HTMLDivElement | null>(null);
   const sendmeRef = useRef<HTMLDivElement | null>(null);
+  const shareRef = useRef<HTMLDivElement | null>(null);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -43,6 +45,7 @@ const Sustainability = () => {
   const [generatedDescriptions, setGeneratedDescriptions] =
     useState<Array<GoalDescription>>();
   const [generatedGoals, setGeneratedGoals] = useState<Array<string>>();
+  const [isSendmeClicked, setIsSendmeClicked] = useState<boolean>(false);
   const companyDetailsRef = useRef<ParsedCompanyDetails | null>(null)
   const hasSubmittedFeedback = Boolean(submittedFeedback);
 
@@ -140,6 +143,11 @@ const Sustainability = () => {
     delay(() => scrollTo(feedbackRef), 500);
   };
 
+  const handleSendmeClick = () => {
+    setIsSendmeClicked(true);
+    delay(() => scrollTo(descriptionsRef), 500);
+  }
+
   useEffect(() => {
     if (!hasSubmittedFeedback && isGenerateDescriptionsClicked) {
       delay(() => scrollTo(feedbackRef), 500);
@@ -185,8 +193,12 @@ const Sustainability = () => {
               feedback={submittedFeedback}
               companyDetailsRef={companyDetailsRef}
               setError={setError}
+              onClick={handleSendmeClick}
               />
             )
+          }
+          <div ref={shareRef} id="shareAnchor"/>
+          { isSendmeClicked && <Share />
           }
         </>
       )}
