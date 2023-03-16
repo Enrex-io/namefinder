@@ -17,7 +17,7 @@ import {
 const HEADING_TEXT = "Invite others to join the sustainability movement!";
 const MESSAGE = "My personalized sustainability goals were generated in just few clicks. Create your own path to sustainability with https://greengoals.ai";
 const TITLE = "My personalized sustainability goals"
-const LINK = "https://greengoals.ai";
+const LINK = "https://greengoalsai.com";
 const HASHTAG = "goals";
 
 interface Props {}
@@ -50,9 +50,9 @@ const Share = ({}: Props) => {
         </TwitterShareButton>
         <LinkedinShareButton 
           url={LINK}
-          // source={LINK}
-          // summary={MESSAGE}
-          // title={TITLE}
+          source={LINK}
+          summary={MESSAGE}
+          title={TITLE}
         >
           <LinkedinIcon />
         </LinkedinShareButton>
