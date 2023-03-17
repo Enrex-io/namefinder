@@ -23,6 +23,11 @@ import Share from "@/widgets/Share/Share";
 const scrollTo = (ref: MutableRefObject<any>) => {
   if (!ref.current) return;
   ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  const parentWindow = window.parent;
+  if (parentWindow) {
+    //prevent parent window scrolling
+    parentWindow.scrollTo(parentWindow.scrollX, parentWindow.scrollY);
+  }
 }
 
 const Sustainability = () => {
