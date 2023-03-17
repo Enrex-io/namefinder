@@ -8,7 +8,7 @@ import { Feedback } from "@/types";
 import CheckboxField from "@/components/CheckboxField/CheckboxField";
 
 const FEEDBACK_HEADING =
-  "You're almost there. Enter your email address below to receive your personalised sustainability goals and updates on sustainability-related events.";
+  "Enter your email for sustainability goals and updates.";
 const BUTTON_TEXT = "Let's go";
 
 interface Props {
