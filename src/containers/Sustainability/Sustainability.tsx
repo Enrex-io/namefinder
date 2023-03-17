@@ -22,9 +22,10 @@ import Share from "@/widgets/Share/Share";
 
 const scrollTo = (ref: MutableRefObject<any>) => {
   if (!ref.current) return;
-  ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  const isIframe = window.location !== window.parent.location;
   const parentWindow = window.parent;
-  if (parentWindow) {
+  ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (parentWindow && isIframe) {
     //prevent parent window scrolling
     parentWindow.scrollTo(parentWindow.scrollX, parentWindow.scrollY);
   }
