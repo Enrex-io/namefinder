@@ -39,33 +39,33 @@ const Share = ({}: Props) => {
           quote={MESSAGE}
           hashtag={`#${HASHTAG}`}
           url={LINK}
-          style={{ height: 64 }}
+          style={{ height: 40 }}
         >
-          <FacebookIcon round={true} />
+          <FacebookIcon round={true} size={40} />
         </FacebookShareButton>
         <TwitterShareButton 
           url={LINK}
           hashtags={[HASHTAG]}
           title={MESSAGE}
-          style={{ height: 64 }}
+          style={{ height: 40 }}
         >
-          <TwitterIcon round={true} />
+          <TwitterIcon round={true} size={40} />
         </TwitterShareButton>
         <LinkedinShareButton 
           url={LINK}
           source={LINK}
           summary={MESSAGE}
           title={TITLE}
-          style={{ height: 64 }}
+          style={{ height: 40 }}
         >
-          <LinkedinIcon round={true} />
+          <LinkedinIcon round={true} size={40} />
         </LinkedinShareButton>
         <TelegramShareButton 
           url={LINK}
           title={MESSAGE}
-          style={{ height: 64 }}
+          style={{ height: 40 }}
         >
-          <TelegramIcon round={true} />
+          <TelegramIcon round={true} size={40} />
         </TelegramShareButton>
       </Paper>
     </div>
