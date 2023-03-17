@@ -12,6 +12,9 @@ body {
   line-height: 1.5;
   color: var(--clr-blue-main);
   min-height: 100vh;
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
 }
 
 a {

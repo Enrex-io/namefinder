@@ -6,7 +6,8 @@ export const getGoalsByResponseString = (
   const listOfGoals = generatedResponse
     .replace(/[0-9]{1,2}\. /g, "")
     .split("\n")
-    .filter((goal: string) => goal !== "");
+    .map((goal) => goal.trim())
+    .filter((goal: string) => goal.length > 6)
   return listOfGoals;
 };
 
