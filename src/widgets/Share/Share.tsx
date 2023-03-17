@@ -39,6 +39,7 @@ const Share = ({}: Props) => {
           quote={MESSAGE}
           hashtag={`#${HASHTAG}`}
           url={LINK}
+          style={{ height: 64 }}
         >
           <FacebookIcon round={true} />
         </FacebookShareButton>
@@ -46,6 +47,7 @@ const Share = ({}: Props) => {
           url={LINK}
           hashtags={[HASHTAG]}
           title={MESSAGE}
+          style={{ height: 64 }}
         >
           <TwitterIcon round={true} />
         </TwitterShareButton>
@@ -54,12 +56,14 @@ const Share = ({}: Props) => {
           source={LINK}
           summary={MESSAGE}
           title={TITLE}
+          style={{ height: 64 }}
         >
           <LinkedinIcon round={true} />
         </LinkedinShareButton>
         <TelegramShareButton 
           url={LINK}
           title={MESSAGE}
+          style={{ height: 64 }}
         >
           <TelegramIcon round={true} />
         </TelegramShareButton>
