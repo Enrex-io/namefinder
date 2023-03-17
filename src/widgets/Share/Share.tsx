@@ -17,7 +17,7 @@ import {
 const HEADING_TEXT = "Invite others to join the sustainability movement!";
 const MESSAGE = "My personalized sustainability goals were generated in just few clicks. Create your own path to sustainability with https://greengoals.ai";
 const TITLE = "My personalized sustainability goals"
-const LINK = "https://greengoals.ai";
+const LINK = "https://greengoalsai.com";
 const HASHTAG = "goals";
 
 interface Props {}
@@ -30,6 +30,7 @@ const Share = ({}: Props) => {
         direction="row"
         wrap="wrap"
         alignItems="center"
+        justifyContent="center"
         spacing={1}
         hasBorder
         className={classes.fieldsContainer}
@@ -38,29 +39,33 @@ const Share = ({}: Props) => {
           quote={MESSAGE}
           hashtag={`#${HASHTAG}`}
           url={LINK}
+          style={{ height: 64 }}
         >
-          <FacebookIcon />
+          <FacebookIcon round={true} />
         </FacebookShareButton>
         <TwitterShareButton 
           url={LINK}
           hashtags={[HASHTAG]}
           title={MESSAGE}
+          style={{ height: 64 }}
         >
-          <TwitterIcon />
+          <TwitterIcon round={true} />
         </TwitterShareButton>
         <LinkedinShareButton 
           url={LINK}
           source={LINK}
           summary={MESSAGE}
           title={TITLE}
+          style={{ height: 64 }}
         >
-          <LinkedinIcon />
+          <LinkedinIcon round={true} />
         </LinkedinShareButton>
         <TelegramShareButton 
           url={LINK}
           title={MESSAGE}
+          style={{ height: 64 }}
         >
-          <TelegramIcon />
+          <TelegramIcon round={true} />
         </TelegramShareButton>
       </Paper>
     </div>
