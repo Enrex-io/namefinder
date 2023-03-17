@@ -6,7 +6,7 @@ import {
 } from "@/types";
 import axios, { AxiosError } from "axios";
 
-const DEFAULT_ERROR_MESSAGE = "Something went wrong";
+const DEFAULT_ERROR_MESSAGE = "The AI service is experiencing high traffic. Please try again later.";
 
 const fetcher = axios.create({
   baseURL: "/api",
