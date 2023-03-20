@@ -118,6 +118,7 @@ const SustainabilityCompanyDetails = ({
                   className={classes.button}
                   isDisabled={!dirty || !!Object.keys(errors || {}).length}
                   isSubmitting={submitting}
+                  funnyLoadingMessage
                 >
                   {SUBMIT_BUTTON_TEXT}
                 </Button>
