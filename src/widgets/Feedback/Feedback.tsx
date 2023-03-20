@@ -46,11 +46,11 @@ const Feedback = ({ onSubmit }: Props) => {
                       {...input} />
                   )} />
                 <div className={classes.tagsContainer}>
-                  {SUSTAINABILITY_GOALS_REASONS_OPTIONS.map(({ label, value }) => {
+                  {SUSTAINABILITY_GOALS_REASONS_OPTIONS.map(({ label, value, initialChecked }) => {
                     return (<Field
                       key={value}
                       name={value}
-                      initialValue={true}
+                      initialValue={initialChecked}
                       type="checkbox"
                       render={({ input }) => {
                         return (
@@ -59,7 +59,8 @@ const Feedback = ({ onSubmit }: Props) => {
                             label={label} 
                             name={input.name} 
                             onChange={input.onChange} 
-                            value={input.value}  
+                            value={input.value}
+                            initialChecked={initialChecked}
                           />
                         );
                       } } />);

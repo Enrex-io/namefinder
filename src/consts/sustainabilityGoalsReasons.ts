@@ -9,9 +9,9 @@ export interface TagsToUpdate {
 }
 
 export enum SustainabilityGoalsReasons {
-  NEWSLETTER = "Get weekly/monthly updates",
+  NEWSLETTER = "Sustainability newsletter",
   DEMO = "Greenifs registration and demo",
-  COLLABORATE = "Partnering for sustainability",
+  COLLABORATE = "Partnership inquiry",
 }
 
 export const SUSTAINABILITY_GOALS_REASONS_OPTIONS = Object.entries(
@@ -19,4 +19,5 @@ export const SUSTAINABILITY_GOALS_REASONS_OPTIONS = Object.entries(
 ).map(([key, value]) => ({
   label: value,
   value: key,
+  initialChecked: !(key === "COLLABORATE"),
 }));

@@ -6,7 +6,8 @@ interface Props {
   label: string;
   value: boolean,
   name: string,
-  onChange: (event: any) => void
+  onChange: (event: any) => void,
+  initialChecked: boolean,
 }
 
 const CheckboxField = forwardRef<HTMLInputElement, PropsWithChildren<Props>>(
@@ -16,6 +17,7 @@ const CheckboxField = forwardRef<HTMLInputElement, PropsWithChildren<Props>>(
       name,
       value,
       onChange,
+      initialChecked,
       ...props
     }: Props,
     ref: React.Ref<HTMLInputElement>
@@ -28,7 +30,7 @@ const CheckboxField = forwardRef<HTMLInputElement, PropsWithChildren<Props>>(
         id={name}
         checked={value}
         onChange={onChange}
-        defaultChecked={true}
+        defaultChecked={initialChecked}
         />
       {label && <span className={classes.label}>{label}</span>}
     </label>
