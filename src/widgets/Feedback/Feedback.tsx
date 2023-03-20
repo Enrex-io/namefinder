@@ -72,6 +72,7 @@ const Feedback = ({ onSubmit }: Props) => {
                 type="submit"
                 isDisabled={!dirty || !!Object.keys(errors || {}).length}
                 isSubmitting={submitting}
+                funnyLoadingMessage
               >
                 {BUTTON_TEXT}
               </Button>

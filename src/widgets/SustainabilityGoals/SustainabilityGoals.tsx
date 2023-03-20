@@ -97,6 +97,7 @@ const SustainabilityGoals = ({
                 isDisabled={!dirty || !!Object.keys(errors || {}).length}
                 isSubmitting={isGeneratingDescriptions}
                 onClick={onGenerateDescriptions}
+                funnyLoadingMessage
               >
                 {SUBMIT_BUTTON_TEXT}
               </Button>

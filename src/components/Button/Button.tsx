@@ -2,12 +2,14 @@ import { ComponentProps, PropsWithChildren } from "react";
 import clsx from "clsx";
 import classes from "./Button.module.scss";
 import Loader from "../Loader/Loader";
+import LoadingMessage from "../LoadingMessage/LoadingMessage";
 
 interface Props extends Omit<ComponentProps<"button">, "disabled"> {
   isDisabled?: boolean;
   size?: "small" | "medium" | "large";
   variant?: "contained" | "outlined";
   isSubmitting?: boolean;
+  funnyLoadingMessage?: boolean,
 }
 
 const Button = ({
@@ -17,6 +19,7 @@ const Button = ({
   size = "medium",
   variant = "contained",
   isSubmitting,
+  funnyLoadingMessage,
   ...rest
 }: PropsWithChildren<Props>) => {
   const computed = clsx(
@@ -31,9 +34,14 @@ const Button = ({
   );
 
   return (
+    <>
     <button disabled={isDisabled} className={computed} {...rest}>
       {isSubmitting ? <Loader height={21} /> : children}
     </button>
+    {
+      funnyLoadingMessage && isSubmitting && <LoadingMessage />
+    }
+    </>
   );
 };
 
