@@ -6,7 +6,7 @@ import {
 } from "@/types";
 import axios, { AxiosError } from "axios";
 
-const DEFAULT_ERROR_MESSAGE = "The AI service is experiencing high traffic. Please try again later.";
+const DEFAULT_ERROR_MESSAGE = "The AI service is experiencing high traffic. Please try again.";
 
 const fetcher = axios.create({
   baseURL: "/api",
@@ -26,7 +26,7 @@ export class OpenAIApi {
       let errorMessage = DEFAULT_ERROR_MESSAGE;
       if (error.response?.status === 408) {
         errorMessage =
-          "The AI service is experiencing high traffic. Please try again later.";
+          "The AI service is experiencing high traffic. Please try again.";
       }
       if (error.response?.status === 429) {
         errorMessage = "Too many requests. Please try again later.";
@@ -51,7 +51,7 @@ export class OpenAIApi {
       let errorMessage = DEFAULT_ERROR_MESSAGE;
       if (error.response?.status === 408) {
         errorMessage =
-          "The AI service is experiencing high traffic. Please try again later.";
+          "The AI service is experiencing high traffic. Please try again.";
       }
       if (error.response?.status === 429) {
         errorMessage = "Too many requests. Please try again later.";
