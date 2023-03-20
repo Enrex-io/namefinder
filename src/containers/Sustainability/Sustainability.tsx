@@ -22,17 +22,7 @@ import Share from "@/widgets/Share/Share";
 
 const scrollTo = (ref: MutableRefObject<any>) => {
   if (!ref.current) return;
-  const isIframe = window.location !== window.parent.location;
-  const parentWindow = window.parent;
-  const initialParentScroll = {
-    scrollX: parentWindow?.scrollX,
-    scrollY: parentWindow?.scrollY,
-  }
   ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
-  if (parentWindow && isIframe) {
-    //prevent parent window scrolling
-    parentWindow.scrollTo(initialParentScroll.scrollX, initialParentScroll.scrollY);
-  }
 }
 
 const Sustainability = () => {
@@ -173,7 +163,7 @@ const Sustainability = () => {
       />
       {generatedGoals?.length && (
         <>
-          <div ref={goalsRef} id="goalsAnchor"/>
+          <div ref={goalsRef} id="goalsAnchor" className={classes.anchor}/>
           <SustainabilityGoals
             goals={generatedGoals}
             onSubmitGoals={async (goals) => {
@@ -184,18 +174,18 @@ const Sustainability = () => {
             onGenerateDescriptions={handleGenerateDescriptions}
             isGeneratingDescriptions={isGeneratingDescriptions}
           />
-          <div ref={feedbackRef} id="feedbackAnchor" />
+          <div ref={feedbackRef} id="feedbackAnchor"  className={classes.anchor}/>
           {!hasSubmittedFeedback && isGenerateDescriptionsClicked && (
             <Feedback onSubmit={handleSubmitFeedback} />
           )}
-          <div ref={descriptionsRef} id="descriptionsAnchor"/>
+          <div ref={descriptionsRef} id="descriptionsAnchor" className={classes.anchor}/>
           {generatedDescriptions?.length && (
             <SustainabilityDescriptions
               descriptions={generatedDescriptions}
               regenerateSingleGoal={handleRegenerateSingleGoal}
             />
           )}
-          <div ref={sendmeRef} id="sendmeAnchor"/>
+          <div ref={sendmeRef} id="sendmeAnchor" className={classes.anchor}/>
           {
             generatedDescriptions?.length && (
               <Sendme
@@ -207,7 +197,7 @@ const Sustainability = () => {
               />
             )
           }
-          <div ref={shareRef} id="shareAnchor"/>
+          <div ref={shareRef} id="shareAnchor" className={classes.anchor}/>
           { isSendmeClicked && <Share />
           }
         </>
