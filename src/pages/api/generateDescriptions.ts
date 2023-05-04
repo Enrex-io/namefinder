@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { OpenAIService } from "@/services/OpenAIService.server";
+import { OpenAIService } from "@/services/OpenAIService";
 import { ResponsePayload } from "@/types";
 import { isCompanyDetailsWithGoals } from "@/types/typeGuards";
 import { applyTaskTimeout } from "@/utils/taskTimeout";
