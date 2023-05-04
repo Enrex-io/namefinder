@@ -1,9 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { OpenAIService } from "@/services/OpenAIService.server";
-import { CompanyDetails, ResponsePayload } from "@/types";
-import { isCompanyDetails } from "@/types/typeGuards";
-import { limiter } from "@/utils/requestsLimiter";
-import { applyTaskTimeout } from "@/utils/taskTimeout";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { OpenAIApi } from '@/services/OpenAIService';
+import { CompanyDetails, ResponsePayload } from '@/types';
+import { isCompanyDetails } from '@/types/typeGuards';
+import { limiter } from '@/utils/requestsLimiter';
+import { applyTaskTimeout } from '@/utils/taskTimeout';
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,30 +14,35 @@ export default async function handler(
       const METHOD = req.method;
       const BODY = req.body;
 
-      if (METHOD !== "POST") {
-        return resolve(res.status(405).json({ error: "Method not allowed" }));
+      if (METHOD !== 'POST') {
+        return resolve(res.status(405).json({ error: 'Method not allowed' }));
       }
       if (!isCompanyDetails(BODY)) {
         return resolve(
-          res.status(400).json({ error: "Company details are required" })
+          res.status(400).json({ error: 'Company details are required' })
         );
       }
 
       const companyDetails: CompanyDetails = BODY;
 
       const openAIServicePromise: Promise<ResponsePayload> =
-        OpenAIService.getGoalsByCompanyDetails(companyDetails)
+        OpenAIApi.getGoalsByCompanyDetails({
+          companyName: companyDetails.companyName,
+          industry: companyDetails.industry,
+          country: companyDetails.country.label,
+          companySize: companyDetails.companySize,
+        })
           .then((goals) => ({ result: goals }))
           .catch((error) => ({ error: error.message }));
 
       const result = await applyTaskTimeout<ResponsePayload>(
         openAIServicePromise,
-        () => ({ error: "Request timed out" })
+        () => ({ error: 'Request timed out' })
       );
 
       const hasError = !!result.error;
       let status: number = hasError
-        ? result.error === "Request timed out"
+        ? result.error === 'Request timed out'
           ? 408
           : 400
         : 200;
