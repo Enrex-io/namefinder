@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { OpenAIApi } from '@/services/OpenAIService';
 import { ResponsePayload } from '@/types';
 import { isCompanyDetailsWithGoals } from '@/types/typeGuards';
 import { applyTaskTimeout } from '@/utils/taskTimeout';
 import { limiter } from '@/utils/requestsLimiter';
+import { OpenAIApi } from '@/services/OpenAIService';
 
 export default async function handler(
   req: NextApiRequest,
@@ -27,6 +27,7 @@ export default async function handler(
       }
 
       const { goals, companyDetails } = BODY;
+
       const openAIServicePromise: Promise<ResponsePayload> =
         OpenAIApi.getDescriptionsByGoals(goals, {
           companyName: companyDetails.companyName,
