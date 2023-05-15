@@ -6,8 +6,8 @@ const DEFAULT_ERROR_MESSAGE =
   'The AI service is experiencing high traffic. Please try again.';
 
 const fetcher = axios.create({
-  // baseURL: 'https://dev-api-10101.greenifs.com/api/sustainabilityMarketing',
-  baseURL: 'http://localhost:5000/api/sustainabilityMarketing',
+  baseURL: 'https://dev-api-10101.greenifs.com/api/sustainabilityMarketing',
+  // baseURL: 'http://localhost:5000/api/sustainabilityMarketing',
   method: 'POST',
 });
 
