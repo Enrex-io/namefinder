@@ -1,6 +1,3 @@
-import { CompanySizes } from "@/consts/companySizes";
-import { SustainabilityGoalsReasons, SUSTAINABILITY_GOALS_REASONS_OPTIONS } from "@/consts/sustainabilityGoalsReasons";
-
 export type Phone = `${number}` | `${number}-${number}`;
 export type Label = Capitalize<string>;
 
@@ -13,51 +10,34 @@ export type Country = {
 
 export type Industry = `${Label} - ${Label}`;
 
-export type CompanyDetails = {
-  companyName: string;
-  companySize: CompanySizes;
-  industry: Industry;
-  country: Country;
-};
-
-export type Goal = {
-  name: Lowercase<`${string}-${string}`>;
-  label: Label;
-};
-
-export type GoalDescription = {
-  goal: string;
+export type Description = {
   description: string;
 };
 
-export type CompanyDetailsWithGoals = {
-  goals: Array<string>;
-  companyDetails: CompanyDetails;
-};
-
-export type GoalsResponsePayload = {
-  result?: Array<string>;
-  errors?: Array<string>;
-};
-
-export type GoalsDescriptionsResponsePayload = {
-  result?: Array<GoalDescription>;
-  errors?: Array<string>;
-};
-
-
 export interface Feedback {
   email: string;
-  COLLABORATE: boolean,
-  NEWSLETTER: boolean,
-  DEMO: boolean,
-};
-
-export type ParsedCompanyDetails = Omit<CompanyDetails, "country"> & {
-  country: string;
-};
+  COLLABORATE: boolean;
+  NEWSLETTER: boolean;
+  DEMO: boolean;
+}
 
 export type ResponsePayload<T = unknown> = {
   result?: T;
   error?: string;
 };
+
+export type FeedbackTags = 'NEWSLETTER' | 'DEMO' | 'COLLABORATE';
+export enum TagStatus {
+  inactive = 'inactive',
+  active = 'active',
+}
+
+export enum FeedbackTagsEnum {
+  NEWSLETTER = 'NEWSLETTER',
+  DEMO = 'DEMO',
+  COLLABORATE = 'COLLABORATE',
+}
+export interface TagsToUpdate {
+  name: FeedbackTags;
+  status: TagStatus;
+}
