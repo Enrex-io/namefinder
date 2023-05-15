@@ -1,14 +1,13 @@
-import { Field, Form } from "react-final-form";
-import Button from "@/components/Button/Button";
-import classes from "./Feedback.module.scss";
-import TextField from "@/components/TextField/TextField";
-import { SUSTAINABILITY_GOALS_REASONS_OPTIONS } from "@/consts/sustainabilityGoalsReasons";
-import { validateEmail } from "@/utils/validators";
-import { Feedback } from "@/types";
-import CheckboxField from "@/components/CheckboxField/CheckboxField";
+import { Field, Form } from 'react-final-form';
+import Button from '@/components/Button/Button';
+import classes from './Feedback.module.scss';
+import TextField from '@/components/TextField/TextField';
+import { validateEmail } from '@/utils/validators';
+import { Feedback } from '@/types';
+import CheckboxField from '@/components/CheckboxField/CheckboxField';
 
 const FEEDBACK_HEADING =
-  "Enter your email for sustainability goals and updates.";
+  'Enter your email for sustainability goals and updates.';
 const BUTTON_TEXT = "Let's go";
 
 interface Props {
@@ -30,46 +29,53 @@ const Feedback = ({ onSubmit }: Props) => {
               <h2 className={classes.heading}>{FEEDBACK_HEADING}</h2>
               <div className={classes.fieldsContainer}>
                 <Field
-                  name="email"
-                  initialValue=""
+                  name='email'
+                  initialValue=''
                   validate={validateEmail}
                   render={({ input, meta }) => (
                     <TextField
-                      label="Email"
+                      label='Email'
                       hasAsterisk
-                      placeholder="mail@example.com"
-                      type="email"
+                      placeholder='mail@example.com'
+                      type='email'
                       isError={meta.touched && meta.error}
                       helperMessage={meta.touched && meta.error}
-                      autoComplete="email"
-                      inputMode="email"
-                      {...input} />
-                  )} />
-                <div className={classes.tagsContainer}>
-                  {SUSTAINABILITY_GOALS_REASONS_OPTIONS.map(({ label, value, initialChecked }) => {
-                    return (<Field
-                      key={value}
-                      name={value}
-                      initialValue={initialChecked}
-                      type="checkbox"
-                      render={({ input }) => {
-                        return (
-                          <CheckboxField 
-                            key={input.name} 
-                            label={label} 
-                            name={input.name} 
-                            onChange={input.onChange} 
-                            value={input.value}
-                            initialChecked={initialChecked}
-                          />
-                        );
-                      } } />);
-                  })}
-                </div>
+                      autoComplete='email'
+                      inputMode='email'
+                      {...input}
+                    />
+                  )}
+                />
+                {/* <div className={classes.tagsContainer}>
+                  {SUSTAINABILITY_GOALS_REASONS_OPTIONS.map(
+                    ({ label, value, initialChecked }) => {
+                      return (
+                        <Field
+                          key={value}
+                          name={value}
+                          initialValue={initialChecked}
+                          type='checkbox'
+                          render={({ input }) => {
+                            return (
+                              <CheckboxField
+                                key={input.name}
+                                label={label}
+                                name={input.name}
+                                onChange={input.onChange}
+                                value={input.value}
+                                initialChecked={initialChecked}
+                              />
+                            );
+                          }}
+                        />
+                      );
+                    }
+                  )}
+                </div> */}
               </div>
               <Button
                 className={classes.button}
-                type="submit"
+                type='submit'
                 isDisabled={!dirty || !!Object.keys(errors || {}).length}
                 isSubmitting={submitting}
                 funnyLoadingMessage
