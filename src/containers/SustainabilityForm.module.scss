@@ -1,0 +1,19 @@
+.container {
+  max-width: 1240px;
+  width: 1240px;
+  // padding: 1.25rem;
+  border-radius: 1rem;
+}
+
+.errorContainer {
+  position: fixed;
+  bottom: 2rem;
+  left: 0rem;
+  width: 100%;
+}
+
+.anchor {
+  position: relative;
+  top: -85px;
+  z-index: -1;
+}
