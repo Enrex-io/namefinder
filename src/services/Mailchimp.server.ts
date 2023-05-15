@@ -1,13 +1,13 @@
-import { TagsToUpdate } from './../consts/sustainabilityGoalsReasons';
 import mailchimp, {
   ApiClient,
   MergeVar,
   MessagesSendRequest,
-} from "@mailchimp/mailchimp_transactional";
-import clientMarketing, { Status } from "@mailchimp/mailchimp_marketing";
-import { EMAIL_TYPES, EMAIL_TYPES_MESSAGES } from "@/consts/mail";
+} from '@mailchimp/mailchimp_transactional';
+import clientMarketing, { Status } from '@mailchimp/mailchimp_marketing';
+import { EMAIL_TYPES, EMAIL_TYPES_MESSAGES } from '@/consts/mail';
+import { TagsToUpdate } from '@/types';
 
-const DEFAULT_SENDER_EMAIL = "no-reply@greenifs.com";
+const DEFAULT_SENDER_EMAIL = 'no-reply@greenifs.com';
 const apiKeyMarketing = process.env.MAILCHIMP_API_KEY;
 const apiKeyTransactional = process.env.MAILCHIMP_API_KEY;
 const apiKeyMandrill = process.env.MANDRILL_API_KEY;
@@ -20,7 +20,9 @@ clientMarketing.setConfig({
 });
 
 export class MailchimpService {
-  private static clientTransactional: ApiClient = mailchimp(apiKeyTransactional || '');
+  private static clientTransactional: ApiClient = mailchimp(
+    apiKeyTransactional || ''
+  );
   private static clientMandrill: ApiClient = mailchimp(apiKeyMandrill || '');
   private static clientMarketing = clientMarketing;
 
@@ -29,11 +31,11 @@ export class MailchimpService {
     companyName: string,
     sectorIndustry: string,
     country: string,
-    companySize: string,
+    companySize: string
   ) => {
     const requestData = {
       email_address: email,
-      status: "subscribed" as Status,
+      status: 'subscribed' as Status,
       merge_fields: {
         COMP_NAME: companyName,
         SECT_INDUS: sectorIndustry,
@@ -42,16 +44,23 @@ export class MailchimpService {
       },
     };
 
-    const response = await this.clientMarketing.lists.addListMember(audienceId || '', requestData);
+    const response = await this.clientMarketing.lists.addListMember(
+      audienceId || '',
+      requestData
+    );
 
     return response;
   };
 
   public static updateSubscriberTags = async (
     emailHash: string,
-    tags: TagsToUpdate[],
+    tags: TagsToUpdate[]
   ) => {
-    const response = await this.clientMarketing.lists.updateListMemberTags(audienceId || '', emailHash, { tags });
+    const response = await this.clientMarketing.lists.updateListMemberTags(
+      audienceId || '',
+      emailHash,
+      { tags }
+    );
     console.log(response);
     return response;
   };
@@ -63,7 +72,7 @@ export class MailchimpService {
   ): Promise<void> {
     const { subject, content } = EMAIL_TYPES_MESSAGES[emailType];
     if (!content && !customContent) {
-      throw new Error("No content for the email was provided");
+      throw new Error('No content for the email was provided');
     }
     const request: MessagesSendRequest = {
       message: {
@@ -88,7 +97,7 @@ export class MailchimpService {
   ): Promise<void> {
     const { subject, template } = EMAIL_TYPES_MESSAGES[emailType];
 
-    if (!template) throw new Error("No template was provided");
+    if (!template) throw new Error('No template was provided');
 
     const res = await this.clientMandrill.messages.sendTemplate({
       template_name: template,

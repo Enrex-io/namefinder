@@ -24,20 +24,35 @@
 }
 
 .fieldsContainer {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  @media screen and (max-width: 768px) {
-    grid-template-columns: 1fr;
-    padding: 1.88rem 1.25rem;
-  }
-
   width: 100%;
-  gap: 0.88rem;
   padding: 1.88rem;
   border-radius: 1rem;
   border: 1px solid var(--clr-grey-main);
   align-items: center;
   justify-content: center;
+}
+
+.fieldsContainerFirst {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.88rem;
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+    padding: 1.88rem 1.25rem;
+  }
+}
+
+.fieldsContainerSecond {
+  display: grid;
+  grid-template-columns: 1fr;
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+    padding: 1.88rem 1.25rem;
+  }
+}
+
+.fieldDescription {
+  width: 100%;
 }
 
 .button {

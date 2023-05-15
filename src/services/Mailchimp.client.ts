@@ -1,39 +1,29 @@
-import { TagsToUpdate } from './../consts/sustainabilityGoalsReasons';
-import axios from "axios";
-
+import { TagsToUpdate } from '@/types';
+import axios from 'axios';
 const fetcher = axios.create({
-  baseURL: "/api",
+  baseURL: '/api',
 });
 
 export class MailchimpService {
-  public static addSubscriber = async (
-    email: string,
-    companyName?: string,
-    sectorIndustry?: string,
-    country?: string,
-    companySize?: string,
-  ) => {
+  public static addSubscriber = async (email: string, description?: string) => {
     try {
       const requestData = {
         email_address: email,
-        status: "subscribed",
+        status: 'subscribed',
         merge_fields: {
-          COMP_NAME: companyName || "Unknown",
-          SECT_INDUS: sectorIndustry || "Unknown",
-          COUNTRY: country || "Unknown",
-          COMP_SIZE: companySize || "Unknown",
+          DESCRIPTION: description || 'Unknown',
         },
       };
 
-      const response = await fetcher.post("/addSubscriber", requestData);
+      const response = await fetcher.post('/addSubscriber', requestData);
       return response.data;
     } catch (error) {
-      console.error("Error adding subscriber to Mailchimp audience:", error);
+      console.error('Error adding subscriber to Mailchimp audience:', error);
     }
   };
-  public static sendGoals = async (
+  public static sendDescription = async (
     email: string,
-    goalDescriptions: string,
+    description: string
   ) => {
     try {
       const requestData = {
@@ -44,27 +34,27 @@ export class MailchimpService {
             content: email,
           },
           {
-            name: 'GOALS',
-            content: goalDescriptions,
-          }
-        ]
+            name: 'DESCRIPTION',
+            content: description,
+          },
+        ],
       };
 
-      const response = await fetcher.post("/sendGoals", requestData);
+      const response = await fetcher.post('/sendDescription', requestData);
       return response.data;
     } catch (error) {
-      console.error("Error sending generated goals by email:", error);
+      console.error('Error sending generated goals by email:', error);
     }
   };
-  public static updateTags = async (
-    email: string,
-    tags: TagsToUpdate[],
-  ) => {
+  public static updateTags = async (email: string, tags: TagsToUpdate) => {
     try {
-      const response = await fetcher.post("/updateSubscriberTags", { email, tags });
+      const response = await fetcher.post('/updateSubscriberTags', {
+        email,
+        tags,
+      });
       return response.data;
     } catch (error) {
-      console.error("Error updating subscriber tags:", error);
+      console.error('Error updating subscriber tags:', error);
     }
   };
 }
