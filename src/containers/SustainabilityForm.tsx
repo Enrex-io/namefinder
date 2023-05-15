@@ -11,6 +11,7 @@ import Share from '@/widgets/Share/Share';
 import SustainabilityDescription from '@/widgets/SustainabilityDescriptions/SustainabilityDescriptions';
 import Sustainability from '@/widgets/Sustainability/Sustainability';
 import classes from './SustainabilityForm.module.scss';
+import { useCookies } from 'react-cookie';
 
 const scrollTo = (ref: MutableRefObject<any>) => {
   if (!ref.current) return;
@@ -72,6 +73,23 @@ const SustainabilityForm = () => {
   //   if (responseFeedback?.error) return setError(responseFeedback.error);
   //   setSubmittedFeedback(feedback);
   // };
+
+  const [cookies, setCookie] = useCookies(['submitCount']);
+
+  const handleAddCookies = () => {
+    if (!cookies.submitCount) {
+      setCookie('submitCount', 0, { path: '/' });
+      return;
+    }
+    let d = new Date();
+    d.setTime(d.getTime() + 60 * 60 * 1000);
+    setCookie('submitCount', Number(cookies.submitCount) + 1 || 0, {
+      path: '/',
+      expires: d,
+    });
+    console.log(cookies, cookies.submitCount++);
+  };
+
   const handleGenerateDescriptions = async () => {
     if (!isGenerateDescriptionsClicked) {
       return setIsGenerateDescriptionsClicked(true);
@@ -108,6 +126,7 @@ const SustainabilityForm = () => {
         onSubmitDescription={handleSubmitDescription}
         isHiddenButton={hasSubmitteddescription}
         valuesRef={descriptionRef}
+        handleAddCookies={handleAddCookies}
       />
       <>
         <div ref={feedbackRef} id='feedbackAnchor' className={classes.anchor} />
@@ -123,6 +142,7 @@ const SustainabilityForm = () => {
           <SustainabilityDescription
             description={generatedDescription}
             generateDescription={handleGenerateDescriptions}
+            handleAddCookies={handleAddCookies}
           />
         )}
         <div ref={sendmeRef} id='sendmeAnchor' className={classes.anchor} />
