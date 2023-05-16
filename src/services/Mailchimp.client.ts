@@ -5,18 +5,15 @@ const fetcher = axios.create({
 });
 
 export class MailchimpService {
-  public static addSubscriber = async (email: string, counter: string) => {
+  public static addSubscriber = async (email: string, counter: number) => {
     try {
       const requestData = {
         email_address: email,
         status: 'subscribed',
         merge_fields: {
-          Counter: counter,
+          COUNTER: counter,
         },
       };
-
-      console.log(requestData);
-
       const response = await fetcher.post('/addSubscriber', requestData);
       return response.data;
     } catch (error) {
@@ -24,13 +21,16 @@ export class MailchimpService {
     }
   };
 
-  public static updateMergeField = async (email: string, counter: string) => {
+  public static updateMergeField = async (email: string, counter: number) => {
     try {
       const requestData = {
-        email,
-        Counter: counter,
+        email_address: email,
+        status: 'subscribed',
+        merge_fields: {
+          COUNTER: counter,
+        },
       };
-      const response = await fetcher.post('/updateMergeField', requestData);
+      const response = await fetcher.put('/updateMergeField', requestData);
       return response.data;
     } catch (error) {
       console.error('Error updating subscriber tags:', error);

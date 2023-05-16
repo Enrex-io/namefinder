@@ -7,10 +7,10 @@ export default async function handler(
 ) {
   const {
     email_address,
-    merge_fields: { Counter },
+    merge_fields: { COUNTER },
   } = req.body;
 
-  await MailchimpService.addSubscriber(email_address, Counter)
+  await MailchimpService.addSubscriber(email_address, COUNTER)
     .then((response) => res.status(200).json(response))
     .catch((error) => res.status(500).json(error));
 }
