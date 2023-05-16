@@ -1,43 +1,35 @@
-import { forwardRef, PropsWithChildren } from "react";
-import clsx from "clsx";
-import classes from "./CheckboxField.module.scss";
+import { forwardRef, PropsWithChildren } from 'react';
+import clsx from 'clsx';
+import classes from './CheckboxField.module.scss';
 
 interface Props {
   label: string;
-  value: boolean,
-  name: string,
-  onChange: (event: any) => void,
-  initialChecked: boolean,
+  value: boolean;
+  name: string;
+  onChange: (event: any) => void;
+  initialChecked: boolean;
 }
 
-const CheckboxField = forwardRef<HTMLInputElement, PropsWithChildren<Props>>(
+const CheckboxField = forwardRef<HTMLTextAreaElement, PropsWithChildren<Props>>(
   (
-    {
-      label,
-      name,
-      value,
-      onChange,
-      initialChecked,
-      ...props
-    }: Props,
-    ref: React.Ref<HTMLInputElement>
+    { label, name, value, onChange, initialChecked, ...props }: Props,
+    ref: React.Ref<HTMLTextAreaElement>
   ) => {
-
     return (
-    <label className={clsx(classes.field)}>
-      <input
-        type="checkbox"
-        id={name}
-        checked={value}
-        onChange={onChange}
-        defaultChecked={initialChecked}
+      <label className={clsx(classes.field)}>
+        <input
+          type='checkbox'
+          id={name}
+          checked={value}
+          onChange={onChange}
+          defaultChecked={initialChecked}
         />
-      {label && <span className={classes.label}>{label}</span>}
-    </label>
+        {label && <span className={classes.label}>{label}</span>}
+      </label>
     );
   }
 );
 
-CheckboxField.displayName = "CheckboxField";
+CheckboxField.displayName = 'CheckboxField';
 
 export default CheckboxField;
