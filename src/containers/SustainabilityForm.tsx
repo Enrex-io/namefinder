@@ -6,12 +6,13 @@ import Stack from '@/components/Stack/Stack';
 import { delay } from '@/utils/helpers';
 import WindowScrollControls from '@/components/WindowScrollControls/WindowScrollControls';
 import StatusDisplay from '@/components/StatusDisplay/StatusDisplay';
-import Sendme from '@/widgets/Sendme/Sendme';
-import Share from '@/widgets/Share/Share';
 import SustainabilityDescription from '@/widgets/SustainabilityDescriptions/SustainabilityDescriptions';
 import Sustainability from '@/widgets/Sustainability/Sustainability';
 import classes from './SustainabilityForm.module.scss';
 import { useCookies } from 'react-cookie';
+import { MailchimpService } from '@/services/Mailchimp.client';
+import Feedback from '@/widgets/Feedback/Feedback';
+import Reset from '@/widgets/Reset/Reset';
 
 const scrollTo = (ref: MutableRefObject<any>) => {
   if (!ref.current) return;
@@ -20,7 +21,6 @@ const scrollTo = (ref: MutableRefObject<any>) => {
 
 const SustainabilityForm = () => {
   const feedbackRef = useRef<HTMLDivElement | null>(null);
-  const descriptionsRef = useRef<HTMLDivElement | null>(null);
   const sendmeRef = useRef<HTMLDivElement | null>(null);
   const shareRef = useRef<HTMLDivElement | null>(null);
 
@@ -38,113 +38,134 @@ const SustainabilityForm = () => {
   const descriptionRef = useRef<Description | null>(null);
   const hasSubmittedFeedback = Boolean(submittedFeedback);
 
+  const [cookies, setCookie] = useCookies(['submitCount', 'email']);
+
   const handleSubmitDescription = async (description: Description) => {
     const responseDescriptions =
-      await OpenAIApi.getAssistedBySustainabilityMarketing(description);
+      await OpenAIApi.getAssistedBySustainabilityMarketing(
+        description.description
+      );
     if (responseDescriptions.error) return setError(responseDescriptions.error);
     setError(null);
     setGeneratedDescription(responseDescriptions.result);
     setHasSubmitteddescription(true);
-    delay(() => scrollTo(descriptionsRef), 500);
+    // delay(() => scrollTo(descriptionRef), 500);
+    return responseDescriptions;
   };
 
-  // const handleSubmitFeedback = async (feedback: FeedbackType) => {
-  //   console.log(feedback);
-  //   if (!descriptionRef.current) return;
-  //   const responseFeedback = await MailchimpService.addSubscriber(
-  //     feedback.email,
-  //     descriptionRef.current.description
-  //   );
-
-  //   if (!generatedDescription) return;
-
-  //   const descriptionToSend = {
-  //     name: generatedDescription
-  //       ? FeedbackTagsEnum.NEWSLETTER
-  //       : FeedbackTagsEnum.NEWSLETTER,
-  //     status: generatedDescription ? TagStatus.active : TagStatus.inactive,
-  //   };
-
-  //   const responseUpdateTags = await MailchimpService.updateTags(
-  //     feedback.email,
-  //     descriptionToSend
-  //   );
-
-  //   if (responseFeedback?.error) return setError(responseFeedback.error);
-  //   setSubmittedFeedback(feedback);
-  // };
-
-  const [cookies, setCookie] = useCookies(['submitCount']);
-
-  const handleAddCookies = () => {
-    if (!cookies.submitCount) {
-      setCookie('submitCount', 0, { path: '/' });
-      return;
-    }
+  const handleSubmitFeedback = async (feedback: FeedbackType) => {
     let d = new Date();
     d.setTime(d.getTime() + 60 * 60 * 1000);
+    setCookie('email', feedback.email, { path: '/', expires: d });
+    const responseFeedback = await MailchimpService.addSubscriber(
+      feedback.email,
+      cookies.submitCount
+    );
+    // const responseUpdateTags = await MailchimpService.updateTags(
+    //   feedback.email,
+    //   cookies.submitCount
+    // );
+    if (!descriptionRef.current) return;
+
+    const result = await handleSubmitDescription(descriptionRef.current);
+    if (responseFeedback?.error) return setError(responseFeedback.error);
+    if (result) {
+      setIsGeneratingDescriptions(false);
+      setSubmittedFeedback(feedback);
+    }
+  };
+
+  const handleAddCookies = async () => {
+    let d = new Date();
+    d.setTime(d.getTime() + 60 * 60 * 1000);
+    if (!cookies.submitCount) {
+      setCookie('submitCount', 1, { path: '/', expires: d });
+      return;
+    }
+
     setCookie('submitCount', Number(cookies.submitCount) + 1 || 0, {
       path: '/',
       expires: d,
     });
-    console.log(cookies, cookies.submitCount++);
+
+    if (Number(cookies.submitCount) > 2 && cookies.email) {
+      const responseFeedback = await MailchimpService.updateMergeField(
+        cookies.email,
+        cookies.submitCount
+      );
+      if (responseFeedback?.error) return setError(responseFeedback.error);
+    }
   };
 
-  const handleGenerateDescriptions = async () => {
-    if (!isGenerateDescriptionsClicked) {
-      return setIsGenerateDescriptionsClicked(true);
-    }
-    setIsGeneratingDescriptions(true);
-    if (!descriptionRef.current) return;
-    const response = await OpenAIApi.getAssistedBySustainabilityMarketing(
-      descriptionRef.current
-    );
-    if (response.error) {
-      setIsGeneratingDescriptions(false);
-      return setError(response.error);
-    }
-    setError(null);
-    setGeneratedDescription(response.result);
-    setIsGeneratingDescriptions(false);
-    delay(() => scrollTo(feedbackRef), 500);
-  };
+  // const handleGenerateDescriptions = async () => {
+  //   if (!isGenerateDescriptionsClicked) {
+  //     return setIsGenerateDescriptionsClicked(true);
+  //   }
+  //   setIsGeneratingDescriptions(true);
+  //   if (!descriptionRef.current) return;
+  //   const response = await OpenAIApi.getAssistedBySustainabilityMarketing(
+  //     descriptionRef.current
+  //   );
+  //   if (response.error) {
+  //     setIsGeneratingDescriptions(false);
+  //     return setError(response.error);
+  //   }
+  //   setError(null);
+  //   setGeneratedDescription(response.result);
+  //   setIsGeneratingDescriptions(false);
+  //   delay(() => scrollTo(feedbackRef), 500);
+  // };
 
   const handleSendmeClick = () => {
     setIsSendmeClicked(true);
     delay(() => scrollTo(shareRef), 500);
   };
 
-  useEffect(() => {
-    if (!hasSubmittedFeedback && isGenerateDescriptionsClicked) {
-      delay(() => scrollTo(feedbackRef), 500);
-    }
-  }, [isGenerateDescriptionsClicked, hasSubmittedFeedback]);
+  const handleResetClick = () => {
+    setGeneratedDescription(undefined);
+    setHasSubmitteddescription(false);
+  };
+
+  // useEffect(() => {
+  //   if (!hasSubmittedFeedback && isGenerateDescriptionsClicked) {
+  //     delay(() => scrollTo(feedbackRef), 500);
+  //   }
+  // }, [isGenerateDescriptionsClicked, hasSubmittedFeedback]);
 
   return (
     <Paper spacing={1.25} direction='column' className={classes.container}>
       <Sustainability
-        onSubmitDescription={handleSubmitDescription}
+        onSubmitDescription={async (description) => {
+          console.log(cookies.submitCount);
+          if (Number(cookies.submitCount) === 2) {
+            setIsGeneratingDescriptions(true);
+            return;
+          } else {
+            await handleSubmitDescription(description);
+          }
+        }}
         isHiddenButton={hasSubmitteddescription}
         valuesRef={descriptionRef}
         handleAddCookies={handleAddCookies}
       />
       <>
         <div ref={feedbackRef} id='feedbackAnchor' className={classes.anchor} />
-        {/* {!hasSubmittedFeedback && isGenerateDescriptionsClicked && (
+        {isGeneratingDescriptions && Number(cookies.submitCount) === 2 && (
           <Feedback onSubmit={handleSubmitFeedback} />
-        )} */}
+        )}
         <div
-          ref={descriptionsRef}
+          // ref={descriptionRef}
           id='descriptionsAnchor'
           className={classes.anchor}
         />
         {generatedDescription && (
           <SustainabilityDescription
             description={generatedDescription}
-            generateDescription={handleGenerateDescriptions}
+            // generateDescription={handleGenerateDescriptions}
             handleAddCookies={handleAddCookies}
           />
         )}
+        {/* SEND ME BUTTON
         <div ref={sendmeRef} id='sendmeAnchor' className={classes.anchor} />
         {generatedDescription && (
           <Sendme
@@ -156,7 +177,8 @@ const SustainabilityForm = () => {
           />
         )}
         <div ref={shareRef} id='shareAnchor' className={classes.anchor} />
-        {isSendmeClicked && <Share />}
+        {isSendmeClicked && <Share />} */}
+        {generatedDescription && <Reset onClick={handleResetClick} />}
       </>
       {error && (
         <Stack
