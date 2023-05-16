@@ -26,21 +26,12 @@ export class MailchimpService {
   private static clientMandrill: ApiClient = mailchimp(apiKeyMandrill || '');
   private static clientMarketing = clientMarketing;
 
-  public static addSubscriber = async (
-    email: string,
-    companyName: string,
-    sectorIndustry: string,
-    country: string,
-    companySize: string
-  ) => {
+  public static addSubscriber = async (email: string, counter: number) => {
     const requestData = {
       email_address: email,
       status: 'subscribed' as Status,
       merge_fields: {
-        COMP_NAME: companyName,
-        SECT_INDUS: sectorIndustry,
-        COUNTRY: country,
-        COMP_SIZE: companySize,
+        Counter: counter,
       },
     };
 
@@ -53,70 +44,15 @@ export class MailchimpService {
   };
 
   public static updateSubscriberTags = async (
-    emailHash: string,
-    tags: TagsToUpdate[]
+    email: string,
+    counter: string
   ) => {
     const response = await this.clientMarketing.lists.updateListMemberTags(
       audienceId || '',
-      emailHash,
-      { tags }
+      email,
+      { Counter: counter }
     );
     console.log(response);
     return response;
   };
-
-  public static async sendSingleMail(
-    receiver: string,
-    emailType: EMAIL_TYPES,
-    customContent?: string
-  ): Promise<void> {
-    const { subject, content } = EMAIL_TYPES_MESSAGES[emailType];
-    if (!content && !customContent) {
-      throw new Error('No content for the email was provided');
-    }
-    const request: MessagesSendRequest = {
-      message: {
-        from_email: DEFAULT_SENDER_EMAIL,
-        to: [{ email: receiver }],
-        subject,
-        text: customContent || content,
-      },
-    };
-
-    const res = await this.clientTransactional.messages.send(request);
-
-    if (res instanceof Error) {
-      throw new Error('Mailchimp service error', res);
-    }
-  }
-
-  public static async sendSingleTemplate(
-    receiver: string,
-    emailType: EMAIL_TYPES,
-    templateVariables: MergeVar[]
-  ): Promise<void> {
-    const { subject, template } = EMAIL_TYPES_MESSAGES[emailType];
-
-    if (!template) throw new Error('No template was provided');
-
-    const res = await this.clientMandrill.messages.sendTemplate({
-      template_name: template,
-      message: {
-        from_email: DEFAULT_SENDER_EMAIL,
-        to: [{ email: receiver }],
-        subject,
-        merge_vars: [
-          {
-            rcpt: receiver,
-            vars: templateVariables,
-          },
-        ],
-      },
-      template_content: [],
-    });
-
-    if (res instanceof Error) {
-      throw new Error('Mailchimp service error', res);
-    }
-  }
 }
