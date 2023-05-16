@@ -50,6 +50,15 @@ const SustainabilityForm = () => {
     setGeneratedDescription(responseDescriptions.result);
     setHasSubmitteddescription(true);
     // delay(() => scrollTo(descriptionRef), 500);
+
+    if (Number(cookies.submitCount) >= 2 && cookies.email) {
+      const responseFeedback = await MailchimpService.updateMergeField(
+        cookies.email,
+        Number(cookies.submitCount)
+      );
+      if (responseFeedback?.error) return setError(responseFeedback.error);
+    }
+
     return responseDescriptions;
   };
 
@@ -59,7 +68,7 @@ const SustainabilityForm = () => {
     setCookie('email', feedback.email, { path: '/', expires: d });
     const responseFeedback = await MailchimpService.addSubscriber(
       feedback.email,
-      cookies.submitCount
+      Number(cookies.submitCount)
     );
     // const responseUpdateTags = await MailchimpService.updateTags(
     //   feedback.email,
@@ -75,7 +84,7 @@ const SustainabilityForm = () => {
     }
   };
 
-  const handleAddCookies = async () => {
+  const handleAddCookies = () => {
     let d = new Date();
     d.setTime(d.getTime() + 60 * 60 * 1000);
     if (!cookies.submitCount) {
@@ -83,18 +92,10 @@ const SustainabilityForm = () => {
       return;
     }
 
-    setCookie('submitCount', Number(cookies.submitCount) + 1 || 0, {
+    setCookie('submitCount', Number(cookies.submitCount) + 1 || 1, {
       path: '/',
       expires: d,
     });
-
-    if (Number(cookies.submitCount) > 2 && cookies.email) {
-      const responseFeedback = await MailchimpService.updateMergeField(
-        cookies.email,
-        cookies.submitCount
-      );
-      if (responseFeedback?.error) return setError(responseFeedback.error);
-    }
   };
 
   // const handleGenerateDescriptions = async () => {
@@ -136,7 +137,6 @@ const SustainabilityForm = () => {
     <Paper spacing={1.25} direction='column' className={classes.container}>
       <Sustainability
         onSubmitDescription={async (description) => {
-          console.log(cookies.submitCount);
           if (Number(cookies.submitCount) === 2) {
             setIsGeneratingDescriptions(true);
             return;
