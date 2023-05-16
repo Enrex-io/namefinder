@@ -23,22 +23,22 @@ function Sendme({
   descriptionRef,
 }: Props) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const handleSendmeClick = async () => {
-    if (!feedback?.email) {
-      return setError('Email is not provided');
-    }
-    onClick();
-    setIsSubmitting(true);
-    await MailchimpService.sendDescription(feedback?.email, description);
-    setIsSubmitting(false);
-  };
+  // const handleSendmeClick = async () => {
+  //   if (!feedback?.email) {
+  //     return setError('Email is not provided');
+  //   }
+  //   onClick();
+  //   setIsSubmitting(true);
+  //   await MailchimpService.sendDescription(feedback?.email, description);
+  //   setIsSubmitting(false);
+  // };
   return (
     <Stack style={{ justifyContent: 'center' }}>
       <Button
         tabIndex={1}
         type='submit'
         className={classes.button}
-        onClick={handleSendmeClick}
+        // onClick={handleSendmeClick}
         isSubmitting={isSubmitting}
       >
         {SENDME_BUTTON_TEXT}
