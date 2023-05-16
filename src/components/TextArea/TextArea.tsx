@@ -1,8 +1,8 @@
 import { ComponentProps, forwardRef, PropsWithChildren, useRef } from 'react';
 import clsx from 'clsx';
-import classes from './TextField.module.scss';
+import classes from './TextArea.module.scss';
 
-interface Props extends ComponentProps<'input'> {
+interface Props extends ComponentProps<'textarea'> {
   label: Capitalize<string>;
   isError?: boolean;
   hasAsterisk?: boolean;
@@ -15,7 +15,7 @@ interface Props extends ComponentProps<'input'> {
   valueClassName?: string;
 }
 
-const TextField = forwardRef<HTMLInputElement, PropsWithChildren<Props>>(
+const TextArea = forwardRef<HTMLTextAreaElement, PropsWithChildren<Props>>(
   (
     {
       label,
@@ -29,30 +29,24 @@ const TextField = forwardRef<HTMLInputElement, PropsWithChildren<Props>>(
       fieldClassName,
       valueClassName,
       autoComplete = 'off',
-      inputMode = 'text',
       ...props
     }: PropsWithChildren<Props>,
-    ref: React.Ref<HTMLInputElement>
+    ref: React.Ref<HTMLTextAreaElement>
   ) => {
     const computedLabel = `${label}${hasAsterisk ? ' *' : ''}`;
-
     return (
       <label className={clsx(classes.field, fieldClassName)}>
         {label && <span className={classes.label}>{computedLabel}</span>}
         <div
-          className={clsx(valueClassName, classes.input, className, {
+          className={clsx(valueClassName, classes.textarea, className, {
             [classes.error]: isError,
           })}
         >
           {startAdornment}
-          <input
-            autoComplete={autoComplete}
-            {...props}
-            inputMode={inputMode}
-            ref={ref}
-          />
+          <textarea autoComplete={autoComplete} rows={10} ref={ref} {...props}>
+            {endAdornment}
+          </textarea>
           {children}
-          {endAdornment}
         </div>
         <span
           className={clsx(classes.helperText, {
@@ -66,6 +60,6 @@ const TextField = forwardRef<HTMLInputElement, PropsWithChildren<Props>>(
   }
 );
 
-TextField.displayName = 'TextField';
+TextArea.displayName = 'TextArea';
 
-export default TextField;
+export default TextArea;

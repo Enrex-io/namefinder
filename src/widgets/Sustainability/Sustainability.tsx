@@ -8,8 +8,9 @@ import { MutableRefObject, useRef } from 'react';
 import { parsedescription } from '@/utils/helpers';
 import { useCookies } from 'react-cookie';
 import classes from './Sustainability.module.scss';
+import TextArea from '@/components/TextArea/TextArea';
 
-const HEADING_TEXT = 'Paste a text to check for green washing flaws.';
+const HEADING_TEXT = 'Sustainability Marketing Assistant';
 const SUBMIT_BUTTON_TEXT = 'Check For GreenWashing';
 
 interface Props {
@@ -50,11 +51,11 @@ const Sustainability = ({
                       name='description'
                       validate={validateDescription}
                       render={({ input, meta }) => (
-                        <TextField
+                        <TextArea
                           tabIndex={1}
-                          label='Description'
+                          label='Paste a text to check for green washing flaws.'
                           hasAsterisk
-                          placeholder='Description'
+                          placeholder='Paste a text to check for green washing flaws.'
                           isError={meta.touched && meta.error}
                           helperMessage={meta.touched && meta.error}
                           {...input}

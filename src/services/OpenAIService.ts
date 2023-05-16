@@ -13,14 +13,14 @@ const fetcher = axios.create({
 
 export class OpenAIApi {
   public static getAssistedBySustainabilityMarketing = async (
-    description: Description
+    description: string
   ): Promise<ResponsePayload<string>> => {
     try {
       const response = await fetcher.post(
         '/getAssistedBySustainabilityMarketing',
         {
           details: {
-            description: description.description,
+            description: description,
           },
         }
       );
