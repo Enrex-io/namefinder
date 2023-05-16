@@ -8,13 +8,13 @@ const HEADING_TEXT = 'Recommended text to use';
 
 interface Props {
   description: string;
-  generateDescription: (description: string) => Promise<void>;
+  // generateDescription: (description: string) => Promise<void>;
   handleAddCookies: () => void;
 }
 
 function SustainabilityDescription({
   description,
-  generateDescription,
+  // generateDescription,
   handleAddCookies,
 }: Props) {
   return (
@@ -31,12 +31,12 @@ function SustainabilityDescription({
           {/* <h3 className={classes.goalHeading}>{description}</h3> */}
           <p className={classes.goalDescription}>{description}</p>
           <Stack spacing={1}>
-            <RestartButton
+            {/* <RestartButton
               onRestart={async () => {
                 await generateDescription(description);
                 handleAddCookies();
               }}
-            />
+            /> */}
             <CopyButton
               copyText={`
               ${description}
