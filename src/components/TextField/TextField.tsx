@@ -2,7 +2,7 @@ import { ComponentProps, forwardRef, PropsWithChildren, useRef } from 'react';
 import clsx from 'clsx';
 import classes from './TextField.module.scss';
 
-interface Props extends ComponentProps<'textarea'> {
+interface Props extends ComponentProps<'input'> {
   label: Capitalize<string>;
   isError?: boolean;
   hasAsterisk?: boolean;
@@ -15,7 +15,7 @@ interface Props extends ComponentProps<'textarea'> {
   valueClassName?: string;
 }
 
-const TextField = forwardRef<HTMLTextAreaElement, PropsWithChildren<Props>>(
+const TextField = forwardRef<HTMLInputElement, PropsWithChildren<Props>>(
   (
     {
       label,
@@ -29,24 +29,30 @@ const TextField = forwardRef<HTMLTextAreaElement, PropsWithChildren<Props>>(
       fieldClassName,
       valueClassName,
       autoComplete = 'off',
+      inputMode = 'text',
       ...props
     }: PropsWithChildren<Props>,
-    ref: React.Ref<HTMLTextAreaElement>
+    ref: React.Ref<HTMLInputElement>
   ) => {
     const computedLabel = `${label}${hasAsterisk ? ' *' : ''}`;
+
     return (
       <label className={clsx(classes.field, fieldClassName)}>
         {label && <span className={classes.label}>{computedLabel}</span>}
         <div
-          className={clsx(valueClassName, classes.textarea, className, {
+          className={clsx(valueClassName, classes.input, className, {
             [classes.error]: isError,
           })}
         >
           {startAdornment}
-          <textarea autoComplete={autoComplete} rows={10} ref={ref} {...props}>
-            {endAdornment}
-          </textarea>
+          <input
+            autoComplete={autoComplete}
+            {...props}
+            inputMode={inputMode}
+            ref={ref}
+          />
           {children}
+          {endAdornment}
         </div>
         <span
           className={clsx(classes.helperText, {
