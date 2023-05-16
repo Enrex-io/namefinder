@@ -31,7 +31,7 @@ export class MailchimpService {
       email_address: email,
       status: 'subscribed' as Status,
       merge_fields: {
-        Counter: counter,
+        COUNTER: counter,
       },
     };
 
@@ -43,16 +43,18 @@ export class MailchimpService {
     return response;
   };
 
-  public static updateSubscriberTags = async (
-    email: string,
-    counter: string
-  ) => {
-    const response = await this.clientMarketing.lists.updateListMemberTags(
+  public static updateMergeField = async (email: string, counter: string) => {
+    const response = await this.clientMarketing.lists.setListMember(
       audienceId || '',
       email,
-      { Counter: counter }
+      {
+        email_address: email,
+        status_if_new: 'subscribed' as Status,
+        merge_fields: {
+          COUNTER: counter,
+        },
+      }
     );
-    console.log(response);
     return response;
   };
 }

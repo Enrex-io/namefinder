@@ -9,9 +9,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { email, Counter } = req.body;
+  const {
+    email_address,
+    merge_fields: { COUNTER },
+  } = req.body;
 
-  await MailchimpService.updateSubscriberTags(md5(email), Counter)
+  await MailchimpService.updateMergeField(email_address, COUNTER)
     .then((response) => res.status(200).json(response))
     .catch((error) => res.status(500).json(error));
 }
