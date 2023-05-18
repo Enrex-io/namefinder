@@ -6,8 +6,7 @@ import { validateEmail } from '@/utils/validators';
 import { Feedback } from '@/types';
 import CheckboxField from '@/components/CheckboxField/CheckboxField';
 
-const FEEDBACK_HEADING =
-  'Enter your email for sustainability goals and updates.';
+const FEEDBACK_HEADING = 'Enter your email for product updates';
 const BUTTON_TEXT = "Let's go";
 
 interface Props {

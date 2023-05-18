@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import Button from "../Button/Button";
+import { useRef, useState } from 'react';
+import Button from '../Button/Button';
 
 interface Props {
   copyText: string;
@@ -11,18 +11,18 @@ const CopyButton = ({ copyText }: Props) => {
 
   return (
     <Button
-      size="small"
-      variant="outlined"
+      size='small'
+      variant='outlined'
       onClick={() => {
         setIsShownLoading(true);
         navigator.clipboard.writeText(copyText);
         if (currentTimeout.current) window.clearTimeout(currentTimeout.current);
         currentTimeout.current = window.setTimeout(() => {
           setIsShownLoading(false);
-        }, 5000);
+        }, 1000);
       }}
     >
-      {isShownLoading ? "Copied" : "Copy"}
+      {isShownLoading ? 'Copied' : 'Copy'}
     </Button>
   );
 };

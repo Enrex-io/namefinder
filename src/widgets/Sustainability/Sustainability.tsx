@@ -53,9 +53,9 @@ const Sustainability = ({
                       render={({ input, meta }) => (
                         <TextArea
                           tabIndex={1}
-                          label='Paste a text to check for green washing flaws.'
+                          label='Text to check for green washing flaws.'
                           hasAsterisk
-                          placeholder='Paste a text to check for green washing flaws.'
+                          placeholder='Enter text here'
                           isError={meta.touched && meta.error}
                           helperMessage={meta.touched && meta.error}
                           {...input}
