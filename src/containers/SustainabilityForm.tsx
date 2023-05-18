@@ -144,7 +144,12 @@ const SustainabilityForm = () => {
             await handleSubmitDescription(description);
           }
         }}
-        isHiddenButton={hasSubmitteddescription}
+        isHiddenButton={
+          (isGeneratingDescriptions &&
+            Number(cookies.submitCount) === 2 &&
+            !hasSubmitteddescription) ||
+          hasSubmitteddescription
+        }
         valuesRef={descriptionRef}
         handleAddCookies={handleAddCookies}
       />
