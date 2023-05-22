@@ -13,6 +13,7 @@ interface Props extends ComponentProps<'textarea'> {
   endAdornment?: React.ReactNode;
   fieldClassName?: string;
   valueClassName?: string;
+  maxLength?: number;
 }
 
 const TextArea = forwardRef<HTMLTextAreaElement, PropsWithChildren<Props>>(
@@ -28,6 +29,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, PropsWithChildren<Props>>(
       children,
       fieldClassName,
       valueClassName,
+      maxLength,
       autoComplete = 'off',
       ...props
     }: PropsWithChildren<Props>,
@@ -43,7 +45,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, PropsWithChildren<Props>>(
           })}
         >
           {startAdornment}
-          <textarea autoComplete={autoComplete} rows={10} ref={ref} {...props}>
+          <textarea autoComplete={autoComplete} rows={5} ref={ref} {...props}>
             {endAdornment}
           </textarea>
           {children}
@@ -55,6 +57,11 @@ const TextArea = forwardRef<HTMLTextAreaElement, PropsWithChildren<Props>>(
         >
           {helperMessage}
         </span>
+        <span
+          className={clsx(classes.helperCounter, {
+            [classes.error]: isError,
+          })}
+        >{`${props?.value?.toString().length} / ${maxLength}`}</span>
       </label>
     );
   }
