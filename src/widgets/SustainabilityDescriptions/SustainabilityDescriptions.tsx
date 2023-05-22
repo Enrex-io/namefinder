@@ -8,14 +8,10 @@ const HEADING_TEXT = 'You post analysis';
 
 interface Props {
   descriptions: string[] | [];
-  // generateDescription: (description: string) => Promise<void>;
-  handleAddCookies: () => void;
 }
 
 function SustainabilityDescription({
   descriptions,
-  // generateDescription,
-  handleAddCookies,
 }: Props) {
   return (
     <Stack spacing={1.25} direction='column'>
@@ -37,19 +33,6 @@ function SustainabilityDescription({
                   {/* <span className={classes.primaryText}>{description}</span> */}
                   <span>{description}</span>
                 </p>
-                {/* <Stack spacing={1}>
-                  <RestartButton
-                  onRestart={async () => {
-                  await generateDescription(description);
-                  handleAddCookies();
-                  }}
-                  />
-                  <CopyButton
-                  copyText={`
-                  ${description}
-                  `}
-                  />
-                  </Stack> */}
               </Paper>
             );
           })}
