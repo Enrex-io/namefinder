@@ -51,7 +51,6 @@ const Sustainability = ({
           ref.current = parseDetails(values);
           const media = parseDetails(values).media;
           if(media) setCountOfChars(getMediaCharByMedia(media as Medias));
-          console.log(MEDIAS_OPTIONS)
           return (
             <form onSubmit={handleSubmit} className={classes.form}>
               <Paper className={classes.paper}>

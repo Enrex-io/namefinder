@@ -25,7 +25,6 @@ function SustainabilityDescription({
         >
           {descriptions.map((description, index) => {
             if (description.trim() === '') return;
-            console.log(index);
             return (
               <Paper key={description} className={classes.paperDescription}>
                 {/* <h3 className={classes.goalHeading}>{description}</h3> */}
