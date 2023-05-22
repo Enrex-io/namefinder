@@ -138,14 +138,9 @@ const SustainabilityForm = () => {
 
   const handleResetClick = () => {
     setGeneratedDescription([]);
+    setPost('');
     setHasSubmitteddescription(false);
   };
-
-  // useEffect(() => {
-  //   if (!hasSubmittedFeedback && isGenerateDescriptionsClicked) {
-  //     delay(() => scrollTo(feedbackRef), 500);
-  //   }
-  // }, [isGenerateDescriptionsClicked, hasSubmittedFeedback]);
 
   return (
     <Paper spacing={1.25} direction='column' className={classes.container}>
@@ -173,36 +168,18 @@ const SustainabilityForm = () => {
           <Feedback onSubmit={handleSubmitFeedback} />
         )}
         <div
-          // ref={descriptionRef}
           id='descriptionsAnchor'
           className={classes.anchor}
         />
         {generatedDescription[0] && (
           <SustainabilityDescription
             descriptions={generatedDescription}
-            // generateDescription={handleGenerateDescriptions}
-            handleAddCookies={handleAddCookies}
           />
         )}
-        {/* SEND ME BUTTON
-        <div ref={sendmeRef} id='sendmeAnchor' className={classes.anchor} />
-        {generatedDescription && (
-          <Sendme
-            description={generatedDescription}
-            feedback={submittedFeedback}
-            descriptionRef={descriptionRef}
-            setError={setError}
-            onClick={handleSendmeClick}
-          />
-        )}
-        <div ref={shareRef} id='shareAnchor' className={classes.anchor} />
-
-        {isSendmeClicked && <Share />} */}
-
-        {/* {generatedDescription && <Reset onClick={handleResetClick} />} */}
         {post && (
           <MediaPost media={detailsRef.current?.media || ''} post={post} />
         )}
+        {post && <Reset onClick={handleResetClick} />}
       </>
       {error && (
         <Stack
