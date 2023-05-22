@@ -4,7 +4,7 @@ import { MailchimpService } from '@/services/Mailchimp.client';
 import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
 import classes from './Reset.module.scss';
 
-const RESET_BUTTON_TEXT = 'Try Again';
+const RESET_BUTTON_TEXT = 'Start over';
 
 interface Props {
   // setError: Dispatch<SetStateAction<string | null>>;
