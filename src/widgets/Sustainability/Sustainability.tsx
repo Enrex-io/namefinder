@@ -7,7 +7,7 @@ import {
   validateRegion,
 } from '@/utils/validators';
 import Paper from '@/components/Paper/Paper';
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { MutableRefObject, useRef, useState } from 'react';
 import { getMediaCharByMedia, parseDetails } from '@/utils/helpers';
 import classes from './Sustainability.module.scss';
 import TextArea from '@/components/TextArea/TextArea';
@@ -39,9 +39,10 @@ const Sustainability = ({
     await onSubmitDetails(result);
   };
 
-  const [countOfChars, setCountOfChars] = useState<number>(280);
 
-  return (
+  const [countOfChars, setCountOfChars] = useState<number>(0);
+
+    return (
     <div className={classes.container}>
       <h2 className={classes.heading}>{HEADING_TEXT}</h2>
       <Form
@@ -49,7 +50,8 @@ const Sustainability = ({
         render={({ handleSubmit, dirty, errors, submitting, values }) => {
           ref.current = parseDetails(values);
           const media = parseDetails(values).media;
-          setCountOfChars(getMediaCharByMedia(media as Medias) | 280);
+          if(media) setCountOfChars(getMediaCharByMedia(media as Medias));
+          console.log(MEDIAS_OPTIONS)
           return (
             <form onSubmit={handleSubmit} className={classes.form}>
               <Paper className={classes.paper}>
@@ -58,13 +60,13 @@ const Sustainability = ({
                     <Field
                       name='media'
                       validate={validateMedia}
+                      defaultValue={MEDIAS_OPTIONS[0].label}
                       render={({ input, meta }) => (
                         <SelectField
                           tabIndex={1}
                           hasAsterisk
                           label='Select social media platform'
                           options={MEDIAS_OPTIONS}
-                          placeholder={Medias.Facebook}
                           isError={meta.touched && meta.error}
                           helperMessage={meta.touched && meta.error}
                           {...input}
@@ -74,13 +76,13 @@ const Sustainability = ({
                     <Field
                       name='region'
                       validate={validateRegion}
+                      defaultValue={REGIONS_OPTIONS[0].label}
                       render={({ input, meta }) => (
                         <SelectField
                           tabIndex={1}
                           hasAsterisk
                           label='Select Region'
                           options={REGIONS_OPTIONS}
-                          placeholder={Regions.EU}
                           isError={meta.touched && meta.error}
                           helperMessage={meta.touched && meta.error}
                           {...input}
