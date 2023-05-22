@@ -1,22 +1,20 @@
-import firebase from 'firebase/compat/app'
+import firebase from '../firebase';
 import 'firebaseui/dist/firebaseui.css'
 import Head from 'next/head';
 import { META } from '@/consts/meta';
 import classes from './index.module.scss';
-import { useEffect } from 'react';
-import { firebaseConfig } from '@/config/firebaseApp.config';
+import { useEffect, useRef } from 'react';
 
 export default function Home() {
+  const ui = useRef<firebaseui.auth.AuthUI>();
+  
   useEffect(() => {
     if (typeof window !== undefined) {
       import('firebaseui').then((firebaseui) => {
-        let app;
-        if (!firebase.apps.length) {
-          app = firebase.initializeApp(firebaseConfig);
-        }
-        if (app) {
-          const ui = new firebaseui.auth.AuthUI(firebase.auth(app));
-          ui.start('#firebaseui-auth-container', {
+        const app = firebase.app();
+        if (!ui.current) {
+          ui.current = new firebaseui.auth.AuthUI(firebase.auth(app));
+          ui.current.start('#firebaseui-auth-container', {
             signInSuccessUrl: '/',
             signInOptions: [
               firebase.auth.GoogleAuthProvider.PROVIDER_ID,
