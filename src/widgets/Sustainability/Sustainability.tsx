@@ -64,7 +64,7 @@ const Sustainability = ({
                           hasAsterisk
                           label='Select social media platform'
                           options={MEDIAS_OPTIONS}
-                          placeholder={Medias.FaceBook}
+                          placeholder={Medias.Facebook}
                           isError={meta.touched && meta.error}
                           helperMessage={meta.touched && meta.error}
                           {...input}
