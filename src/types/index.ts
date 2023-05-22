@@ -10,9 +10,11 @@ export type Country = {
 
 export type Industry = `${Label} - ${Label}`;
 
-export type Description = {
+export interface Details {
+  region: string;
+  media: string;
   description: string;
-};
+}
 
 export interface Feedback {
   email: string;

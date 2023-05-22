@@ -1,5 +1,5 @@
 import { isAxiosError } from '../types/typeGuards';
-import { Description, ResponsePayload } from '@/types';
+import { Details, ResponsePayload } from '@/types';
 import axios, { AxiosError } from 'axios';
 
 const DEFAULT_ERROR_MESSAGE =
@@ -10,21 +10,26 @@ const fetcher = axios.create({
   // baseURL: 'http://localhost:5000/api/sustainabilityMarketing',
   method: 'POST',
 });
-
 export class OpenAIApi {
   public static getAssistedBySustainabilityMarketing = async (
-    description: string
+    details: Details,
+    chars: number
   ): Promise<ResponsePayload<string>> => {
     try {
+      const { description, media, region } = details;
       const response = await fetcher.post(
         '/getAssistedBySustainabilityMarketing',
         {
           details: {
-            description: description,
+            media,
+            region,
+            chars,
+            description,
           },
         }
       );
-      return { result: response.data.result };
+      console.log(response.data.result);
+      return response.data;
     } catch (error: unknown) {
       console.error(
         'OpenAIService.getAssistedBySustainabilityMarketing: ',

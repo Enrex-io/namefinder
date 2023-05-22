@@ -1,27 +1,32 @@
 import { Form, Field } from 'react-final-form';
 import Button from '@/components/Button/Button';
-import TextField from '@/components/TextField/TextField';
-import { Description } from '@/types';
-import { validateDescription } from '@/utils/validators';
+import { Details } from '@/types';
+import {
+  validateDescription,
+  validateMedia,
+  validateRegion,
+} from '@/utils/validators';
 import Paper from '@/components/Paper/Paper';
-import { MutableRefObject, useRef } from 'react';
-import { parsedescription } from '@/utils/helpers';
-import { useCookies } from 'react-cookie';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { getMediaCharByMedia, parseDetails } from '@/utils/helpers';
 import classes from './Sustainability.module.scss';
 import TextArea from '@/components/TextArea/TextArea';
+import SelectField from '@/components/SelectField/SelectField';
+import Medias, { MEDIAS_OPTIONS } from '@/consts/medias';
+import Regions, { REGIONS_OPTIONS } from '@/consts/region';
 
 const HEADING_TEXT = 'Sustainability Marketing Assistant';
-const SUBMIT_BUTTON_TEXT = 'Check For GreenWashing';
+const SUBMIT_BUTTON_TEXT = 'Analyze post';
 
 interface Props {
-  onSubmitDescription: (description: Description) => Promise<void>;
+  onSubmitDetails: (values: Details) => Promise<void>;
   isHiddenButton?: boolean;
   valuesRef?: MutableRefObject<Record<string, any> | null>;
   handleAddCookies: () => void;
 }
 
 const Sustainability = ({
-  onSubmitDescription,
+  onSubmitDetails,
   isHiddenButton = false,
   valuesRef,
   handleAddCookies,
@@ -30,9 +35,11 @@ const Sustainability = ({
   const ref = valuesRef || innerRef;
 
   const handleSubmit = async (values: Record<string, any>) => {
-    const result = parsedescription(values);
-    await onSubmitDescription(result);
+    const result = parseDetails(values);
+    await onSubmitDetails(result);
   };
+
+  const [countOfChars, setCountOfChars] = useState<number>(280);
 
   return (
     <div className={classes.container}>
@@ -40,24 +47,62 @@ const Sustainability = ({
       <Form
         onSubmit={handleSubmit}
         render={({ handleSubmit, dirty, errors, submitting, values }) => {
-          ref.current = parsedescription(values);
+          ref.current = parseDetails(values);
+          const media = parseDetails(values).media;
+          setCountOfChars(getMediaCharByMedia(media as Medias) | 280);
           return (
             <form onSubmit={handleSubmit} className={classes.form}>
               <Paper className={classes.paper}>
                 <div className={classes.fieldsContainer}>
+                  <div className={classes.fieldsContainerFirst}>
+                    <Field
+                      name='media'
+                      validate={validateMedia}
+                      render={({ input, meta }) => (
+                        <SelectField
+                          tabIndex={1}
+                          hasAsterisk
+                          label='Select social media platform'
+                          options={MEDIAS_OPTIONS}
+                          placeholder={Medias.FaceBook}
+                          isError={meta.touched && meta.error}
+                          helperMessage={meta.touched && meta.error}
+                          {...input}
+                        />
+                      )}
+                    />
+                    <Field
+                      name='region'
+                      validate={validateRegion}
+                      render={({ input, meta }) => (
+                        <SelectField
+                          tabIndex={1}
+                          hasAsterisk
+                          label='Select Region'
+                          options={REGIONS_OPTIONS}
+                          placeholder={Regions.EU}
+                          isError={meta.touched && meta.error}
+                          helperMessage={meta.touched && meta.error}
+                          {...input}
+                        />
+                      )}
+                    />
+                  </div>
                   <div className={classes.fieldsContainerSecond}>
                     <Field
                       className={classes.fieldDescription}
                       name='description'
-                      validate={validateDescription}
+                      validate={(value) => {
+                        return validateDescription(value, countOfChars);
+                      }}
                       render={({ input, meta }) => (
                         <TextArea
                           tabIndex={1}
-                          label='Text to check for green washing flaws.'
-                          hasAsterisk
+                          label='Insert your post here'
                           placeholder='Enter text here'
                           isError={meta.touched && meta.error}
                           helperMessage={meta.touched && meta.error}
+                          maxLength={countOfChars}
                           {...input}
                         />
                       )}
