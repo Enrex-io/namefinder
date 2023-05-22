@@ -1,4 +1,3 @@
-// firebase.ts
 import firebase from 'firebase/compat/app';
 import 'firebaseui/dist/firebaseui.css';
 import { firebaseConfig } from '@/config/firebaseApp.config';
