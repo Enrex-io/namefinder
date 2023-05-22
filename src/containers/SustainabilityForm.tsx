@@ -1,9 +1,9 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import Paper from '@/components/Paper/Paper';
-import { Feedback as FeedbackType, Description } from '@/types';
+import { Feedback as FeedbackType, Details } from '@/types';
 import { OpenAIApi } from '@/services/OpenAIService';
 import Stack from '@/components/Stack/Stack';
-import { delay } from '@/utils/helpers';
+import { delay, getMediaCharByMedia } from '@/utils/helpers';
 import WindowScrollControls from '@/components/WindowScrollControls/WindowScrollControls';
 import StatusDisplay from '@/components/StatusDisplay/StatusDisplay';
 import SustainabilityDescription from '@/widgets/SustainabilityDescriptions/SustainabilityDescriptions';
@@ -13,6 +13,8 @@ import { useCookies } from 'react-cookie';
 import { MailchimpService } from '@/services/Mailchimp.client';
 import Feedback from '@/widgets/Feedback/Feedback';
 import Reset from '@/widgets/Reset/Reset';
+import MediaPost from '@/widgets/MediaPost/MediaPost';
+import Medias from '@/consts/medias';
 
 const scrollTo = (ref: MutableRefObject<any>) => {
   if (!ref.current) return;
@@ -33,23 +35,39 @@ const SustainabilityForm = () => {
     useState<boolean>(false);
   const [isGenerateDescriptionsClicked, setIsGenerateDescriptionsClicked] =
     useState<boolean>(false);
-  const [generatedDescription, setGeneratedDescription] = useState<string>();
+  const [generatedDescription, setGeneratedDescription] = useState<
+    string[] | []
+  >([]);
   const [isSendmeClicked, setIsSendmeClicked] = useState<boolean>(false);
-  const descriptionRef = useRef<Description | null>(null);
+  const detailsRef = useRef<Details | null>(null);
   const hasSubmittedFeedback = Boolean(submittedFeedback);
+  const [post, setPost] = useState<string>('');
 
   const [cookies, setCookie] = useCookies(['submitCount', 'email']);
 
-  const handleSubmitDescription = async (description: Description) => {
-    const responseDescriptions =
-      await OpenAIApi.getAssistedBySustainabilityMarketing(
-        description.description
-      );
-    if (responseDescriptions.error) return setError(responseDescriptions.error);
+  const handleSubmitDescription = async (details: Details) => {
+    const chars = getMediaCharByMedia(details.media as Medias);
+    const res = await OpenAIApi.getAssistedBySustainabilityMarketing(
+      details,
+      chars
+    );
+    const result: string = res.result || '';
     setError(null);
-    setGeneratedDescription(responseDescriptions.result);
     setHasSubmitteddescription(true);
-    // delay(() => scrollTo(descriptionRef), 500);
+    if (res.error) return setError(res.error);
+
+    const termsIndex = result?.indexOf('Terms');
+    const postIndex = result?.indexOf('Correct');
+
+    const resDescription = result?.slice(termsIndex + 8, postIndex).split('\n');
+
+    const resPost: string = result?.slice(postIndex + 8);
+
+    if (resDescription) setGeneratedDescription(resDescription);
+
+    if (resPost) setPost(resPost);
+
+    console.log(res, termsIndex, postIndex);
 
     if (Number(cookies.submitCount) >= 2 && cookies.email) {
       const responseFeedback = await MailchimpService.updateMergeField(
@@ -59,7 +77,7 @@ const SustainabilityForm = () => {
       if (responseFeedback?.error) return setError(responseFeedback.error);
     }
 
-    return responseDescriptions;
+    return res;
   };
 
   const handleSubmitFeedback = async (feedback: FeedbackType) => {
@@ -70,13 +88,9 @@ const SustainabilityForm = () => {
       feedback.email,
       Number(cookies.submitCount)
     );
-    // const responseUpdateTags = await MailchimpService.updateTags(
-    //   feedback.email,
-    //   cookies.submitCount
-    // );
-    if (!descriptionRef.current) return;
+    if (!detailsRef.current) return;
 
-    const result = await handleSubmitDescription(descriptionRef.current);
+    const result = await handleSubmitDescription(detailsRef.current);
     if (responseFeedback?.error) return setError(responseFeedback.error);
     if (result) {
       setIsGeneratingDescriptions(false);
@@ -123,25 +137,20 @@ const SustainabilityForm = () => {
   };
 
   const handleResetClick = () => {
-    setGeneratedDescription(undefined);
+    setGeneratedDescription([]);
+    setPost('');
     setHasSubmitteddescription(false);
   };
-
-  // useEffect(() => {
-  //   if (!hasSubmittedFeedback && isGenerateDescriptionsClicked) {
-  //     delay(() => scrollTo(feedbackRef), 500);
-  //   }
-  // }, [isGenerateDescriptionsClicked, hasSubmittedFeedback]);
 
   return (
     <Paper spacing={1.25} direction='column' className={classes.container}>
       <Sustainability
-        onSubmitDescription={async (description) => {
+        onSubmitDetails={async (details) => {
           if (Number(cookies.submitCount) === 2) {
             setIsGeneratingDescriptions(true);
             return;
           } else {
-            await handleSubmitDescription(description);
+            await handleSubmitDescription(details);
           }
         }}
         isHiddenButton={
@@ -150,7 +159,7 @@ const SustainabilityForm = () => {
             !hasSubmitteddescription) ||
           hasSubmitteddescription
         }
-        valuesRef={descriptionRef}
+        valuesRef={detailsRef}
         handleAddCookies={handleAddCookies}
       />
       <>
@@ -159,31 +168,18 @@ const SustainabilityForm = () => {
           <Feedback onSubmit={handleSubmitFeedback} />
         )}
         <div
-          // ref={descriptionRef}
           id='descriptionsAnchor'
           className={classes.anchor}
         />
-        {generatedDescription && (
+        {generatedDescription[0] && (
           <SustainabilityDescription
-            description={generatedDescription}
-            // generateDescription={handleGenerateDescriptions}
-            handleAddCookies={handleAddCookies}
+            descriptions={generatedDescription}
           />
         )}
-        {/* SEND ME BUTTON
-        <div ref={sendmeRef} id='sendmeAnchor' className={classes.anchor} />
-        {generatedDescription && (
-          <Sendme
-            description={generatedDescription}
-            feedback={submittedFeedback}
-            descriptionRef={descriptionRef}
-            setError={setError}
-            onClick={handleSendmeClick}
-          />
+        {post && (
+          <MediaPost media={detailsRef.current?.media || ''} post={post} />
         )}
-        <div ref={shareRef} id='shareAnchor' className={classes.anchor} />
-        {isSendmeClicked && <Share />} */}
-        {generatedDescription && <Reset onClick={handleResetClick} />}
+        {post && <Reset onClick={handleResetClick} />}
       </>
       {error && (
         <Stack

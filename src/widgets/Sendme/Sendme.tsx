@@ -1,7 +1,7 @@
 import Button from '@/components/Button/Button';
 import Stack from '@/components/Stack/Stack';
 import { MailchimpService } from '@/services/Mailchimp.client';
-import { Feedback, Description } from '@/types';
+import { Feedback, Details } from '@/types';
 import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
 import classes from './Sendme.module.scss';
 
@@ -10,7 +10,7 @@ const SENDME_BUTTON_TEXT = 'Send me';
 interface Props {
   description: string;
   setError: Dispatch<SetStateAction<string | null>>;
-  descriptionRef: MutableRefObject<Description | null>;
+  detailsRef: MutableRefObject<Details | null>;
   onClick: () => void;
   feedback?: Feedback;
 }
@@ -20,7 +20,7 @@ function Sendme({
   setError,
   feedback,
   onClick,
-  descriptionRef,
+  detailsRef,
 }: Props) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   // const handleSendmeClick = async () => {
