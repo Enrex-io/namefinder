@@ -11,10 +11,16 @@ export default function Home() {
   useEffect(() => {
     if (typeof window !== undefined) {
       import('firebaseui').then((firebaseui) => {
-        const app = firebase.app();
         if (!ui.current) {
-          ui.current = new firebaseui.auth.AuthUI(firebase.auth(app));
+          ui.current = new firebaseui.auth.AuthUI(firebase.auth());
           ui.current.start('#firebaseui-auth-container', {
+            callbacks: {
+              signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+                console.dir(authResult);
+                
+                return true;
+              },
+            },
             signInSuccessUrl: '/',
             signInOptions: [
               firebase.auth.GoogleAuthProvider.PROVIDER_ID,

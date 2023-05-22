@@ -41,3 +41,14 @@ export interface TagsToUpdate {
   name: FeedbackTags;
   status: TagStatus;
 }
+
+export type UserProfile = {
+  id: string;
+  photo: string | null;
+  email: string | null;
+  name: string | null;
+  phone: string | null;
+  isEmailVerified: boolean;
+  token?: string,
+  claims?: { [key: string]: any };
+};
