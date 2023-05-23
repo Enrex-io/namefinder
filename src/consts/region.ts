@@ -1,8 +1,7 @@
 enum Regions {
   EU = 'EU',
   USA = 'USA',
-  AU = 'AU',
-  CH = 'CH',
+  UK = 'UK',
 }
 
 export const REGIONS_OPTIONS = Object.values(Regions).map((media) => ({
