@@ -1,10 +1,11 @@
 import React from 'react';
 import classes from "./ProfileMenu.module.scss";
-import { IconLogout, IconSettings, IconLogin } from '@tabler/icons-react';
+import { IconLogout, IconLogin, IconCreditCard, IconHistory } from '@tabler/icons-react';
 import Image from 'next/image';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
+import Chip from '../Chip/Chip';
 
 const ProfileMenu = () => {
   const { push } = useRouter();
@@ -26,8 +27,19 @@ const ProfileMenu = () => {
       <Image width={40} height={40} src={user.photo || '/images/profile.png'} className={classes.profile} alt="profile photo" />
       <ul className={classes.submenu}>
         <li className={clsx(classes.subItem, classes.bottomDivider)}>
-          <IconSettings color='#091F3D' />
-          <p>Profile settings</p>
+          <p className={classes.semibold}>{user.email}</p>
+        </li>
+        <li className={clsx(classes.subItem, classes.bottomDivider)}>
+          <Chip label={'5'} className={classes.checksChip} />
+          <p>Free checks</p>
+        </li>
+        <li className={classes.subItem} onClick={() => signout?.()}>
+          <IconCreditCard color='#091F3D'/>
+          <p>Subscription</p>
+        </li>
+        <li className={classes.subItem} onClick={() => signout?.()}>
+          <IconHistory color='#091F3D'/>
+          <p>History</p>
         </li>
         <li className={classes.subItem} onClick={() => signout?.()}>
           <IconLogout color='#091F3D'/>
