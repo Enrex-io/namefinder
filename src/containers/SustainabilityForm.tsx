@@ -67,8 +67,6 @@ const SustainabilityForm = () => {
 
     if (resPost) setPost(resPost);
 
-    console.log(res, termsIndex, postIndex);
-
     if (Number(cookies.submitCount) >= 2 && cookies.email) {
       const responseFeedback = await MailchimpService.updateMergeField(
         cookies.email,
