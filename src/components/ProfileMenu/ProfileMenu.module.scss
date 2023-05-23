@@ -3,12 +3,12 @@
   position: relative;
 }
 
-.li .submenu {
+.submenu {
   margin: 0;
   padding: 0;
   flex-direction: column;
   position: absolute;
-  background-color: white;
+  background-color: #ffffff;
   align-items: flex-start;
   transition: all 0.5s ease;
   width: 230px;
@@ -22,11 +22,11 @@
   display: none;
 }
 
-.li:hover > .submenu,
-.li .submenu:hover {
+.submenuShown {
   visibility: visible;
   opacity: 1;
   display: flex;
+  z-index: 1;
 }
 
 
@@ -66,5 +66,5 @@
 }
 
 .checksChip {
-  padding: 2px 8px !important;
+  padding: 3px 8px !important;
 }

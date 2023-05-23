@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from "./ProfileMenu.module.scss";
 import { IconLogout, IconLogin, IconCreditCard, IconHistory } from '@tabler/icons-react';
 import Image from 'next/image';
@@ -10,6 +10,10 @@ import Chip from '../Chip/Chip';
 const ProfileMenu = () => {
   const { push } = useRouter();
   const { user, signout } = useAuth();
+  const [ isSubmenuShown, setIsSumbenuShown ] = useState(false);
+
+  const handleMouseEnterLi = () => setIsSumbenuShown(true);
+  const handleMouseLeaveUl = () => setTimeout(() => setIsSumbenuShown(false), 350);
 
   const handleLogout = () => {
     signout?.();
@@ -28,9 +32,9 @@ const ProfileMenu = () => {
   }
 
   return (
-    <li className={classes.li}>
+    <li className={classes.li} onMouseEnter={handleMouseEnterLi}>
       <Image width={40} height={40} src={user.photo || '/images/profile.png'} className={classes.profile} alt="profile photo" />
-      <ul className={classes.submenu}>
+      <ul className={clsx(classes.submenu, { [classes.submenuShown]: isSubmenuShown })} onMouseLeave={handleMouseLeaveUl}>
         <li className={clsx(classes.subItem, classes.bottomDivider)}>
           <p className={classes.semibold}>{user.email}</p>
         </li>
