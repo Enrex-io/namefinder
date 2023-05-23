@@ -4,6 +4,7 @@ import Sustainability from '@/containers/SustainabilityForm';
 import classes from './index.module.scss';
 import { useAuth } from '@/hooks/useAuth';
 import { useEffect } from 'react';
+import NavBar from '@/components/NavBar/NavBar';
 
 export default function Home() {
   const { user } = useAuth();
@@ -18,6 +19,7 @@ export default function Home() {
         <meta name='description' content={META.description} />
         <meta name='viewport' content='width=device-width, initial-scale=1' />
       </Head>
+      <NavBar />
       <div className={classes.container}>
         <Sustainability />
       </div>

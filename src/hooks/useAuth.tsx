@@ -2,7 +2,13 @@ import { useState, useEffect, useContext, createContext, ReactElement } from "re
 import firebase from "../firebase";
 import { UserProfile } from "@/types";
 
-const authContext = createContext<{ user: UserProfile | null | false }>({ user: null });
+type User = UserProfile | null | false;
+interface UserContext {
+  user: User;
+  signout?: () => void
+}
+
+const authContext = createContext<UserContext>({ user: null });
 
 export function ProvideAuth({ children }: { children: ReactElement | null}) {
   const AuthContextProvider = authContext.Provider;
@@ -15,7 +21,16 @@ export const useAuth = () => {
 };
 // Provider hook that creates auth object and handles state
 function useProvideAuth() {
-  const [user, setUser] = useState<UserProfile | null | false>(null);
+  const [user, setUser] = useState<User>(null);
+
+  const signout = () => {
+    return firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        setUser(false);
+      });
+  };
 
   useEffect(() => {
     if (!firebase.auth) return;
@@ -42,6 +57,7 @@ function useProvideAuth() {
   }, []);
 
   return {
-    user
+    user,
+    signout
   };
 }

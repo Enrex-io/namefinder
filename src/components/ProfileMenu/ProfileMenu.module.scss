@@ -1,0 +1,83 @@
+.li {
+  list-style-type: none;
+  position: relative;
+  padding: 0.625rem 0 0.5rem;
+}
+
+.li .ul {
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  position: absolute;
+  background-color: white;
+  align-items: flex-start;
+  transition: all 0.5s ease;
+  width: 20rem;
+  right: -3rem;
+  top: 4.5rem;
+  border-radius: 0.325rem;
+  gap: 0;
+  padding: 1rem 0rem;
+  opacity: 0;
+  box-shadow: 0px 0px 100px rgba(20, 18, 18, 0.25);
+  display: none;
+}
+
+.li:hover > .ul,
+.li .ul:hover {
+  visibility: visible;
+  opacity: 1;
+  display: flex;
+}
+
+.materialIconsOutlined {
+  color: #888888;
+  transition: all 0.3s ease-out;
+}
+
+.materialIconsOutlined:hover {
+  color: #ff9800;
+  transform: scale(1.25) translateY(-4px);
+  cursor: pointer;
+}
+
+
+.profile {
+  max-width: 100%;
+  height: auto;
+  height: 3rem;
+  width: auto;
+  cursor: pointer;
+}
+
+.subItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.725rem;
+  cursor: pointer;
+  padding: 0.5rem 1.5rem;
+}
+
+.subItem:hover {
+  background-color: rgba(232, 232, 232, 0.4);
+}
+
+.subItem:hover .material-icons-outlined {
+  color: #ff9800;
+  transform: scale(1.08) translateY(-2px);
+  cursor: pointer;
+}
+
+.subItem:hover p {
+  color: #000;
+  cursor: pointer;
+}
+
+.subItem p {
+  font-size: 0.85rem;
+  color: #888888;
+  font-weight: 500;
+  margin: 0.4rem 0;
+  flex: 1;
+}
