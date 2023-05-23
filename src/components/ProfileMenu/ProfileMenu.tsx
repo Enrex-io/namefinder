@@ -11,6 +11,11 @@ const ProfileMenu = () => {
   const { push } = useRouter();
   const { user, signout } = useAuth();
 
+  const handleLogout = () => {
+    signout?.();
+    push('/login');
+  }
+
   if (!user) {
     return (
       <li className={classes.li} onClick={() => push('/login')}>
@@ -33,15 +38,15 @@ const ProfileMenu = () => {
           <Chip label={'5'} className={classes.checksChip} />
           <p>Free checks</p>
         </li>
-        <li className={classes.subItem} onClick={() => signout?.()}>
+        <li className={classes.subItem}>
           <IconCreditCard color='#091F3D'/>
           <p>Subscription</p>
         </li>
-        <li className={classes.subItem} onClick={() => signout?.()}>
+        <li className={classes.subItem}>
           <IconHistory color='#091F3D'/>
           <p>History</p>
         </li>
-        <li className={classes.subItem} onClick={() => signout?.()}>
+        <li className={classes.subItem} onClick={handleLogout}>
           <IconLogout color='#091F3D'/>
           <p>Logout</p>
         </li>
