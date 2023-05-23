@@ -4,6 +4,7 @@ import { IconLogout, IconSettings, IconLogin } from '@tabler/icons-react';
 import Image from 'next/image';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
+import clsx from 'clsx';
 
 const ProfileMenu = () => {
   const { push } = useRouter();
@@ -23,17 +24,13 @@ const ProfileMenu = () => {
   return (
     <li className={classes.li}>
       <Image width={40} height={40} src={user.photo || '/images/profile.png'} className={classes.profile} alt="profile photo" />
-      <ul className={classes.ul}>
-        <li className={classes.subItem}>
-          <span className={classes.materialIconsOutlined}>
-            <IconSettings />
-          </span>
+      <ul className={classes.submenu}>
+        <li className={clsx(classes.subItem, classes.bottomDivider)}>
+          <IconSettings color='#091F3D' />
           <p>Profile settings</p>
         </li>
         <li className={classes.subItem} onClick={() => signout?.()}>
-          <span className={classes.materialIconsOutlined}>
-            <IconLogout />
-          </span>
+          <IconLogout color='#091F3D'/>
           <p>Logout</p>
         </li>
       </ul>
