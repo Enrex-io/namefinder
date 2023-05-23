@@ -28,7 +28,6 @@ export class OpenAIApi {
           },
         }
       );
-      console.log(response.data.result);
       return response.data;
     } catch (error: unknown) {
       console.error(
