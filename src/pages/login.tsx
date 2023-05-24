@@ -3,21 +3,26 @@ import 'firebaseui/dist/firebaseui.css'
 import Head from 'next/head';
 import { META } from '@/consts/meta';
 import classes from './index.module.scss';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
+import axios from '@/utils/axios';
 
 export default function Home() {
   const ui = useRef<firebaseui.auth.AuthUI>();
   const router = useRouter()
+  const [ isNewUser, setIsNewUser ] = useState(false);
 
   const { user } = useAuth();
 
   useEffect(() => {
     if (user) {
+      if (isNewUser) {
+        axios.post('/api/sustainabilityMarketing/createUser')
+      }
       router.push('/');
     }
-  }, [user, router]);
+  }, [user, router, isNewUser]);
   
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -27,8 +32,7 @@ export default function Home() {
           ui.current.start('#firebaseui-auth-container', {
             callbacks: {
               signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-                const isNewUser = authResult.additionalUserInfo.isNewUser;
-                console.log(isNewUser);
+                setIsNewUser(Boolean(authResult?.additionalUserInfo?.isNewUser));
                 //We will manually redirect after ensuring that the user is present in the context to avoid bugs with redirects
                 return false;
               },
