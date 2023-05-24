@@ -16,13 +16,6 @@ export interface Details {
   description: string;
 }
 
-export interface Feedback {
-  email: string;
-  COLLABORATE: boolean;
-  NEWSLETTER: boolean;
-  DEMO: boolean;
-}
-
 export type ResponsePayload<T = unknown> = {
   result?: T;
   error?: string;

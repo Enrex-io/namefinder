@@ -1,7 +1,6 @@
 import Button from '@/components/Button/Button';
 import Stack from '@/components/Stack/Stack';
-import { MailchimpService } from '@/services/Mailchimp.client';
-import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import classes from './Reset.module.scss';
 
 const RESET_BUTTON_TEXT = 'Start over';

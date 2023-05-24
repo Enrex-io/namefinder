@@ -1,6 +1,6 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { MutableRefObject, useRef, useState } from 'react';
 import Paper from '@/components/Paper/Paper';
-import { Feedback as FeedbackType, Details } from '@/types';
+import { Details } from '@/types';
 import { OpenAIApi } from '@/services/OpenAIService';
 import Stack from '@/components/Stack/Stack';
 import { delay, getMediaCharByMedia } from '@/utils/helpers';
@@ -9,9 +9,6 @@ import StatusDisplay from '@/components/StatusDisplay/StatusDisplay';
 import SustainabilityDescription from '@/widgets/SustainabilityDescriptions/SustainabilityDescriptions';
 import Sustainability from '@/widgets/Sustainability/Sustainability';
 import classes from './SustainabilityForm.module.scss';
-import { useCookies } from 'react-cookie';
-import { MailchimpService } from '@/services/Mailchimp.client';
-import Feedback from '@/widgets/Feedback/Feedback';
 import Reset from '@/widgets/Reset/Reset';
 import MediaPost from '@/widgets/MediaPost/MediaPost';
 import Medias from '@/consts/medias';
@@ -22,7 +19,6 @@ const scrollTo = (ref: MutableRefObject<any>) => {
 };
 
 const SustainabilityForm = () => {
-  const feedbackRef = useRef<HTMLDivElement | null>(null);
   const sendmeRef = useRef<HTMLDivElement | null>(null);
   const shareRef = useRef<HTMLDivElement | null>(null);
 
@@ -30,20 +26,14 @@ const SustainabilityForm = () => {
 
   const [isGeneratingDescriptions, setIsGeneratingDescriptions] =
     useState<boolean>(false);
-  const [submittedFeedback, setSubmittedFeedback] = useState<FeedbackType>();
   const [hasSubmitteddescription, setHasSubmitteddescription] =
-    useState<boolean>(false);
-  const [isGenerateDescriptionsClicked, setIsGenerateDescriptionsClicked] =
     useState<boolean>(false);
   const [generatedDescription, setGeneratedDescription] = useState<
     string[] | []
   >([]);
   const [isSendmeClicked, setIsSendmeClicked] = useState<boolean>(false);
   const detailsRef = useRef<Details | null>(null);
-  const hasSubmittedFeedback = Boolean(submittedFeedback);
   const [post, setPost] = useState<string>('');
-
-  const [cookies, setCookie] = useCookies(['submitCount', 'email']);
 
   const handleSubmitDescription = async (details: Details) => {
     const chars = getMediaCharByMedia(details.media as Medias);
@@ -67,47 +57,7 @@ const SustainabilityForm = () => {
 
     if (resPost) setPost(resPost);
 
-    if (Number(cookies.submitCount) >= 2 && cookies.email) {
-      const responseFeedback = await MailchimpService.updateMergeField(
-        cookies.email,
-        Number(cookies.submitCount)
-      );
-      if (responseFeedback?.error) return setError(responseFeedback.error);
-    }
-
     return res;
-  };
-
-  const handleSubmitFeedback = async (feedback: FeedbackType) => {
-    let d = new Date();
-    d.setTime(d.getTime() + 60 * 60 * 1000);
-    setCookie('email', feedback.email, { path: '/', expires: d });
-    const responseFeedback = await MailchimpService.addSubscriber(
-      feedback.email,
-      Number(cookies.submitCount)
-    );
-    if (!detailsRef.current) return;
-
-    const result = await handleSubmitDescription(detailsRef.current);
-    if (responseFeedback?.error) return setError(responseFeedback.error);
-    if (result) {
-      setIsGeneratingDescriptions(false);
-      setSubmittedFeedback(feedback);
-    }
-  };
-
-  const handleAddCookies = () => {
-    let d = new Date();
-    d.setTime(d.getTime() + 60 * 60 * 1000);
-    if (!cookies.submitCount) {
-      setCookie('submitCount', 1, { path: '/', expires: d });
-      return;
-    }
-
-    setCookie('submitCount', Number(cookies.submitCount) + 1 || 1, {
-      path: '/',
-      expires: d,
-    });
   };
 
   // const handleGenerateDescriptions = async () => {
@@ -144,27 +94,15 @@ const SustainabilityForm = () => {
     <Paper spacing={1.25} direction='column' className={classes.container}>
       <Sustainability
         onSubmitDetails={async (details) => {
-          if (Number(cookies.submitCount) === 2) {
-            setIsGeneratingDescriptions(true);
-            return;
-          } else {
-            await handleSubmitDescription(details);
-          }
+          await handleSubmitDescription(details);
         }}
         isHiddenButton={
-          (isGeneratingDescriptions &&
-            Number(cookies.submitCount) === 2 &&
-            !hasSubmitteddescription) ||
-          hasSubmitteddescription
+          (isGeneratingDescriptions && !hasSubmitteddescription) 
+          || hasSubmitteddescription
         }
         valuesRef={detailsRef}
-        handleAddCookies={handleAddCookies}
       />
       <>
-        <div ref={feedbackRef} id='feedbackAnchor' className={classes.anchor} />
-        {isGeneratingDescriptions && Number(cookies.submitCount) === 2 && (
-          <Feedback onSubmit={handleSubmitFeedback} />
-        )}
         <div
           id='descriptionsAnchor'
           className={classes.anchor}
