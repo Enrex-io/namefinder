@@ -1,0 +1,70 @@
+.li {
+  list-style-type: none;
+  position: relative;
+}
+
+.submenu {
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  position: absolute;
+  background-color: #ffffff;
+  align-items: flex-start;
+  transition: all 0.5s ease;
+  width: 230px;
+  right: 0;
+  top: 50px;
+  border: 1px solid #D1D5DC;
+  border-radius: 6px;
+  gap: 0;
+  opacity: 0;
+  box-shadow: 0px 3px 6px #D8D8D880;
+  display: none;
+}
+
+.submenuShown {
+  visibility: visible;
+  opacity: 1;
+  display: flex;
+  z-index: 1;
+}
+
+
+.profile {
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.subItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.725rem;
+  cursor: pointer;
+  padding: 10px 15px;
+}
+
+.bottomDivider {
+  border-bottom: 1px solid #D8D8D8;
+}
+
+.subItem:hover {
+  cursor: pointer;
+  background-color: rgba(216, 216, 216, 0.5);
+}
+
+.subItem p {
+  font-size: 12px;
+  color: #091F3D;
+  font-weight: 500;
+  margin: 0.4rem 0;
+  flex: 1;
+}
+
+.subItem .semibold {
+  font-weight: 600;
+}
+
+.checksChip {
+  padding: 3px 8px !important;
+}

@@ -1,7 +1,6 @@
 import Button from '@/components/Button/Button';
 import Stack from '@/components/Stack/Stack';
-import { MailchimpService } from '@/services/Mailchimp.client';
-import { Feedback, Details } from '@/types';
+import { Details } from '@/types';
 import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
 import classes from './Sendme.module.scss';
 
@@ -12,13 +11,11 @@ interface Props {
   setError: Dispatch<SetStateAction<string | null>>;
   detailsRef: MutableRefObject<Details | null>;
   onClick: () => void;
-  feedback?: Feedback;
 }
 
 function Sendme({
   description,
   setError,
-  feedback,
   onClick,
   detailsRef,
 }: Props) {

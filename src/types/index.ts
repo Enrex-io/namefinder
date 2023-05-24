@@ -16,13 +16,6 @@ export interface Details {
   description: string;
 }
 
-export interface Feedback {
-  email: string;
-  COLLABORATE: boolean;
-  NEWSLETTER: boolean;
-  DEMO: boolean;
-}
-
 export type ResponsePayload<T = unknown> = {
   result?: T;
   error?: string;
@@ -43,3 +36,14 @@ export interface TagsToUpdate {
   name: FeedbackTags;
   status: TagStatus;
 }
+
+export type UserProfile = {
+  id: string;
+  photo: string | null;
+  email: string | null;
+  name: string | null;
+  phone: string | null;
+  isEmailVerified: boolean;
+  token?: string,
+  claims?: { [key: string]: any };
+};

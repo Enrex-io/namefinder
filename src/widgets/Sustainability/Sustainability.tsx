@@ -22,14 +22,12 @@ interface Props {
   onSubmitDetails: (values: Details) => Promise<void>;
   isHiddenButton?: boolean;
   valuesRef?: MutableRefObject<Record<string, any> | null>;
-  handleAddCookies: () => void;
 }
 
 const Sustainability = ({
   onSubmitDetails,
   isHiddenButton = false,
   valuesRef,
-  handleAddCookies,
 }: Props) => {
   const innerRef = useRef<Record<string, any> | null>(null);
   const ref = valuesRef || innerRef;
@@ -118,7 +116,6 @@ const Sustainability = ({
                   className={classes.button}
                   isDisabled={!dirty || !!Object.keys(errors || {}).length}
                   isSubmitting={submitting}
-                  onClick={handleAddCookies}
                   funnyLoadingMessage
                 >
                   {SUBMIT_BUTTON_TEXT}
