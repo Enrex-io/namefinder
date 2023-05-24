@@ -2,15 +2,11 @@ import Head from 'next/head';
 import { META } from '@/consts/meta';
 import Sustainability from '@/containers/SustainabilityForm';
 import classes from './index.module.scss';
-import { useAuth } from '@/hooks/useAuth';
-import { useEffect } from 'react';
+import { ReactElement } from 'react';
 import NavBar from '@/components/NavBar/NavBar';
+import AuthGuard from '@/utils/route-guard/AuthGuard';
 
-export default function Home() {
-  const { user } = useAuth();
-  useEffect(() => {
-    console.dir(user);
-  }, [user]);
+function Home() {
   return (
     <>
       <Head>
@@ -26,3 +22,9 @@ export default function Home() {
     </>
   );
 }
+
+Home.getLayout = function getLayout(page: ReactElement) {
+  return <AuthGuard>{page}</AuthGuard>;
+};
+
+export default Home;
