@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Chip from '../Chip/Chip';
+import UserPhotoPlaceholder from '../UserPhotoPlaceholder/UserPhotoPlaceholder';
 
 const ProfileMenu = () => {
   const { push } = useRouter();
@@ -33,7 +34,11 @@ const ProfileMenu = () => {
 
   return (
     <li className={classes.li} onMouseEnter={handleMouseEnterLi}>
-      <Image width={40} height={40} src={user.photo || '/images/profile.png'} className={classes.profile} alt="profile photo" />
+      {
+        user.photo
+          ? <Image width={40} height={40} src={user.photo} className={classes.profile} alt="profile photo" />
+          : <UserPhotoPlaceholder userName={user.name} /> 
+      }
       <ul className={clsx(classes.submenu, { [classes.submenuShown]: isSubmenuShown })} onMouseLeave={handleMouseLeaveUl}>
         <li className={clsx(classes.subItem, classes.bottomDivider)}>
           <p className={classes.semibold}>{user.email}</p>
