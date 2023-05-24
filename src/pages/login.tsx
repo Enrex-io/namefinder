@@ -4,9 +4,20 @@ import Head from 'next/head';
 import { META } from '@/consts/meta';
 import classes from './index.module.scss';
 import { useEffect, useRef } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { useRouter } from 'next/router';
 
 export default function Home() {
   const ui = useRef<firebaseui.auth.AuthUI>();
+  const router = useRouter()
+
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      router.push('/');
+    }
+  }, [user, router]);
   
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -16,12 +27,12 @@ export default function Home() {
           ui.current.start('#firebaseui-auth-container', {
             callbacks: {
               signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-                console.dir(authResult);
-                
-                return true;
+                const isNewUser = authResult.additionalUserInfo.isNewUser;
+                console.log(isNewUser);
+                //We will manually redirect after ensuring that the user is present in the context to avoid bugs with redirects
+                return false;
               },
             },
-            signInSuccessUrl: '/',
             signInOptions: [
               firebase.auth.GoogleAuthProvider.PROVIDER_ID,
               firebase.auth.FacebookAuthProvider.PROVIDER_ID,
@@ -30,6 +41,12 @@ export default function Home() {
           });
         }
       })
+
+      return () => {
+        if (ui.current) {
+          ui.current.delete();
+        }
+      }
     }
   }, []);
 
