@@ -1,6 +1,6 @@
-import {useRef, useState} from 'react';
+import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import Paper from '@/components/Paper/Paper';
-import { Details } from '@/types';
+import { Details, IGreenWashingUser } from '@/types';
 import { OpenAIApi } from '@/services/OpenAIService';
 import Stack from '@/components/Stack/Stack';
 import { getMediaCharByMedia } from '@/utils/helpers';
@@ -13,7 +13,11 @@ import Reset from '@/widgets/Reset/Reset';
 import MediaPost from '@/widgets/MediaPost/MediaPost';
 import Medias from '@/consts/medias';
 
-const SustainabilityForm = () => {
+interface SustainabilityFormProps {
+  setUserInfo: Dispatch<SetStateAction<IGreenWashingUser | null>>
+}
+
+const SustainabilityForm: React.FC<SustainabilityFormProps> = ({ setUserInfo }) => {
   const [error, setError] = useState<string | null>(null);
   const [generatedDescription, setGeneratedDescription] = useState<
     string[] | []
@@ -26,7 +30,13 @@ const SustainabilityForm = () => {
       details,
       chars
     );
-    const result: string = res.result || '';
+    const result: string = res.result?.text || '';
+    const userData = res.result?.userData;
+
+    if(userData) {
+      setUserInfo(userData);
+    }
+
     setError(null);
     if (res.error) return setError(res.error);
 

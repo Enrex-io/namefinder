@@ -47,3 +47,9 @@ export type UserProfile = {
   token?: string,
   claims?: { [key: string]: any };
 };
+
+export interface IGreenWashingUser {
+  userId: string;
+  counter: number;
+  plan: string;
+}

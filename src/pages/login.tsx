@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
 import axios from '@/utils/axios';
+import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 
 export default function Home() {
   const ui = useRef<firebaseui.auth.AuthUI>();
@@ -18,7 +19,7 @@ export default function Home() {
   useEffect(() => {
     if (user) {
       if (isNewUser) {
-        axios.post('/api/sustainabilityMarketing/createUser')
+        GreenWashingUserService.createUser();
       }
       router.push('/');
     }
