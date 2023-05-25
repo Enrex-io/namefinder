@@ -4,11 +4,28 @@ import Sustainability from '@/containers/SustainabilityForm';
 import classes from './index.module.scss';
 import NavBar from '@/components/NavBar/NavBar';
 import AuthGuard from '@/utils/route-guard/AuthGuard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IGreenWashingUser } from '@/types';
+import { useAuth } from '@/hooks/useAuth';
+import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 
 function Home() {
   const [userInfo, setUserInfo] = useState<IGreenWashingUser | null>(null);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    async function fetchUser() {
+      const userData = await GreenWashingUserService.getUser();
+      if (userData.result) {
+        setUserInfo(userData.result);
+        return;
+      }
+    }
+
+    if (user) {
+      fetchUser();
+    }
+  }, [user])
 
   return (
     <AuthGuard>

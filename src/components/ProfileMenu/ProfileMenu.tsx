@@ -23,7 +23,6 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo }) => {
 
   const handleLogout = () => {
     signout?.();
-    push('/login');
   }
 
   if (!user) {
