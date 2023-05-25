@@ -1,15 +1,9 @@
 import { isAxiosError } from '../types/typeGuards';
 import { Details, ResponsePayload } from '@/types';
-import axios, { AxiosError } from 'axios';
+import axios from '../utils/axios';
 
 const DEFAULT_ERROR_MESSAGE =
   'The AI service is experiencing high traffic. Please try again.';
-
-const fetcher = axios.create({
-  baseURL: 'https://dev-api-10101.greenifs.com/api/sustainabilityMarketing',
-  // baseURL: 'http://localhost:5000/api/sustainabilityMarketing',
-  method: 'POST',
-});
 export class OpenAIApi {
   public static getAssistedBySustainabilityMarketing = async (
     details: Details,
@@ -17,8 +11,8 @@ export class OpenAIApi {
   ): Promise<ResponsePayload<string>> => {
     try {
       const { description, media, region } = details;
-      const response = await fetcher.post(
-        '/getAssistedBySustainabilityMarketing',
+      const response = await axios.post(
+        '/api/sustainabilityMarketing/getAssistedBySustainabilityMarketing',
         {
           details: {
             media,
