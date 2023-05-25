@@ -11,7 +11,6 @@ import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 export default function Home() {
   const ui = useRef<firebaseui.auth.AuthUI>();
   const router = useRouter()
-  const [ isNewUser, setIsNewUser ] = useState(false);
 
   const { user } = useAuth();
 
@@ -20,7 +19,7 @@ export default function Home() {
       GreenWashingUserService.createUser();
       router.push('/');
     }
-  }, [user, router, isNewUser]);
+  }, [user, router]);
   
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -30,7 +29,6 @@ export default function Home() {
           ui.current.start('#firebaseui-auth-container', {
             callbacks: {
               signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-                setIsNewUser(Boolean(authResult?.additionalUserInfo?.isNewUser));
                 //We will manually redirect after ensuring that the user is present in the context to avoid bugs with redirects
                 return false;
               },
