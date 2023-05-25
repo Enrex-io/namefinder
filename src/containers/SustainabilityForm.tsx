@@ -1,9 +1,9 @@
-import { Dispatch, MutableRefObject, SetStateAction, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import Paper from '@/components/Paper/Paper';
 import { Details, IGreenWashingUser } from '@/types';
 import { OpenAIApi } from '@/services/OpenAIService';
 import Stack from '@/components/Stack/Stack';
-import { delay, getMediaCharByMedia } from '@/utils/helpers';
+import { getMediaCharByMedia } from '@/utils/helpers';
 import WindowScrollControls from '@/components/WindowScrollControls/WindowScrollControls';
 import StatusDisplay from '@/components/StatusDisplay/StatusDisplay';
 import SustainabilityDescription from '@/widgets/SustainabilityDescriptions/SustainabilityDescriptions';
@@ -17,28 +17,13 @@ interface SustainabilityFormProps {
   setUserInfo: Dispatch<SetStateAction<IGreenWashingUser | null>>
 }
 
-const scrollTo = (ref: MutableRefObject<any>) => {
-  if (!ref.current) return;
-  ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-};
-
 const SustainabilityForm: React.FC<SustainabilityFormProps> = ({ setUserInfo }) => {
-  const sendmeRef = useRef<HTMLDivElement | null>(null);
-  const shareRef = useRef<HTMLDivElement | null>(null);
-
   const [error, setError] = useState<string | null>(null);
-
-  const [isGeneratingDescriptions, setIsGeneratingDescriptions] =
-    useState<boolean>(false);
-  const [hasSubmitteddescription, setHasSubmitteddescription] =
-    useState<boolean>(false);
   const [generatedDescription, setGeneratedDescription] = useState<
     string[] | []
   >([]);
-  const [isSendmeClicked, setIsSendmeClicked] = useState<boolean>(false);
   const detailsRef = useRef<Details | null>(null);
   const [post, setPost] = useState<string>('');
-
   const handleSubmitDescription = async (details: Details) => {
     const chars = getMediaCharByMedia(details.media as Medias);
     const res = await OpenAIApi.getAssistedBySustainabilityMarketing(
@@ -53,7 +38,6 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({ setUserInfo }) 
     }
 
     setError(null);
-    setHasSubmitteddescription(true);
     if (res.error) return setError(res.error);
 
     const termsIndex = result?.indexOf('Terms');
@@ -69,47 +53,18 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({ setUserInfo }) 
 
     return res;
   };
-
-  // const handleGenerateDescriptions = async () => {
-  //   if (!isGenerateDescriptionsClicked) {
-  //     return setIsGenerateDescriptionsClicked(true);
-  //   }
-  //   setIsGeneratingDescriptions(true);
-  //   if (!descriptionRef.current) return;
-  //   const response = await OpenAIApi.getAssistedBySustainabilityMarketing(
-  //     descriptionRef.current
-  //   );
-  //   if (response.error) {
-  //     setIsGeneratingDescriptions(false);
-  //     return setError(response.error);
-  //   }
-  //   setError(null);
-  //   setGeneratedDescription(response.result);
-  //   setIsGeneratingDescriptions(false);
-  //   delay(() => scrollTo(feedbackRef), 500);
-  // };
-
-  const handleSendmeClick = () => {
-    setIsSendmeClicked(true);
-    delay(() => scrollTo(shareRef), 500);
-  };
-
   const handleResetClick = () => {
     setGeneratedDescription([]);
     setPost('');
-    setHasSubmitteddescription(false);
   };
 
   return (
     <Paper spacing={1.25} direction='column' className={classes.container}>
       <Sustainability
         onSubmitDetails={async (details) => {
+          handleResetClick()
           await handleSubmitDescription(details);
         }}
-        isHiddenButton={
-          (isGeneratingDescriptions && !hasSubmitteddescription) 
-          || hasSubmitteddescription
-        }
         valuesRef={detailsRef}
       />
       <>
