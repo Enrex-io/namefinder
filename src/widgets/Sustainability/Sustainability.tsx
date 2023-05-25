@@ -30,7 +30,6 @@ const Sustainability = ({
 }: Props) => {
   const innerRef = useRef<Record<string, any> | null>(null);
   const ref = valuesRef || innerRef;
-  const [countOfChars, setCountOfChars] = useState<number>(0);
   const handleSubmit = async (values: Record<string, any>, form: FormApi) => {
     const result = parseDetails(values);
     await onSubmitDetails(result);
