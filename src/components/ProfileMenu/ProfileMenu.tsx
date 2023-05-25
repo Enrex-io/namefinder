@@ -41,7 +41,7 @@ const ProfileMenu = () => {
       }
       <ul className={clsx(classes.submenu, { [classes.submenuShown]: isSubmenuShown })} onMouseLeave={handleMouseLeaveUl}>
         <li className={clsx(classes.subItem, classes.bottomDivider)}>
-          <p className={classes.semibold}>{user.email}</p>
+          <p className={classes.semibold}>{user.email || user.name}</p>
         </li>
         <li className={clsx(classes.subItem, classes.bottomDivider)}>
           <Chip label={'5'} className={classes.checksChip} />

@@ -7,7 +7,7 @@ import {
   validateRegion,
 } from '@/utils/validators';
 import Paper from '@/components/Paper/Paper';
-import { MutableRefObject, useRef, useState} from 'react';
+import { MutableRefObject, useRef } from 'react';
 import { getMediaCharByMedia, parseDetails } from '@/utils/helpers';
 import classes from './Sustainability.module.scss';
 import TextArea from '@/components/TextArea/TextArea';
@@ -30,7 +30,6 @@ const Sustainability = ({
 }: Props) => {
   const innerRef = useRef<Record<string, any> | null>(null);
   const ref = valuesRef || innerRef;
-  const [countOfChars, setCountOfChars] = useState<number>(0);
   const handleSubmit = async (values: Record<string, any>, form: FormApi) => {
     const result = parseDetails(values);
     await onSubmitDetails(result);
@@ -43,9 +42,10 @@ const Sustainability = ({
       <Form
         onSubmit={(values, form) => handleSubmit(values, form)}
         render={({ handleSubmit, dirty, errors, submitting, values }) => {
+          let countOfChars = 0;
           ref.current = parseDetails(values);
           const media = parseDetails(values).media;
-          if(media) setCountOfChars(getMediaCharByMedia(media as Medias));
+          if(media) countOfChars = getMediaCharByMedia(media as Medias);
           return (
             <form onSubmit={handleSubmit} className={classes.form}>
               <Paper className={classes.paper}>
