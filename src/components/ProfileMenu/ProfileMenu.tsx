@@ -36,8 +36,6 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo }) => {
     );
   }
 
-  console.log(userInfo);
-
   return (
     <li className={classes.li} onMouseEnter={handleMouseEnterLi}>
       {
