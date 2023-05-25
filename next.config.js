@@ -7,9 +7,24 @@ const nextConfig = {
       "test-sandelys.fra1.digitaloceanspaces.com",
       "sandelys.fra1.cdn.digitaloceanspaces.com",
       "sandelys.fra1.digitaloceanspaces.com",
-      "lh3.googleusercontent.com",
-      "pbs.twimg.com",
-    ]
+    ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*.googleusercontent.com',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: 'scontent-*.xx.fbcdn.net',
+        port: '',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.twimg.com',
+        port: '',
+      },
+    ],
   }
 }
 
