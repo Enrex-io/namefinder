@@ -1,10 +1,8 @@
 import Paper from '@/components/Paper/Paper';
 import Stack from '@/components/Stack/Stack';
-import CopyButton from '@/components/CopyButton/CopyButton';
-import RestartButton from '@/components/RestartButton/RestartButton';
 import classes from './SustainabilityDescriptions.module.scss';
 
-const HEADING_TEXT = 'You post analysis';
+const HEADING_TEXT = 'Your post analysis';
 
 interface Props {
   descriptions: string[] | [];
@@ -23,7 +21,7 @@ function SustainabilityDescription({
           spacing={1}
           hasBorder
         >
-          {descriptions.map((description, index) => {
+          {descriptions.map((description) => {
             if (description.trim() === '') return;
             return (
               <Paper key={description} className={classes.paperDescription}>
