@@ -26,7 +26,7 @@ export default function Home() {
     if (typeof window !== undefined) {
       import('firebaseui').then((firebaseui) => {
         if (!ui.current) {
-          ui.current = new firebaseui.auth.AuthUI(firebase.auth());
+          ui.current = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth());
           ui.current.start('#firebaseui-auth-container', {
             callbacks: {
               signInSuccessWithAuthResult: function(authResult, redirectUrl) {
