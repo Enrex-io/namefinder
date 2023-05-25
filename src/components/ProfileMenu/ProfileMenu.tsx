@@ -7,8 +7,13 @@ import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Chip from '../Chip/Chip';
 import UserPhotoPlaceholder from '../UserPhotoPlaceholder/UserPhotoPlaceholder';
+import { IGreenWashingUser } from '@/types';
 
-const ProfileMenu = () => {
+interface ProfileMenuProps {
+  userInfo: IGreenWashingUser | null;
+}
+
+const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo }) => {
   const { push } = useRouter();
   const { user, signout } = useAuth();
   const [ isSubmenuShown, setIsSumbenuShown ] = useState(false);
@@ -32,6 +37,8 @@ const ProfileMenu = () => {
     );
   }
 
+  console.log(userInfo);
+
   return (
     <li className={classes.li} onMouseEnter={handleMouseEnterLi}>
       {
@@ -44,7 +51,7 @@ const ProfileMenu = () => {
           <p className={classes.semibold}>{user.email}</p>
         </li>
         <li className={clsx(classes.subItem, classes.bottomDivider)}>
-          <Chip label={'5'} className={classes.checksChip} />
+          <Chip label={userInfo?.counter?.toFixed(0) || '0'} className={classes.checksChip} />
           <p>Free checks</p>
         </li>
         <li className={classes.subItem}>

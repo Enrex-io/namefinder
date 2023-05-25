@@ -1,6 +1,6 @@
-import { MutableRefObject, useRef, useState } from 'react';
+import { Dispatch, MutableRefObject, SetStateAction, useRef, useState } from 'react';
 import Paper from '@/components/Paper/Paper';
-import { Details } from '@/types';
+import { Details, IGreenWashingUser } from '@/types';
 import { OpenAIApi } from '@/services/OpenAIService';
 import Stack from '@/components/Stack/Stack';
 import { delay, getMediaCharByMedia } from '@/utils/helpers';
@@ -13,12 +13,16 @@ import Reset from '@/widgets/Reset/Reset';
 import MediaPost from '@/widgets/MediaPost/MediaPost';
 import Medias from '@/consts/medias';
 
+interface SustainabilityFormProps {
+  setUserInfo: Dispatch<SetStateAction<IGreenWashingUser | null>>
+}
+
 const scrollTo = (ref: MutableRefObject<any>) => {
   if (!ref.current) return;
   ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
-const SustainabilityForm = () => {
+const SustainabilityForm: React.FC<SustainabilityFormProps> = ({ setUserInfo }) => {
   const sendmeRef = useRef<HTMLDivElement | null>(null);
   const shareRef = useRef<HTMLDivElement | null>(null);
 
@@ -41,7 +45,13 @@ const SustainabilityForm = () => {
       details,
       chars
     );
-    const result: string = res.result || '';
+    const result: string = res.result?.text || '';
+    const userData = res.result?.userData;
+
+    if(userData) {
+      setUserInfo(userData);
+    }
+
     setError(null);
     setHasSubmitteddescription(true);
     if (res.error) return setError(res.error);
