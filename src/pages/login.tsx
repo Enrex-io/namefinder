@@ -6,7 +6,6 @@ import classes from './index.module.scss';
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
-import axios from '@/utils/axios';
 import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 
 export default function Home() {
@@ -18,9 +17,7 @@ export default function Home() {
 
   useEffect(() => {
     if (user) {
-      if (isNewUser) {
-        GreenWashingUserService.createUser();
-      }
+      GreenWashingUserService.createUser();
       router.push('/');
     }
   }, [user, router, isNewUser]);
