@@ -43,7 +43,7 @@ export class OpenAIApi {
 
   public static savePrompt = async (prompt: IPrompt) => {
     try {
-      const response = await axios.post('/api/sustainabilityMarketing/getAssistedBySustainabilityMarketing', prompt);
+      const response = await axios.post('/api/sustainabilityMarketing/savePrompt', prompt);
       return response.data;
     } catch (error: unknown) {
       console.error('OpenAIService.getAssistedBySustainabilityMarketing: ', error);
