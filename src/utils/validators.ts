@@ -1,5 +1,4 @@
 import { MEDIAS_OPTIONS } from '@/consts/medias';
-import { EMAIL_VALIDATION_REGEX } from '@/consts/regex';
 import { REGIONS_OPTIONS } from '@/consts/region';
 
 export const validateDescription = (value: string, maxChars: number) => {
@@ -7,12 +6,6 @@ export const validateDescription = (value: string, maxChars: number) => {
   if (value.length < 3)
     return "Description doesn't look like a realDescription";
   if (value.length > maxChars) return 'Text is too big';
-};
-
-export const validateEmail = (value: string) => {
-  if (!value) return 'Email is required';
-  if (!value.match(EMAIL_VALIDATION_REGEX))
-    return "Email doesn't look like a valid email";
 };
 
 export const validateRegion = (value: string) => {

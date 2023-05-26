@@ -1,3 +1,6 @@
+import Regions from "@/consts/region";
+import Medias from "@/consts/medias";
+
 export type Phone = `${number}` | `${number}-${number}`;
 export type Label = Capitalize<string>;
 
@@ -47,6 +50,17 @@ export type UserProfile = {
   token?: string,
   claims?: { [key: string]: any };
 };
+
+export interface IPrompt {
+  userId: string;
+  media: Medias;
+  region: Regions;
+  request: string;
+  response: {
+    terms: string[];
+    correctText: string;
+  }
+}
 
 export interface IGreenWashingUser {
   userId: string;
