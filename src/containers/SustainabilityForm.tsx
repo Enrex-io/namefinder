@@ -49,22 +49,21 @@ import Regions from "@/consts/region";
 
       const resPost: string = result?.slice(postIndex + 8);
       if (!user) return;
-      console.log(user.id);
-       const savePrompt = await OpenAIApi.savePrompt({
-         userId: user.id,
-         media: details.media as Medias,
-         region: details.region as Regions,
-         request: details.description,
-         response: {
-           terms: resDescription,
-           correctText: resPost,
-         }
-       })
-      console.log(savePrompt);
 
       if (resDescription) setGeneratedDescription(resDescription);
 
       if (resPost) setPost(resPost);
+
+      const savePrompt = await OpenAIApi.savePrompt({
+        userId: user.id,
+        media: details.media as Medias,
+        region: details.region as Regions,
+        request: details.description,
+        response: {
+          terms: resDescription,
+          correctText: resPost,
+        }
+      })
 
       return res;
     };
