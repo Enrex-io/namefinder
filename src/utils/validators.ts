@@ -1,5 +1,4 @@
 import { MEDIAS_OPTIONS } from '@/consts/medias';
-import { EMAIL_VALIDATION_REGEX } from '@/consts/regex';
 import { REGIONS_OPTIONS } from '@/consts/region';
 
 export const validateDescription = (value: string, maxChars: number) => {
