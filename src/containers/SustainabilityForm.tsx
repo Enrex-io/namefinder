@@ -41,19 +41,19 @@ import Regions from "@/consts/region";
 
       setError(null);
       if (res.error) return setError(res.error);
-
-      const termsIndex = result?.indexOf('Terms');
-      const postIndex = result?.indexOf('Correct');
-
-      const resDescription = result?.slice(termsIndex + 8, postIndex).split('\n');
-
-      const resPost: string = result?.slice(postIndex + 8);
+      const statementIndex = result?.indexOf('\na.');
+      const termsIndex = result?.indexOf('\nb.');
+      const postIndex = result?.indexOf('\nc.');
+      
+      let resDescription: string[] = [];
+      const statement = result?.slice(statementIndex + 4, termsIndex);
+      const terms = result.slice(termsIndex + 10, postIndex).split('\n');
+      resDescription = [statement, ...terms]
+      const resPost: string = result?.slice(postIndex + 4);
+      
       if (!user) return;
-
       if (resDescription) setGeneratedDescription(resDescription);
-
       if (resPost) setPost(resPost);
-
       const savePrompt = await OpenAIApi.savePrompt({
         userId: user.id,
         media: details.media as Medias,
