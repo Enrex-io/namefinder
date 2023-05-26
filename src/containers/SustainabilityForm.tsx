@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useRef, useState } from 'react';
+import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
 import Paper from '@/components/Paper/Paper';
 import { Details, IGreenWashingUser } from '@/types';
 import { OpenAIApi } from '@/services/OpenAIService';
@@ -33,6 +33,8 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({ setUserInfo }) 
     const result: string = res.result?.text || '';
     const userData = res.result?.userData;
 
+    console.log(result);
+
     if(userData) {
       setUserInfo(userData);
     }
@@ -40,12 +42,16 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({ setUserInfo }) 
     setError(null);
     if (res.error) return setError(res.error);
 
-    const termsIndex = result?.indexOf('Terms');
-    const postIndex = result?.indexOf('Correct');
+    const statementIndex = result?.indexOf('\na.');
+    const termsIndex = result?.indexOf('\nb.');
+    const postIndex = result?.indexOf('\nc.');
+    let resDescription: string[] = [];
 
-    const resDescription = result?.slice(termsIndex + 8, postIndex).split('\n');
+    const statement = result?.slice(statementIndex + 4, termsIndex);
+    const terms = result.slice(termsIndex + 10, postIndex).split('\n');
+    resDescription = [statement, ...terms]
 
-    const resPost: string = result?.slice(postIndex + 8);
+    const resPost: string = result?.slice(postIndex + 4);
 
     if (resDescription) setGeneratedDescription(resDescription);
 
