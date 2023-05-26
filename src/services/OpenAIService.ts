@@ -1,5 +1,5 @@
 import { isAxiosError } from '../types/typeGuards';
-import {Details, IPrompt, ResponsePayload} from '@/types';
+import { Details, IGreenWashingUser, ResponsePayload, IPrompt } from '@/types';
 import axios from '../utils/axios';
 
 const DEFAULT_ERROR_MESSAGE =
@@ -8,7 +8,7 @@ export class OpenAIApi {
   public static getAssistedBySustainabilityMarketing = async (
     details: Details,
     chars: number
-  ): Promise<ResponsePayload<string>> => {
+  ): Promise<ResponsePayload<{ text: string, userData: IGreenWashingUser}>> => {
     try {
       const { description, media, region } = details;
       const response = await axios.post(

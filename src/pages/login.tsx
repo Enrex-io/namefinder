@@ -6,33 +6,29 @@ import classes from './index.module.scss';
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
-import axios from '@/utils/axios';
+import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 
 export default function Home() {
   const ui = useRef<firebaseui.auth.AuthUI>();
   const router = useRouter()
-  const [ isNewUser, setIsNewUser ] = useState(false);
 
   const { user } = useAuth();
 
   useEffect(() => {
     if (user) {
-      if (isNewUser) {
-        axios.post('/api/sustainabilityMarketing/createUser')
-      }
+      GreenWashingUserService.createUser();
       router.push('/');
     }
-  }, [user, router, isNewUser]);
+  }, [user, router]);
   
   useEffect(() => {
     if (typeof window !== undefined) {
       import('firebaseui').then((firebaseui) => {
         if (!ui.current) {
-          ui.current = new firebaseui.auth.AuthUI(firebase.auth());
+          ui.current = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth());
           ui.current.start('#firebaseui-auth-container', {
             callbacks: {
               signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-                setIsNewUser(Boolean(authResult?.additionalUserInfo?.isNewUser));
                 //We will manually redirect after ensuring that the user is present in the context to avoid bugs with redirects
                 return false;
               },

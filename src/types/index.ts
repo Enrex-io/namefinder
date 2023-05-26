@@ -61,3 +61,9 @@ export interface IPrompt {
     correctText: string;
   }
 }
+
+export interface IGreenWashingUser {
+  userId: string;
+  counter: number;
+  plan: string;
+}

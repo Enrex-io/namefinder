@@ -7,48 +7,45 @@ import {
   validateRegion,
 } from '@/utils/validators';
 import Paper from '@/components/Paper/Paper';
-import { MutableRefObject, useRef, useState } from 'react';
+import { MutableRefObject, useRef } from 'react';
 import { getMediaCharByMedia, parseDetails } from '@/utils/helpers';
 import classes from './Sustainability.module.scss';
 import TextArea from '@/components/TextArea/TextArea';
 import SelectField from '@/components/SelectField/SelectField';
 import Medias, { MEDIAS_OPTIONS } from '@/consts/medias';
-import Regions, { REGIONS_OPTIONS } from '@/consts/region';
+import { REGIONS_OPTIONS } from '@/consts/region';
+import {FormApi} from "final-form";
 
 const HEADING_TEXT = 'Sustainability Marketing Assistant';
 const SUBMIT_BUTTON_TEXT = 'Analyze post';
 
 interface Props {
   onSubmitDetails: (values: Details) => Promise<void>;
-  isHiddenButton?: boolean;
   valuesRef?: MutableRefObject<Record<string, any> | null>;
 }
 
 const Sustainability = ({
   onSubmitDetails,
-  isHiddenButton = false,
-  valuesRef,
+  valuesRef
 }: Props) => {
   const innerRef = useRef<Record<string, any> | null>(null);
   const ref = valuesRef || innerRef;
-
-  const handleSubmit = async (values: Record<string, any>) => {
+  const handleSubmit = async (values: Record<string, any>, form: FormApi) => {
     const result = parseDetails(values);
     await onSubmitDetails(result);
+    form.reset(result)
   };
-
-
-  const [countOfChars, setCountOfChars] = useState<number>(0);
 
     return (
     <div className={classes.container}>
       <h2 className={classes.heading}>{HEADING_TEXT}</h2>
       <Form
-        onSubmit={handleSubmit}
+        onSubmit={(values, form) => handleSubmit(values, form)}
         render={({ handleSubmit, dirty, errors, submitting, values }) => {
+          let countOfChars = 0;
           ref.current = parseDetails(values);
           const media = parseDetails(values).media;
-          if(media) setCountOfChars(getMediaCharByMedia(media as Medias));
+          if(media) countOfChars = getMediaCharByMedia(media as Medias);
           return (
             <form onSubmit={handleSubmit} className={classes.form}>
               <Paper className={classes.paper}>
@@ -109,7 +106,6 @@ const Sustainability = ({
                   </div>
                 </div>
               </Paper>
-              {!isHiddenButton && (
                 <Button
                   tabIndex={1}
                   type='submit'
@@ -120,7 +116,6 @@ const Sustainability = ({
                 >
                   {SUBMIT_BUTTON_TEXT}
                 </Button>
-              )}
             </form>
           );
         }}
