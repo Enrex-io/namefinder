@@ -12,6 +12,8 @@ import classes from './SustainabilityForm.module.scss';
 import Reset from '@/widgets/Reset/Reset';
 import MediaPost from '@/widgets/MediaPost/MediaPost';
 import Medias from '@/consts/medias';
+import {useAuth} from "@/hooks/useAuth";
+import Regions from "@/consts/region";
 
 const scrollTo = (ref: MutableRefObject<any>) => {
   if (!ref.current) return;
@@ -19,6 +21,8 @@ const scrollTo = (ref: MutableRefObject<any>) => {
 };
 
 const SustainabilityForm = () => {
+  const { user } = useAuth();
+
   const sendmeRef = useRef<HTMLDivElement | null>(null);
   const shareRef = useRef<HTMLDivElement | null>(null);
 
@@ -52,6 +56,17 @@ const SustainabilityForm = () => {
     const resDescription = result?.slice(termsIndex + 8, postIndex).split('\n');
 
     const resPost: string = result?.slice(postIndex + 8);
+    if (!user) return;
+     const savePrompt = await OpenAIApi.savePrompt({
+       userId: user.id,
+       media: details.media as Medias,
+       region: details.region as Regions,
+       request: details.description,
+       response: {
+         terms: resDescription,
+         correctText: resPost,
+       }
+     })
 
     if (resDescription) setGeneratedDescription(resDescription);
 
