@@ -9,12 +9,6 @@ export const validateDescription = (value: string, maxChars: number) => {
   if (value.length > maxChars) return 'Text is too big';
 };
 
-export const validateEmail = (value: string) => {
-  if (!value) return 'Email is required';
-  if (!value.match(EMAIL_VALIDATION_REGEX))
-    return "Email doesn't look like a valid email";
-};
-
 export const validateRegion = (value: string) => {
   if (!value) return 'Regions are required';
   const foundValue = REGIONS_OPTIONS.find((option) => option.value === value);
