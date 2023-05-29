@@ -12,6 +12,8 @@ import classes from './SustainabilityForm.module.scss';
 import Reset from '@/widgets/Reset/Reset';
 import MediaPost from '@/widgets/MediaPost/MediaPost';
 import Medias from '@/consts/medias';
+import { useAuth } from '@/hooks/useAuth';
+import Regions from '@/consts/region';
 
 interface SustainabilityFormProps {
     setUserInfo: Dispatch<SetStateAction<IGreenWashingUser | null>>;
@@ -20,6 +22,7 @@ interface SustainabilityFormProps {
 const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
     setUserInfo,
 }) => {
+    const { user } = useAuth();
     const [error, setError] = useState<string | null>(null);
     const [generatedDescription, setGeneratedDescription] = useState<
         string[] | []
@@ -43,7 +46,6 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
 
         setError(null);
         if (res.error) return setError(res.error);
-
         const summaryIndex: number = data?.indexOf('Summary');
         const termsIndex: number = data?.indexOf('Terms');
         const postIndex: number = data?.indexOf('Correct');
@@ -107,5 +109,4 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
         </Paper>
     );
 };
-
 export default SustainabilityForm;
