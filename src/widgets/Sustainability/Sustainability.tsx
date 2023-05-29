@@ -33,10 +33,27 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
         form.reset(result);
     };
 
+    const countChars = (values: any) => {
+        let countOfChars = 0;
+        const media = parseDetails(values).media;
+        if (media) countOfChars = getMediaCharByMedia(media as Medias);
+        return countOfChars;
+    };
+
     return (
         <div className={classes.container}>
             <h2 className={classes.heading}>{HEADING_TEXT}</h2>
             <Form
+                validate={(values) => {
+                    return {
+                        media: validateMedia(values.media),
+                        region: validateRegion(values.region),
+                        description: validateDescription(
+                            values.description,
+                            countChars(ref.current)
+                        ),
+                    };
+                }}
                 onSubmit={(values, form) => handleSubmit(values, form)}
                 render={({
                     handleSubmit,
@@ -45,11 +62,7 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
                     submitting,
                     values,
                 }) => {
-                    let countOfChars = 0;
                     ref.current = parseDetails(values);
-                    const media = parseDetails(values).media;
-                    if (media)
-                        countOfChars = getMediaCharByMedia(media as Medias);
                     return (
                         <form onSubmit={handleSubmit} className={classes.form}>
                             <Paper className={classes.paper}>
@@ -59,7 +72,6 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
                                     >
                                         <Field
                                             name="media"
-                                            validate={validateMedia}
                                             defaultValue={
                                                 MEDIAS_OPTIONS[0].label
                                             }
@@ -83,7 +95,6 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
                                         />
                                         <Field
                                             name="region"
-                                            validate={validateRegion}
                                             defaultValue={
                                                 REGIONS_OPTIONS[0].label
                                             }
@@ -114,12 +125,6 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
                                         <Field
                                             className={classes.fieldDescription}
                                             name="description"
-                                            validate={(value) => {
-                                                return validateDescription(
-                                                    value,
-                                                    countOfChars
-                                                );
-                                            }}
                                             render={({ input, meta }) => (
                                                 <TextArea
                                                     tabIndex={1}
@@ -133,7 +138,9 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
                                                         meta.touched &&
                                                         meta.error
                                                     }
-                                                    maxLength={countOfChars}
+                                                    maxLength={countChars(
+                                                        ref.current
+                                                    )}
                                                     {...input}
                                                 />
                                             )}
