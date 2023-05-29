@@ -139,7 +139,7 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
                                                         meta.error
                                                     }
                                                     maxLength={countChars(
-                                                        countChars(values)
+                                                        values
                                                     )}
                                                     {...input}
                                                 />
