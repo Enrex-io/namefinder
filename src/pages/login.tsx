@@ -15,10 +15,14 @@ export default function Home() {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user) {
-      GreenWashingUserService.createUser();
-      router.push('/');
+    async function createUserThenRedirect() {
+      if (user) {
+        await GreenWashingUserService.createUser();
+        router.push('/');
+      }
     }
+
+    createUserThenRedirect();
   }, [user, router]);
   
   useEffect(() => {
@@ -36,6 +40,16 @@ export default function Home() {
             signInOptions: [
               firebase.auth.GoogleAuthProvider.PROVIDER_ID,
               firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+              {
+                provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+                signInMethod: firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
+                forceSameDevice: false,
+                emailLinkSignIn: function() {
+                  return {
+                    url: window.location.href,
+                  };
+                }
+              }
             ],
           });
         }
