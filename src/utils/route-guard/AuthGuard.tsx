@@ -13,7 +13,7 @@ const AuthGuard = ({ children }: { children: ReactElement | null }) => {
             router.push('/login');
         }
         // eslint-disable-next-line
-  }, [isLoggedIn]);
+    }, [isLoggedIn]);
 
     if (!isLoggedIn) {
         return (

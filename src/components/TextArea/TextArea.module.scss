@@ -1,62 +1,62 @@
 .field {
-  font-size: 0.88rem;
-  .label {
-    display: block;
-    margin-bottom: 0.5rem;
-    cursor: pointer;
-    user-select: none;
+    font-size: 0.88rem;
+    .label {
+        display: block;
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        user-select: none;
 
-    text-align: left;
-  }
-
-  .textarea {
-    padding: 0.5rem 1rem;
-    width: 100%;
-    border-radius: 1rem;
-    border: 1px solid var(--clr-grey-main);
-    font-size: inherit;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    cursor: text;
-    textarea {
-      padding: 0.1rem 0.2rem;
-      flex: 1;
-      border: none;
-      outline: none;
-      background: transparent;
-      font-size: inherit;
-      resize: vertical;
+        text-align: left;
     }
 
-    &::placeholder {
-      color: var(--clr-grey-main);
+    .textarea {
+        padding: 0.5rem 1rem;
+        width: 100%;
+        border-radius: 1rem;
+        border: 1px solid var(--clr-grey-main);
+        font-size: inherit;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        cursor: text;
+        textarea {
+            padding: 0.1rem 0.2rem;
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: inherit;
+            resize: vertical;
+        }
+
+        &::placeholder {
+            color: var(--clr-grey-main);
+        }
+
+        &.error {
+            border-color: var(--clr-red-main);
+        }
     }
 
-    &.error {
-      border-color: var(--clr-red-main);
+    .helperCounter {
+        display: block;
+        text-align: right;
+        width: 100%;
+        &.error {
+            color: var(--clr-red-main);
+        }
     }
-  }
 
-  .helperCounter {
-    display: block;
-    text-align: right;
-    width: 100%;
-    &.error {
-      color: var(--clr-red-main);
+    .helperText {
+        display: block;
+        font-size: 0.75rem;
+        min-height: 1.13rem;
+        margin-top: 0.2rem;
+
+        text-align: left;
+
+        &.error {
+            color: var(--clr-red-main);
+        }
     }
-  }
-
-  .helperText {
-    display: block;
-    font-size: 0.75rem;
-    min-height: 1.13rem;
-    margin-top: 0.2rem;
-
-    text-align: left;
-
-    &.error {
-      color: var(--clr-red-main);
-    }
-  }
 }

@@ -1,21 +1,21 @@
 .chip {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 100rem;
-  color: var(--clr-blue-main);
-  background-color: var(--clr-green-light);
-  padding: 0.5rem 1rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  width: fit-content;
-  height: fit-content;
-  text-align: center;
-  cursor: pointer;
-  user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100rem;
+    color: var(--clr-blue-main);
+    background-color: var(--clr-green-light);
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    width: fit-content;
+    height: fit-content;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
 
-  &.active {
-    color: var(--clr-white-main);
-    background-color: var(--clr-green-main);
-  }
+    &.active {
+        color: var(--clr-white-main);
+        background-color: var(--clr-green-main);
+    }
 }

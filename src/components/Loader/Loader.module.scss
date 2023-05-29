@@ -1,47 +1,47 @@
 .animatedLoadingDotsContainer {
-  float: left;
-  position: relative;
-  height: 100%;
-  width: 100%;
-  z-index: 9999;
+    float: left;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    z-index: 9999;
 }
 .animatedLoadingDots {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .animatedLoadingDots > div {
-  background-color: #888;
-  width: 12px;
-  height: 12px;
-  border-radius: 12px;
-  animation-name: loader-dots;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-  animation-duration: 1s;
-  animation-delay: 200ms;
-  margin: 0;
+    background-color: #888;
+    width: 12px;
+    height: 12px;
+    border-radius: 12px;
+    animation-name: loader-dots;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-duration: 1s;
+    animation-delay: 200ms;
+    margin: 0;
 }
 .animatedLoadingDots.darkDots div {
-  background-color: #fff;
+    background-color: #fff;
 }
 
 .animatedLoadingDots div:first-child,
 .animatedLoadingDots div:last-child {
-  margin: 0 12px;
+    margin: 0 12px;
 }
 .animatedLoadingDots div:first-child {
-  animation-delay: 0ms;
+    animation-delay: 0ms;
 }
 .animatedLoadingDots div:last-child {
-  animation-delay: 400ms;
+    animation-delay: 400ms;
 }
 @keyframes loader-dots {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.3;
-  }
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.3;
+    }
 }
