@@ -1,5 +1,5 @@
 import { isAxiosError } from '../types/typeGuards';
-import { Details, IGreenWashingUser, ResponsePayload } from '@/types';
+import { Details, IGreenWashingUser, ResponsePayload, IPrompt } from '@/types';
 import axios from '../utils/axios';
 
 const DEFAULT_ERROR_MESSAGE =
@@ -40,6 +40,22 @@ export class OpenAIApi {
                 errorMessage = 'Too many requests. Please try again later.';
             }
             return { error: errorMessage };
+        }
+    };
+
+    public static savePrompt = async (prompt: IPrompt) => {
+        try {
+            const response = await axios.post(
+                '/api/sustainabilityMarketing/savePrompt',
+                prompt
+            );
+            return response.data;
+        } catch (error: unknown) {
+            console.error(
+                'OpenAIService.getAssistedBySustainabilityMarketing: ',
+                error
+            );
+            if (!isAxiosError(error)) return { error: DEFAULT_ERROR_MESSAGE };
         }
     };
 }

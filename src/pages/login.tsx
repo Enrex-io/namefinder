@@ -32,8 +32,8 @@ export default function Home() {
                     ui.current.start('#firebaseui-auth-container', {
                         callbacks: {
                             signInSuccessWithAuthResult: function (
-                                authResult,
-                                redirectUrl
+                                _authResult,
+                                _redirectUrl
                             ) {
                                 //We will manually redirect after ensuring that the user is present in the context to avoid bugs with redirects
                                 return false;
@@ -41,7 +41,6 @@ export default function Home() {
                         },
                         signInOptions: [
                             firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                            firebase.auth.FacebookAuthProvider.PROVIDER_ID,
                             firebase.auth.TwitterAuthProvider.PROVIDER_ID,
                         ],
                     });

@@ -12,7 +12,8 @@ import classes from './SustainabilityForm.module.scss';
 import Reset from '@/widgets/Reset/Reset';
 import MediaPost from '@/widgets/MediaPost/MediaPost';
 import Medias from '@/consts/medias';
-
+import { useAuth } from '@/hooks/useAuth';
+import Regions from '@/consts/region';
 interface SustainabilityFormProps {
     setUserInfo: Dispatch<SetStateAction<IGreenWashingUser | null>>;
 }
@@ -20,6 +21,7 @@ interface SustainabilityFormProps {
 const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
     setUserInfo,
 }) => {
+    const { user } = useAuth();
     const [error, setError] = useState<string | null>(null);
     const [generatedDescription, setGeneratedDescription] = useState<
         string[] | []
@@ -41,19 +43,29 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
 
         setError(null);
         if (res.error) return setError(res.error);
+        const statementIndex = result?.indexOf('\na.');
+        const termsIndex = result?.indexOf('\nb.');
+        const postIndex = result?.indexOf('\nc.');
 
-        const termsIndex = result?.indexOf('Terms');
-        const postIndex = result?.indexOf('Correct');
+        let resDescription: string[] = [];
+        const statement = result?.slice(statementIndex + 4, termsIndex);
+        const terms = result.slice(termsIndex + 10, postIndex).split('\n');
+        resDescription = [statement, ...terms];
+        const resPost: string = result?.slice(postIndex + 4);
 
-        const resDescription = result
-            ?.slice(termsIndex + 8, postIndex)
-            .split('\n');
-
-        const resPost: string = result?.slice(postIndex + 8);
-
+        if (!user) return;
         if (resDescription) setGeneratedDescription(resDescription);
-
         if (resPost) setPost(resPost);
+        const savePrompt = await OpenAIApi.savePrompt({
+            userId: user.id,
+            media: details.media as Medias,
+            region: details.region as Regions,
+            request: details.description,
+            response: {
+                terms: resDescription,
+                correctText: resPost,
+            },
+        });
 
         return res;
     };
@@ -103,5 +115,4 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
         </Paper>
     );
 };
-
 export default SustainabilityForm;
