@@ -33,24 +33,21 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
         form.reset(result);
     };
 
-    const countChars = (values: any) => {
-        let countOfChars = 0;
-        const media = parseDetails(values).media;
-        if (media) countOfChars = getMediaCharByMedia(media as Medias);
-        return countOfChars;
-    };
-
     return (
         <div className={classes.container}>
             <h2 className={classes.heading}>{HEADING_TEXT}</h2>
             <Form
                 validate={(values) => {
+                    let countOfChars = 0;
+                    const media = parseDetails(values).media;
+                    if (media)
+                        countOfChars = getMediaCharByMedia(media as Medias);
                     return {
                         media: validateMedia(values.media),
                         region: validateRegion(values.region),
                         description: validateDescription(
                             values.description,
-                            countChars(ref.current)
+                            countOfChars
                         ),
                     };
                 }}
@@ -62,6 +59,10 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
                     submitting,
                     values,
                 }) => {
+                    let countOfChars = 0;
+                    const media = parseDetails(values).media;
+                    if (media)
+                        countOfChars = getMediaCharByMedia(media as Medias);
                     ref.current = parseDetails(values);
                     return (
                         <form onSubmit={handleSubmit} className={classes.form}>
@@ -138,9 +139,7 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
                                                         meta.touched &&
                                                         meta.error
                                                     }
-                                                    maxLength={countChars(
-                                                        ref.current
-                                                    )}
+                                                    maxLength={countOfChars}
                                                     {...input}
                                                 />
                                             )}
