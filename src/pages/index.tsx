@@ -10,39 +10,42 @@ import { useAuth } from '@/hooks/useAuth';
 import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 
 function Home() {
-  const [userInfo, setUserInfo] = useState<IGreenWashingUser | null>(null);
-  const { user } = useAuth();
+    const [userInfo, setUserInfo] = useState<IGreenWashingUser | null>(null);
+    const { user } = useAuth();
 
-  useEffect(() => {
-    async function fetchUser() {
-      const userData = await GreenWashingUserService.getUser();
-      if (userData.result) {
-        setUserInfo(userData.result);
-        return;
-      }
-    }
+    useEffect(() => {
+        async function fetchUser() {
+            const userData = await GreenWashingUserService.getUser();
+            if (userData.result) {
+                setUserInfo(userData.result);
+                return;
+            }
+        }
 
-    if (user) {
-      fetchUser();
-    }
-  }, [user])
+        if (user) {
+            fetchUser();
+        }
+    }, [user]);
 
-  return (
-    <AuthGuard>
-      <>
-        <Head>
-          <title>{META.title}</title>
-          <link rel='icon' href={META.favicon} />
-          <meta name='description' content={META.description} />
-          <meta name='viewport' content='width=device-width, initial-scale=1' />
-        </Head>
-        <NavBar userInfo={userInfo}/>
-        <div className={classes.container}>
-          <Sustainability setUserInfo={setUserInfo} />
-        </div>
-      </>
-    </AuthGuard>
-  );
+    return (
+        <AuthGuard>
+            <>
+                <Head>
+                    <title>{META.title}</title>
+                    <link rel="icon" href={META.favicon} />
+                    <meta name="description" content={META.description} />
+                    <meta
+                        name="viewport"
+                        content="width=device-width, initial-scale=1"
+                    />
+                </Head>
+                <NavBar userInfo={userInfo} />
+                <div className={classes.container}>
+                    <Sustainability setUserInfo={setUserInfo} />
+                </div>
+            </>
+        </AuthGuard>
+    );
 }
 
 export default Home;

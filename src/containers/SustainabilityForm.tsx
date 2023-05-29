@@ -12,14 +12,17 @@ import classes from './SustainabilityForm.module.scss';
 import Reset from '@/widgets/Reset/Reset';
 import MediaPost from '@/widgets/MediaPost/MediaPost';
 import Medias from '@/consts/medias';
-import {useAuth} from "@/hooks/useAuth";
-import Regions from "@/consts/region";
-  interface SustainabilityFormProps {
-    setUserInfo: Dispatch<SetStateAction<IGreenWashingUser | null>>
-  }
+import { useAuth } from '@/hooks/useAuth';
+import Regions from '@/consts/region';
 
-  const SustainabilityForm: React.FC<SustainabilityFormProps> = ({setUserInfo}) => {
-    const {user} = useAuth();
+interface SustainabilityFormProps {
+    setUserInfo: Dispatch<SetStateAction<IGreenWashingUser | null>>;
+}
+
+const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
+    setUserInfo,
+}) => {
+    const { user } = useAuth();
     const [error, setError] = useState<string | null>(null);
     const [generatedDescription, setGeneratedDescription] = useState<
         string[] | []
@@ -27,90 +30,89 @@ import Regions from "@/consts/region";
     const detailsRef = useRef<Details | null>(null);
     const [post, setPost] = useState<string>('');
     const handleSubmitDescription = async (details: Details) => {
-      const chars = getMediaCharByMedia(details.media as Medias);
-      const res = await OpenAIApi.getAssistedBySustainabilityMarketing(
-          details,
-          chars
-      );
-      const result: string = res.result?.text || '';
-      const userData = res.result?.userData;
+        const chars = getMediaCharByMedia(details.media as Medias);
+        const res = await OpenAIApi.getAssistedBySustainabilityMarketing(
+            details,
+            chars
+        );
+        const result: string = res.result?.text || '';
+        const userData = res.result?.userData;
 
-      if (userData) {
-        setUserInfo(userData);
-      }
-
-      setError(null);
-      if (res.error) return setError(res.error);
-      const statementIndex = result?.indexOf('\na.');
-      const termsIndex = result?.indexOf('\nb.');
-      const postIndex = result?.indexOf('\nc.');
-      
-      let resDescription: string[] = [];
-      const statement = result?.slice(statementIndex + 4, termsIndex);
-      const terms = result.slice(termsIndex + 10, postIndex).split('\n');
-      resDescription = [statement, ...terms]
-      const resPost: string = result?.slice(postIndex + 4);
-      
-      if (!user) return;
-      if (resDescription) setGeneratedDescription(resDescription);
-      if (resPost) setPost(resPost);
-      const savePrompt = await OpenAIApi.savePrompt({
-        userId: user.id,
-        media: details.media as Medias,
-        region: details.region as Regions,
-        request: details.description,
-        response: {
-          terms: resDescription,
-          correctText: resPost,
+        if (userData) {
+            setUserInfo(userData);
         }
-      })
 
-      return res;
+        setError(null);
+        if (res.error) return setError(res.error);
+        const statementIndex = result?.indexOf('\na.');
+        const termsIndex = result?.indexOf('\nb.');
+        const postIndex = result?.indexOf('\nc.');
+
+        let resDescription: string[];
+        const statement = result?.slice(statementIndex + 4, termsIndex);
+        const terms = result.slice(termsIndex + 10, postIndex).split('\n');
+        resDescription = [statement, ...terms];
+        const resPost: string = result?.slice(postIndex + 4);
+
+        if (!user) return;
+        if (resDescription) setGeneratedDescription(resDescription);
+        if (resPost) setPost(resPost);
+        await OpenAIApi.savePrompt({
+            media: details.media as Medias,
+            region: details.region as Regions,
+            request: details.description,
+            response: {
+                terms: resDescription,
+                correctText: resPost,
+            },
+        });
+
+        return res;
     };
     const handleResetClick = () => {
-      setGeneratedDescription([]);
-      setPost('');
+        setGeneratedDescription([]);
+        setPost('');
     };
 
     return (
-        <Paper spacing={1.25} direction='column' className={classes.container}>
-          <Sustainability
-              onSubmitDetails={async (details) => {
-                handleResetClick()
-                await handleSubmitDescription(details);
-              }}
-              valuesRef={detailsRef}
-          />
-          <>
-            <div
-                id='descriptionsAnchor'
-                className={classes.anchor}
+        <Paper spacing={1.25} direction="column" className={classes.container}>
+            <Sustainability
+                onSubmitDetails={async (details) => {
+                    handleResetClick();
+                    await handleSubmitDescription(details);
+                }}
+                valuesRef={detailsRef}
             />
-            {generatedDescription[0] && (
-                <SustainabilityDescription
-                    descriptions={generatedDescription}
-                />
+            <>
+                <div id="descriptionsAnchor" className={classes.anchor} />
+                {generatedDescription[0] && (
+                    <SustainabilityDescription
+                        descriptions={generatedDescription}
+                    />
+                )}
+                {post && (
+                    <MediaPost
+                        media={detailsRef.current?.media || ''}
+                        post={post}
+                    />
+                )}
+                {post && <Reset onClick={handleResetClick} />}
+            </>
+            {error && (
+                <Stack
+                    className={classes.errorContainer}
+                    alignItems="center"
+                    justifyContent="center"
+                >
+                    <StatusDisplay
+                        message={error}
+                        severity="warning"
+                        onReset={() => setError(null)}
+                    />
+                </Stack>
             )}
-            {post && (
-                <MediaPost media={detailsRef.current?.media || ''} post={post}/>
-            )}
-            {post && <Reset onClick={handleResetClick}/>}
-          </>
-          {error && (
-              <Stack
-                  className={classes.errorContainer}
-                  alignItems='center'
-                  justifyContent='center'
-              >
-                <StatusDisplay
-                    message={error}
-                    severity='warning'
-                    onReset={() => setError(null)}
-                />
-              </Stack>
-          )}
-          <WindowScrollControls/>
+            <WindowScrollControls />
         </Paper>
     );
-  };
+};
 export default SustainabilityForm;
