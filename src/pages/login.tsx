@@ -35,10 +35,7 @@ export default function Home() {
                         new firebaseui.auth.AuthUI(firebase.auth());
                     ui.current.start('#firebaseui-auth-container', {
                         callbacks: {
-                            signInSuccessWithAuthResult: function (
-                                _authResult,
-                                _redirectUrl
-                            ) {
+                            signInSuccessWithAuthResult: function () {
                                 //We will manually redirect after ensuring that the user is present in the context to avoid bugs with redirects
                                 return false;
                             },

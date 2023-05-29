@@ -1,62 +1,62 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
 }
 
 .heading {
-  text-align: left;
-  font-size: 1.13rem;
-  letter-spacing: 0px;
-  font-weight: 500;
+    text-align: left;
+    font-size: 1.13rem;
+    letter-spacing: 0px;
+    font-weight: 500;
 }
 
 .form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2.5rem;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    width: 100%;
 }
 
 .paper {
-  width: 100%;
+    width: 100%;
 }
 
 .fieldsContainer {
-  width: 100%;
-  padding: 1.88rem;
-  border-radius: 1rem;
-  border: 1px solid var(--clr-grey-main);
-  align-items: center;
-  justify-content: center;
+    width: 100%;
+    padding: 1.88rem;
+    border-radius: 1rem;
+    border: 1px solid var(--clr-grey-main);
+    align-items: center;
+    justify-content: center;
 }
 
 .fieldsContainerFirst {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.88rem;
-  @media screen and (max-width: 768px) {
-    grid-template-columns: 1fr;
-    padding: 1.88rem 1.25rem;
-  }
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.88rem;
+    @media screen and (max-width: 768px) {
+        grid-template-columns: 1fr;
+        padding: 1.88rem 1.25rem;
+    }
 }
 
 .fieldsContainerSecond {
-  display: grid;
-  grid-template-columns: 1fr;
-  @media screen and (max-width: 768px) {
+    display: grid;
     grid-template-columns: 1fr;
-    padding: 1.88rem 1.25rem;
-  }
+    @media screen and (max-width: 768px) {
+        grid-template-columns: 1fr;
+        padding: 1.88rem 1.25rem;
+    }
 }
 
 .fieldDescription {
-  width: 100%;
+    width: 100%;
 }
 
 .button {
-  @media screen and (max-width: 768px) {
-    width: 100%;
-  }
+    @media screen and (max-width: 768px) {
+        width: 100%;
+    }
 }
