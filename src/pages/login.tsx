@@ -15,45 +15,48 @@ export default function Home() {
 
     const { user } = useAuth();
 
-    useEffect(() => {
-        if (user) {
-            GreenWashingUserService.createUser();
-            router.push('/');
+  useEffect(() => {
+    async function createUserThenRedirect() {
+      if (user) {
+        await GreenWashingUserService.createUser();
+        router.push('/');
+      }
+    }
+
+    createUserThenRedirect();
+  }, [user, router]);
+  
+  useEffect(() => {
+    if (typeof window !== undefined) {
+      import('firebaseui').then((firebaseui) => {
+        if (!ui.current) {
+          ui.current = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth());
+          ui.current.start('#firebaseui-auth-container', {
+            callbacks: {
+              signInSuccessWithAuthResult: function(_authResult, _redirectUrl) {
+                //We will manually redirect after ensuring that the user is present in the context to avoid bugs with redirects
+                return false;
+              },
+            },
+            signInOptions: [
+              firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+              firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+              {
+                provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+                signInMethod: firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD,
+                forceSameDevice: false,
+                emailLinkSignIn: function() {
+                  return {
+                    url: window.location.href,
+                  };
+                }
+              }
+            ],
+          });
         }
+      });
+    }
     }, [user, router]);
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            import('firebaseui').then((firebaseui) => {
-                if (!ui.current) {
-                    ui.current =
-                        firebaseui.auth.AuthUI.getInstance() ||
-                        new firebaseui.auth.AuthUI(firebase.auth());
-                    ui.current.start('#firebaseui-auth-container', {
-                        callbacks: {
-                            signInSuccessWithAuthResult: function (
-                                _authResult,
-                                _redirectUrl
-                            ) {
-                                //We will manually redirect after ensuring that the user is present in the context to avoid bugs with redirects
-                                return false;
-                            },
-                        },
-                        signInOptions: [
-                            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                            firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-                        ],
-                    });
-                }
-            });
-
-            return () => {
-                if (ui.current) {
-                    ui.current.delete();
-                }
-            };
-        }
-    }, []);
 
     return (
         <>
