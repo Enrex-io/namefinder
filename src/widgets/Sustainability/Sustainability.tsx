@@ -50,7 +50,7 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
                         region: validateRegion(values.region),
                         description: validateDescription(
                             values.description,
-                            countChars(ref.current)
+                            countChars(values)
                         ),
                     };
                 }}
@@ -139,7 +139,7 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
                                                         meta.error
                                                     }
                                                     maxLength={countChars(
-                                                        ref.current
+                                                        values
                                                     )}
                                                     {...input}
                                                 />
