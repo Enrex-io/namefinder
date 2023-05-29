@@ -1,18 +1,19 @@
 import firebase from '../firebase';
-import 'firebaseui/dist/firebaseui.css'
+import 'firebaseui/dist/firebaseui.css';
 import Head from 'next/head';
 import { META } from '@/consts/meta';
 import classes from './index.module.scss';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
 import { GreenWashingUserService } from '@/services/GreenWashingUserService';
+import firebaseui from 'firebaseui';
 
 export default function Home() {
-  const ui = useRef<firebaseui.auth.AuthUI>();
-  const router = useRouter()
+    const ui = useRef<firebaseui.auth.AuthUI>();
+    const router = useRouter();
 
-  const { user } = useAuth();
+    const { user } = useAuth();
 
   useEffect(() => {
     async function createUserThenRedirect() {
@@ -53,27 +54,24 @@ export default function Home() {
             ],
           });
         }
-      })
-
-      return () => {
-        if (ui.current) {
-          ui.current.delete();
-        }
-      }
+      });
     }
-  }, []);
+    }, [user, router]);
 
-  return (
-    <>
-      <Head>
-        <title>{META.title}</title>
-        <link rel='icon' href={META.favicon} />
-        <meta name='description' content={META.description} />
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
-      </Head>
-      <div className={classes.container}>
-        <div id="firebaseui-auth-container" />
-      </div>
-    </>
-  );
+    return (
+        <>
+            <Head>
+                <title>{META.title}</title>
+                <link rel="icon" href={META.favicon} />
+                <meta name="description" content={META.description} />
+                <meta
+                    name="viewport"
+                    content="width=device-width, initial-scale=1"
+                />
+            </Head>
+            <div className={classes.container}>
+                <div id="firebaseui-auth-container" />
+            </div>
+        </>
+    );
 }
