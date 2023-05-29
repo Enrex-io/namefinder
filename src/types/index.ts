@@ -52,7 +52,6 @@ export type UserProfile = {
 };
 
 export interface IPrompt {
-    userId: string;
     media: Medias;
     region: Regions;
     request: string;
