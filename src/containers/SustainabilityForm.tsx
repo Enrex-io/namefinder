@@ -14,6 +14,7 @@ import MediaPost from '@/widgets/MediaPost/MediaPost';
 import Medias from '@/consts/medias';
 import { useAuth } from '@/hooks/useAuth';
 import Regions from '@/consts/region';
+
 interface SustainabilityFormProps {
     setUserInfo: Dispatch<SetStateAction<IGreenWashingUser | null>>;
 }
@@ -47,7 +48,7 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
         const termsIndex = result?.indexOf('\nb.');
         const postIndex = result?.indexOf('\nc.');
 
-        let resDescription: string[] = [];
+        let resDescription: string[];
         const statement = result?.slice(statementIndex + 4, termsIndex);
         const terms = result.slice(termsIndex + 10, postIndex).split('\n');
         resDescription = [statement, ...terms];
@@ -56,8 +57,7 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
         if (!user) return;
         if (resDescription) setGeneratedDescription(resDescription);
         if (resPost) setPost(resPost);
-        const savePrompt = await OpenAIApi.savePrompt({
-            userId: user.id,
+        await OpenAIApi.savePrompt({
             media: details.media as Medias,
             region: details.region as Regions,
             request: details.description,
