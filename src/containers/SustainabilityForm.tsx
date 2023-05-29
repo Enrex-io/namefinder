@@ -24,6 +24,7 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
     const [generatedDescription, setGeneratedDescription] = useState<
         string[] | []
     >([]);
+    const [data, setData] = useState<string>('');
     const detailsRef = useRef<Details | null>(null);
     const [post, setPost] = useState<string>('');
     const handleSubmitDescription = async (details: Details) => {
@@ -32,9 +33,10 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
             details,
             chars
         );
-        const result: string = res.result?.text || '';
-        const userData = res.result?.userData;
+        setData(res.result!.text);
+        console.log(data);
 
+        const userData = res.result?.userData;
         if (userData) {
             setUserInfo(userData);
         }
@@ -42,18 +44,20 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
         setError(null);
         if (res.error) return setError(res.error);
 
-        const termsIndex = result?.indexOf('Terms');
-        const postIndex = result?.indexOf('Correct');
+        const summaryIndex: number = data?.indexOf('Summary');
+        const termsIndex: number = data?.indexOf('Terms');
+        const postIndex: number = data?.indexOf('Correct');
 
-        const resDescription = result
-            ?.slice(termsIndex + 8, postIndex)
+        const summary: string = data.slice(summaryIndex + 8, termsIndex);
+        const terms: string[] = data
+            .slice(termsIndex + 6, postIndex)
             .split('\n');
+        const post: string = data?.slice(postIndex + 8);
 
-        const resPost: string = result?.slice(postIndex + 8);
+        const description: string[] = [summary, ...terms];
 
-        if (resDescription) setGeneratedDescription(resDescription);
-
-        if (resPost) setPost(resPost);
+        if (description) setGeneratedDescription(description);
+        if (post) setPost(post);
 
         return res;
     };
