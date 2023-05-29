@@ -7,9 +7,9 @@ export const delay = (fn: Function, ms: number, ...args: Array<unknown>) => {
 
 export const parseDetails = (values: Record<string, any>): Details => {
     return {
-        media: values.media,
-        region: values.region,
-        description: values.description,
+        media: values?.media,
+        region: values?.region,
+        description: values?.description,
     };
 };
 
