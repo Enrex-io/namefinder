@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import classes from './ProfileMenu.module.scss';
 import {
-    IconLogout,
-    IconLogin,
     IconCreditCard,
     IconHistory,
+    IconLogin,
+    IconLogout,
 } from '@tabler/icons-react';
 import Image from 'next/image';
 import { useAuth } from '@/hooks/useAuth';
@@ -77,7 +77,10 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo }) => {
                     <IconCreditCard color="#091F3D" />
                     <p>Subscription</p>
                 </li>
-                <li className={classes.subItem}>
+                <li
+                    className={classes.subItem}
+                    onClick={() => push('/history')}
+                >
                     <IconHistory color="#091F3D" />
                     <p>History</p>
                 </li>
