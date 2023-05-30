@@ -59,4 +59,16 @@ export class OpenAIApi {
             if (!isAxiosError(error)) return { error: DEFAULT_ERROR_MESSAGE };
         }
     };
+
+    public static getHistory = async (userId: string) => {
+        try {
+            const response = await axios.get(
+                `/api/sustainabilityMarketing/getHistory/${userId}`
+            );
+            return response.data;
+        } catch (error: unknown) {
+            console.error('OpenAIService.getHistory: ', error);
+            if (!isAxiosError(error)) return { error: DEFAULT_ERROR_MESSAGE };
+        }
+    };
 }
