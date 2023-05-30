@@ -58,8 +58,9 @@ export interface IPrompt {
     media: Medias;
     region: Regions;
     request: string;
+    unparsedResponse: string;
     response: {
-        terms: string;
+        terms: string[];
         correctText: string;
     };
 }

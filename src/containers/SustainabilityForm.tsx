@@ -74,8 +74,9 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
             media: details.media as Medias,
             region: details.region as Regions,
             request: details.description,
+            unparsedResponse: data,
             response: {
-                terms: summary + data.slice(termsIndex + 6, postIndex),
+                terms: descriptions,
                 correctText: post,
             },
         });
