@@ -25,6 +25,7 @@ export type ResponsePayload<T = unknown> = {
 };
 
 export type FeedbackTags = 'NEWSLETTER' | 'DEMO' | 'COLLABORATE';
+
 export enum TagStatus {
     inactive = 'inactive',
     active = 'active',
@@ -35,6 +36,7 @@ export enum FeedbackTagsEnum {
     DEMO = 'DEMO',
     COLLABORATE = 'COLLABORATE',
 }
+
 export interface TagsToUpdate {
     name: FeedbackTags;
     status: TagStatus;
@@ -52,11 +54,12 @@ export type UserProfile = {
 };
 
 export interface IPrompt {
+    userId: string;
     media: Medias;
     region: Regions;
     request: string;
     response: {
-        terms: string[];
+        terms: string;
         correctText: string;
     };
 }
