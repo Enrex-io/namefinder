@@ -63,6 +63,7 @@ export interface IPrompt {
         terms: string[];
         correctText: string;
     };
+    date?: string;
 }
 
 export interface IGreenWashingUser {
