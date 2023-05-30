@@ -12,8 +12,8 @@ import classes from './SustainabilityForm.module.scss';
 import Reset from '@/widgets/Reset/Reset';
 import MediaPost from '@/widgets/MediaPost/MediaPost';
 import Medias from '@/consts/medias';
-import { useAuth } from '@/hooks/useAuth';
 import Regions from '@/consts/region';
+import { useAuth } from '@/hooks/useAuth';
 
 interface SustainabilityFormProps {
     setUserInfo: Dispatch<SetStateAction<IGreenWashingUser | null>>;
@@ -27,7 +27,6 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
     const [generatedDescription, setGeneratedDescription] = useState<
         string[] | []
     >([]);
-    const [data, setData] = useState<string>('');
     const detailsRef = useRef<Details | null>(null);
     const [post, setPost] = useState<string>('');
     const handleSubmitDescription = async (details: Details) => {
@@ -36,8 +35,7 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
             details,
             chars
         );
-        setData(res.result!.text);
-        console.log(data);
+        const data = res.result?.text || '';
 
         const userData = res.result?.userData;
         if (userData) {
@@ -46,20 +44,41 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
 
         setError(null);
         if (res.error) return setError(res.error);
+
         const summaryIndex: number = data?.indexOf('Summary');
+        const colonSummaryIndex: number = data.indexOf('\n', summaryIndex);
+
         const termsIndex: number = data?.indexOf('Terms');
+        const colonTermsIndex: number = data.indexOf('\n', termsIndex);
+
         const postIndex: number = data?.indexOf('Correct');
+        const colonPostIndex: number = data.indexOf('\n', postIndex);
 
-        const summary: string = data.slice(summaryIndex + 8, termsIndex);
+        const summary: string = data.slice(colonSummaryIndex, termsIndex);
         const terms: string[] = data
-            .slice(termsIndex + 6, postIndex)
+            .slice(colonTermsIndex, postIndex)
             .split('\n');
-        const post: string = data?.slice(postIndex + 8);
+        const post: string = data?.slice(colonPostIndex);
 
-        const description: string[] = [summary, ...terms];
+        const descriptions: string[] = [summary, ...terms].filter(
+            (description: string) => !!description.trim()
+        );
 
-        if (description) setGeneratedDescription(description);
-        if (post) setPost(post);
+        if (!user) return;
+
+        setGeneratedDescription(descriptions);
+        setPost(post);
+
+        await OpenAIApi.savePrompt({
+            userId: user.id,
+            media: details.media as Medias,
+            region: details.region as Regions,
+            request: details.description,
+            response: {
+                terms: summary + data.slice(termsIndex + 6, postIndex),
+                correctText: post,
+            },
+        });
 
         return res;
     };
