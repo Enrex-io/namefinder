@@ -10,9 +10,9 @@ import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 import firebaseui from 'firebaseui';
 
 export default function Home() {
+    const firebaseAuthContainerRef = useRef<HTMLDivElement | null>(null);
     const ui = useRef<firebaseui.auth.AuthUI>();
     const router = useRouter();
-
     const { user } = useAuth();
 
     useEffect(() => {
@@ -29,11 +29,11 @@ export default function Home() {
     useEffect(() => {
         if (typeof window !== 'undefined') {
             import('firebaseui').then((firebaseui) => {
-                if (!ui.current) {
+                if (!ui.current && firebaseAuthContainerRef.current) {
                     ui.current =
                         firebaseui.auth.AuthUI.getInstance() ||
                         new firebaseui.auth.AuthUI(firebase.auth());
-                    ui.current.start('#firebaseui-auth-container', {
+                    ui.current.start(firebaseAuthContainerRef.current, {
                         callbacks: {
                             signInSuccessWithAuthResult: function () {
                                 //We will manually redirect after ensuring that the user is present in the context to avoid bugs with redirects
@@ -61,7 +61,7 @@ export default function Home() {
                 }
             });
         }
-    }, [user, router]);
+    }, []);
 
     return (
         <>
@@ -75,7 +75,7 @@ export default function Home() {
                 />
             </Head>
             <div className={classes.container}>
-                <div id="firebaseui-auth-container" />
+                <div ref={firebaseAuthContainerRef} />
             </div>
         </>
     );
