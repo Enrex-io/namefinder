@@ -1,0 +1,22 @@
+.firebaseui-card-content {
+    @media (min-width: 420px) {
+        padding-right: 45px;
+        padding-left: 45px;
+    }
+}
+
+.mdl-button {
+    border-radius: 50px !important;
+    border: 1px solid #D8D8D8 !important;
+    @media (min-width: 420px) {
+        width: 250px !important;
+    }
+}
+
+.firebaseui-list-item {
+    margin-bottom: 20px !important;
+}
+
+.firebaseui-idp-text {
+    font-size: 16px !important;
+}

@@ -2,12 +2,14 @@ import firebase from '../firebase';
 import 'firebaseui/dist/firebaseui.css';
 import Head from 'next/head';
 import { META } from '@/consts/meta';
-import classes from './index.module.scss';
+import classes from './login.module.scss';
 import { useEffect, useRef } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
 import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 import firebaseui from 'firebaseui';
+import Link from 'next/link';
+import Logo from '@/components/Logo/Logo';
 
 export default function Home() {
     const firebaseAuthContainerRef = useRef<HTMLDivElement | null>(null);
@@ -75,7 +77,13 @@ export default function Home() {
                 />
             </Head>
             <div className={classes.container}>
-                <div ref={firebaseAuthContainerRef} />
+                <div className={classes.loginPaper}>
+                    <Link href="#">
+                        <Logo />
+                    </Link>
+                    <p className={classes.signInText}>Sign in to continue</p>
+                    <div ref={firebaseAuthContainerRef} />
+                </div>
             </div>
         </>
     );
