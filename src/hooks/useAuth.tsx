@@ -59,7 +59,7 @@ function useProvideAuth() {
                     });
             } else {
                 delete axios.defaults.headers.common.Authorization;
-                setUser(false);
+                signout();
             }
         });
         return () => unsubscribe();
