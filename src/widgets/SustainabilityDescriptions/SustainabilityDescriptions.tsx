@@ -29,7 +29,7 @@ function SustainabilityDescription({ descriptions }: Props) {
                                 {/* <h3 className={classes.goalHeading}>{description}</h3> */}
                                 <p className={classes.goalDescription}>
                                     {/* <span className={classes.primaryText}>{description}</span> */}
-                                    <span>{description}</span>
+                                    <span>{`${description}`}</span>
                                 </p>
                             </Paper>
                         );
