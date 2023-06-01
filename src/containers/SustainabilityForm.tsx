@@ -37,8 +37,6 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
         );
         const data = res.result?.text || '';
 
-        console.log(data);
-
         const userData = res.result?.userData;
         if (userData) {
             setUserInfo(userData);
@@ -47,21 +45,21 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
         setError(null);
         if (res.error) return setError(res.error);
 
-        const summaryIndex: number = data?.indexOf('Summary: ');
-        const colonSummaryIndex: number = summaryIndex + 9;
+        const summaryIndex: number = data?.indexOf('Summary:');
+        const colonSummaryIndex: number = data.indexOf('\n', summaryIndex);
 
-        const termsIndex: number = data?.indexOf('Terms: ');
-        const colonTermsIndex: number = termsIndex + 7;
+        const termsIndex: number = data?.indexOf('Terms:');
+        const colonTermsIndex: number = data.indexOf('\n', termsIndex);
 
-        const postIndex: number = data?.indexOf('Correct: ');
-        const colonPostIndex: number = postIndex + 9;
+        const postIndex: number = data?.indexOf('Correct:');
+        const quotePostIndex: number = data.indexOf(`\n`, postIndex);
 
         const summary: string = data.slice(colonSummaryIndex, termsIndex);
         const terms: string[] = data
             .slice(colonTermsIndex, postIndex)
             .split('\n');
-        const post: string = data?.slice(colonPostIndex);
-        console.log(summary, terms, post);
+        const post: string = data?.slice(quotePostIndex);
+        console.log(data);
 
         const descriptions: string[] = [summary, ...terms].filter(
             (description: string) => !!description.trim()
