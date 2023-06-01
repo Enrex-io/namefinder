@@ -15,9 +15,10 @@ import SelectField from '@/components/SelectField/SelectField';
 import Medias, { MEDIAS_OPTIONS } from '@/consts/medias';
 import { REGIONS_OPTIONS } from '@/consts/region';
 import { FormApi } from 'final-form';
+import Image from 'next/image';
 
 const HEADING_TEXT = 'Sustainability Marketing Assistant';
-const SUBMIT_BUTTON_TEXT = 'Analyze post';
+const SUBMIT_BUTTON_TEXT = 'Check post';
 
 interface Props {
     onSubmitDetails: (values: Details) => Promise<void>;
@@ -73,7 +74,7 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
                                         <Field
                                             name="media"
                                             defaultValue={
-                                                MEDIAS_OPTIONS[0].label
+                                                MEDIAS_OPTIONS[2].label
                                             }
                                             render={({ input, meta }) => (
                                                 <SelectField
@@ -158,7 +159,13 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
                                 isSubmitting={submitting}
                                 funnyLoadingMessage
                             >
-                                {SUBMIT_BUTTON_TEXT}
+                                <Image
+                                    src={'/svg/check.svg'}
+                                    alt={'Check'}
+                                    width={18}
+                                    height={18}
+                                />
+                                <span>{SUBMIT_BUTTON_TEXT}</span>
                             </Button>
                         </form>
                     );
