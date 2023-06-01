@@ -1,7 +1,7 @@
 import { ReactElement, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useAuth from '../../hooks/useAuth';
-import Loader from '@/components/Loader/Loader';
+import FullscreenLoader from '@/components/Loader/FullscreenLoader';
 
 const AuthGuard = ({ children }: { children: ReactElement | null }) => {
     const { user } = useAuth();
@@ -16,19 +16,7 @@ const AuthGuard = ({ children }: { children: ReactElement | null }) => {
     }, [isLoggedIn]);
 
     if (!isLoggedIn) {
-        return (
-            <div
-                style={{
-                    height: '100vh',
-                    width: '100vw',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}
-            >
-                <Loader height={21} />
-            </div>
-        );
+        return <FullscreenLoader />;
     }
 
     return children;
