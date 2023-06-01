@@ -65,7 +65,7 @@ const FirebaseLogin = ({ ...others }) => {
     const matchDownSM = useMediaQuery('(min-width:900px)');
     const [checked, setChecked] = React.useState(true);
     const router = useRouter();
-    const [isVerified, setIsVerified] = useState<boolean>(false);
+    const [isVerified, setIsVerified] = useState<boolean>(true);
 
     const {
         firebaseEmailPasswordSignIn,
