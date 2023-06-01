@@ -57,58 +57,63 @@ export default function History() {
             >
                 <h2 className={classes.heading}>{HEADING_TEXT}</h2>
                 <Stack direction="column" spacing={1.25}>
-                    <Paper
-                        className={classes.paper}
-                        direction="column"
-                        spacing={1}
-                        hasBorder
-                    >
-                        {history.map((prompt: IPrompt, index: number) => {
-                            const date: Date = new Date(
-                                prompt!.date as unknown as Date
-                            );
+                    {history?.map((prompt: IPrompt, index: number) => {
+                        const date: Date = new Date(
+                            prompt!.date as unknown as Date
+                        );
+                        const dateText = `${date.getFullYear()}/${date.getMonth()}/${date.getDay()} - ${
+                            prompt.media
+                        }`;
 
-                            return (
-                                <>
+                        return (
+                            <>
+                                <Paper
+                                    className={classes.paper}
+                                    direction="column"
+                                    spacing={1.5}
+                                    hasBorder
+                                >
+                                    <h3 className={classes.goalHeading}>
+                                        <span>{dateText}</span>
+                                    </h3>
                                     <Paper
-                                        className={classes.paper}
+                                        className={classes.paperPrompt}
                                         direction="column"
-                                        spacing={1.5}
+                                        spacing={1}
                                         hasBorder
                                     >
-                                        <h3 className={classes.goalHeading}>
-                                            <span>
-                                                {'Prompt № '}
-                                                {index + 1}
-                                                {'. '}
-                                            </span>
-                                        </h3>
                                         <h3 className={classes.goalDescription}>
                                             <span></span>
                                             {prompt.request}
                                         </h3>
-                                        {prompt.response.terms.map(
-                                            (term: string) => {
-                                                return (
-                                                    <Paper
-                                                        key={term}
+                                    </Paper>
+                                    {prompt.response.terms.map(
+                                        (term: string) => {
+                                            return (
+                                                <Paper
+                                                    key={term}
+                                                    className={
+                                                        classes.paperDescription
+                                                    }
+                                                    direction="row"
+                                                >
+                                                    <p
                                                         className={
-                                                            classes.paperDescription
+                                                            classes.goalDescription
                                                         }
-                                                        direction="row"
                                                     >
-                                                        <p
-                                                            className={
-                                                                classes.goalDescription
-                                                            }
-                                                        >
-                                                            <span>{term}</span>
-                                                        </p>
-                                                    </Paper>
-                                                );
-                                            }
-                                        )}
-
+                                                        <span>{term}</span>
+                                                    </p>
+                                                </Paper>
+                                            );
+                                        }
+                                    )}
+                                    <Paper
+                                        className={classes.paperPost}
+                                        direction="column"
+                                        spacing={1}
+                                        hasBorder
+                                    >
                                         <div className={classes.post}>
                                             <div
                                                 className={
@@ -135,19 +140,11 @@ export default function History() {
                                                 </p>
                                             </div>
                                         </div>
-                                        <span className={classes.dateHeading}>
-                                            {date.toLocaleDateString()}{' '}
-                                            {/*{date.getHours()}*/}
-                                            {/*{':'}*/}
-                                            {/*{date.getMinutes()}*/}
-                                            {/*{':'}*/}
-                                            {/*{date.getSeconds()}*/}
-                                        </span>
                                     </Paper>
-                                </>
-                            );
-                        })}
-                    </Paper>
+                                </Paper>
+                            </>
+                        );
+                    })}
                 </Stack>
             </Stack>
         </>

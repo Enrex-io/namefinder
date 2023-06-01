@@ -1,8 +1,8 @@
 enum Medias {
     TwitterEU = 'Twitter (280 characters)',
     TwitterUS = 'Twitter (4000 characters)',
-    LinkedIn = 'LinkedIn',
-    Facebook = 'Facebook',
+    LinkedIn = 'LinkedIn (3000 characters)',
+    Facebook = 'Facebook (4000 characters)',
 }
 
 export enum MediaChars {
