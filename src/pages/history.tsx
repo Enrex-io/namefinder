@@ -63,7 +63,7 @@ export default function History() {
                         spacing={1}
                         hasBorder
                     >
-                        {history.map((prompt: IPrompt, index: number) => {
+                        {history?.map((prompt: IPrompt, index: number) => {
                             const date: Date = new Date(
                                 prompt!.date as unknown as Date
                             );
