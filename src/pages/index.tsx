@@ -6,7 +6,7 @@ import NavBar from '@/components/NavBar/NavBar';
 import AuthGuard from '@/utils/route-guard/AuthGuard';
 import { useEffect, useState } from 'react';
 import { IGreenWashingUser } from '@/types';
-import { useAuth } from '@/hooks/useAuth';
+import useAuth from '@/hooks/useAuth';
 import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 
 function Home() {

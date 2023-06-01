@@ -1,15 +1,15 @@
 import type { AppProps } from 'next/app';
 import { fontInter } from '@/styles/fonts';
 import '@/styles/globals.scss';
-import { ProvideAuth } from '@/hooks/useAuth';
+import { FirebaseProvider as AuthProvider } from '../contexts/FirebaseContext';
 import './login.css';
 
 export default function App({ Component, pageProps }: AppProps) {
     return (
         <main className={fontInter.className}>
-            <ProvideAuth>
+            <AuthProvider>
                 <Component {...pageProps} />
-            </ProvideAuth>
+            </AuthProvider>
         </main>
     );
 }

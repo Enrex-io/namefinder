@@ -1,3 +1,4 @@
+import firebase from 'firebase/compat';
 import Regions from '@/consts/region';
 import Medias from '@/consts/medias';
 
@@ -70,4 +71,38 @@ export interface IGreenWashingUser {
     userId: string;
     counter: number;
     plan: string;
+}
+
+export type FirebaseContextType = {
+    isLoggedIn: boolean;
+    isEmailVerified?: boolean;
+    isInitialized?: boolean;
+    user?: UserProfile | null | undefined;
+    logout: () => Promise<void>;
+    login: () => void;
+    firebaseRegister: (
+        email: string,
+        password: string
+    ) => Promise<firebase.auth.UserCredential>;
+    firebaseEmailPasswordSignIn: (
+        email: string,
+        password: string
+    ) => Promise<firebase.auth.UserCredential>;
+    firebaseGoogleSignIn: () => Promise<firebase.auth.UserCredential>;
+    firebaseResendEmailVerification: () => Promise<void>;
+    resetPassword: (email: string) => Promise<void>;
+    updateProfile: (name: string, email: string) => Promise<void>;
+    updatePhoto: (photoUrl: string) => Promise<void>;
+    verifyEmail: (
+        code: string
+    ) => Promise<{ isVerifiedEmail: boolean; firebase: typeof firebase }>;
+    checkFirebaseEmailVerification: () => Promise<boolean | undefined>;
+    checkActionCode: (code: string) => Promise<firebase.auth.ActionCodeInfo>;
+};
+
+export interface InitialLoginContextProps {
+    isLoggedIn: boolean;
+    isEmailVerified?: boolean;
+    isInitialized?: boolean;
+    user?: UserProfile | null | undefined;
 }

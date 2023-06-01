@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { IGreenWashingUser, IPrompt } from '@/types';
 import Stack from '@/components/Stack/Stack';
 import classes from './history.module.scss';
-import { useAuth } from '@/hooks/useAuth';
+import useAuth from '@/hooks/useAuth';
 import { OpenAIApi } from '@/services/OpenAIService';
 import Paper from '@/components/Paper/Paper';
 import NavBar from '@/components/NavBar/NavBar';

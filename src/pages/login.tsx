@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { META } from '@/consts/meta';
 import classes from './login.module.scss';
 import { useEffect, useRef } from 'react';
-import { useAuth } from '@/hooks/useAuth';
+import useAuth from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
 import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 import firebaseui from 'firebaseui';
