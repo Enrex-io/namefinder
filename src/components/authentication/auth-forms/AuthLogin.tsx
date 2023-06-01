@@ -1,14 +1,9 @@
 import Image from 'next/image';
-<<<<<<< HEAD
-import React, { useEffect } from 'react';
-=======
-import React, { useEffect, useState } from 'react';
->>>>>>> 4a08d5a105c1023d07ad78fda285a5ef53fc0e8f
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 // material-ui
-import { useTheme } from '@mui/styles';
 import {
     Alert,
     Box,
@@ -69,20 +64,12 @@ const FirebaseLogin = ({ ...others }) => {
     const matchDownSM = useMediaQuery('(min-width:900px)');
     const [checked, setChecked] = React.useState(true);
     const router = useRouter();
-<<<<<<< HEAD
-=======
     const [isVerified, setIsVerified] = useState<boolean>(true);
->>>>>>> 4a08d5a105c1023d07ad78fda285a5ef53fc0e8f
-
     const {
         firebaseEmailPasswordSignIn,
         firebaseGoogleSignIn,
         firebaseResendEmailVerification,
         checkFirebaseEmailVerification,
-<<<<<<< HEAD
-        isEmailVerified,
-=======
->>>>>>> 4a08d5a105c1023d07ad78fda285a5ef53fc0e8f
     } = useAuth();
     const [notification, setNotification] = React.useState<string>('');
 
@@ -154,7 +141,6 @@ const FirebaseLogin = ({ ...others }) => {
                             <Image
                                 src={Google}
                                 alt="Greenifs"
-                                layout="intrinsic"
                                 width={16}
                                 height={16}
                             />
@@ -242,14 +228,10 @@ const FirebaseLogin = ({ ...others }) => {
                                     await checkFirebaseEmailVerification();
 
                                 if (isEmailVerified) {
-<<<<<<< HEAD
-                                    createUserThenRedirect();
-=======
                                     setIsVerified(true);
                                     createUserThenRedirect();
                                 } else {
                                     setIsVerified(false);
->>>>>>> 4a08d5a105c1023d07ad78fda285a5ef53fc0e8f
                                 }
                                 // WARNING: do not set any formik state here as formik might be already destroyed here. You may get following error by doing so.
                                 // Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application.
@@ -393,11 +375,7 @@ const FirebaseLogin = ({ ...others }) => {
                                 </FormHelperText>
                             </Box>
                         )}
-<<<<<<< HEAD
-                        {!isEmailVerified && (
-=======
                         {!isVerified && (
->>>>>>> 4a08d5a105c1023d07ad78fda285a5ef53fc0e8f
                             <Box sx={{ mt: 3 }}>
                                 <FormHelperText error>
                                     Please complete sign-up process. Check your
