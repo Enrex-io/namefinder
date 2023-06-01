@@ -180,7 +180,7 @@ const FirebaseLogin = ({ ...others }) => {
                                 borderColor: '#f5f5f5',
                                 color: `${'#212121'}!important`,
                                 fontWeight: 500,
-                                borderRadius: `${6}px`,
+                                borderRadius: `${16}px`,
                             }}
                             disableRipple
                             disabled
