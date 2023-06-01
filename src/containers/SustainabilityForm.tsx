@@ -13,7 +13,7 @@ import Reset from '@/widgets/Reset/Reset';
 import MediaPost from '@/widgets/MediaPost/MediaPost';
 import Medias from '@/consts/medias';
 import Regions from '@/consts/region';
-import { useAuth } from '@/hooks/useAuth';
+import useAuth from '@/hooks/useAuth';
 
 interface SustainabilityFormProps {
     setUserInfo: Dispatch<SetStateAction<IGreenWashingUser | null>>;
