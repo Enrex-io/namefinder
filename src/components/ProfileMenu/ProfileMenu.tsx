@@ -13,8 +13,7 @@ import clsx from 'clsx';
 import Chip from '../Chip/Chip';
 import UserPhotoPlaceholder from '../UserPhotoPlaceholder/UserPhotoPlaceholder';
 import { IGreenWashingUser } from '@/types';
-
-// import logo from '/images/logo.png';
+import PopUp from '@/components/PopUp/PopUp';
 
 interface ProfileMenuProps {
     userInfo: IGreenWashingUser | null;
@@ -48,6 +47,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo }) => {
 
     return (
         <div className={classes.profileMenu}>
+            {openPopUp && <PopUp handlePopUp={handlePopUp} />}
             <li className={classes.logo} onClick={() => push('/')}>
                 <Image
                     src={'/images/logo.png'}
