@@ -3,10 +3,12 @@ import Paper from '@/components/Paper/Paper';
 import Stack from '@/components/Stack/Stack';
 import React from 'react';
 import classes from './MediaPost.module.scss';
+
 interface IMedia {
     media: string;
     post: string;
 }
+
 export default function MediaPost({ media, post }: IMedia) {
     const HEADING_TEXT = `Revised ${media} post example`;
     return (
@@ -33,7 +35,9 @@ export default function MediaPost({ media, post }: IMedia) {
                                 </div>
                             </div>
                             <div className={classes.description}>
-                                <p>{post}</p>
+                                {post.split('\n').map((postText) => {
+                                    return <p key={postText}>{postText}</p>;
+                                })}
                             </div>
                         </div>
                     </Paper>
