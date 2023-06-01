@@ -106,3 +106,7 @@ export interface InitialLoginContextProps {
     isInitialized?: boolean;
     user?: UserProfile | null | undefined;
 }
+
+export type KeyedObject = {
+    [key: string]: string | number | KeyedObject | any;
+};
