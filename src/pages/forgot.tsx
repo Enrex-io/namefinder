@@ -2,14 +2,14 @@ import Head from 'next/head';
 import { META } from '@/consts/meta';
 import Link from 'next/link';
 import Logo from '@/components/Logo/Logo';
-import AuthLogin from '@/components/authentication/auth-forms/AuthLogin';
 import AuthWrapper1 from '@/components/authentication/AuthWrapper1';
 import Grid from '@mui/material/Grid';
 import AuthCardWrapper from '@/components/authentication/AuthCardWrapper';
-import { Divider, Stack, Typography, useMediaQuery } from '@mui/material';
+import { Divider, Typography, useMediaQuery } from '@mui/material';
 import AuthFooter from '@/components/authentication/AuthFooter';
+import AuthForgotPassword from '@/components/authentication/auth-forms/AuthForgotPassword';
 
-export default function Login() {
+export default function ForgotPassword() {
     const matchDownSM = useMediaQuery('(min-width:900px)');
 
     return (
@@ -45,26 +45,48 @@ export default function Login() {
                                         alignItems="center"
                                         justifyContent="center"
                                     >
-                                        <Grid item>
-                                            <Stack spacing={1}>
-                                                <Link href="#">
-                                                    <Logo />
-                                                </Link>
-                                                <Typography
-                                                    variant="caption"
-                                                    fontSize="16px"
-                                                    textAlign={
-                                                        matchDownSM
-                                                            ? 'center'
-                                                            : 'inherit'
-                                                    }
-                                                >
-                                                    Sign in to continue
-                                                </Typography>
-                                            </Stack>
+                                        <Grid item sx={{ mb: 3 }}>
+                                            <Link href="#">
+                                                <Logo />
+                                            </Link>
                                         </Grid>
                                         <Grid item xs={12}>
-                                            <AuthLogin />
+                                            <Grid
+                                                container
+                                                alignItems="center"
+                                                justifyContent="center"
+                                                textAlign="center"
+                                                spacing={2}
+                                            >
+                                                <Grid item xs={12}>
+                                                    <Typography
+                                                        color="#009688"
+                                                        gutterBottom
+                                                        variant={
+                                                            matchDownSM
+                                                                ? 'h3'
+                                                                : 'h2'
+                                                        }
+                                                    >
+                                                        Forgot password?
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    <Typography
+                                                        variant="caption"
+                                                        fontSize="16px"
+                                                        textAlign="center"
+                                                    >
+                                                        Enter your email address
+                                                        below and we&apos;ll
+                                                        send you password reset
+                                                        OTP.
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <AuthForgotPassword />
                                         </Grid>
                                         <Grid item xs={12}>
                                             <Divider />
@@ -79,13 +101,13 @@ export default function Login() {
                                             >
                                                 <Typography
                                                     component={Link}
-                                                    href="/register"
+                                                    href="/login"
                                                     variant="subtitle1"
                                                     sx={{
                                                         textDecoration: 'none',
                                                     }}
                                                 >
-                                                    Don&apos;t have an account?
+                                                    Already have an account?
                                                 </Typography>
                                             </Grid>
                                         </Grid>
