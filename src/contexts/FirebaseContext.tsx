@@ -7,6 +7,7 @@ import Loader from '../components/Loader/Loader';
 import { FirebaseContextType, InitialLoginContextProps } from '../types';
 import axios from '../utils/axios';
 import { firebaseConfig } from '@/config/firebaseApp.config';
+import { AxiosError, AxiosResponse } from 'axios';
 
 // firebase initialize
 if (!firebase.apps.length) {
@@ -73,8 +74,8 @@ export const FirebaseProvider = ({
 
     useEffect(() => {
         const interceptor = axios.interceptors.response.use(
-            (response) => response,
-            (error) => {
+            (response: AxiosResponse) => response,
+            (error: AxiosError) => {
                 if (
                     error.response?.status === 401 ||
                     error.response?.status === 403
