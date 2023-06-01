@@ -7,7 +7,6 @@ import AuthWrapper1 from '@/components/authentication/AuthWrapper1';
 import Grid from '@mui/material/Grid';
 import AuthCardWrapper from '@/components/authentication/AuthCardWrapper';
 import { Divider, Stack, Typography, useMediaQuery } from '@mui/material';
-import AuthFooter from '@/components/authentication/AuthFooter';
 
 export default function Login() {
     const matchDownSM = useMediaQuery('(min-width:900px)');
@@ -93,9 +92,6 @@ export default function Login() {
                                 </AuthCardWrapper>
                             </Grid>
                         </Grid>
-                    </Grid>
-                    <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
-                        <AuthFooter />
                     </Grid>
                 </Grid>
             </AuthWrapper1>
