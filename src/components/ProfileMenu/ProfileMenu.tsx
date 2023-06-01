@@ -13,6 +13,7 @@ import clsx from 'clsx';
 import Chip from '../Chip/Chip';
 import UserPhotoPlaceholder from '../UserPhotoPlaceholder/UserPhotoPlaceholder';
 import { IGreenWashingUser } from '@/types';
+import settings from '../../../public/svg/settings.svg';
 
 interface ProfileMenuProps {
     userInfo: IGreenWashingUser | null;
@@ -44,17 +45,27 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo }) => {
 
     return (
         <li className={classes.li} onMouseEnter={handleMouseEnterLi}>
-            {user.photo ? (
-                <Image
-                    width={40}
-                    height={40}
-                    src={user.photo}
-                    className={classes.profile}
-                    alt="profile photo"
-                />
-            ) : (
-                <UserPhotoPlaceholder userName={user.name} />
-            )}
+            <div className={classes.image_wrapper}>
+                {user.photo ? (
+                    <>
+                        <Image
+                            width={35}
+                            height={35}
+                            src={user.photo}
+                            className={classes.profile}
+                            alt="profile photo"
+                        />
+                        <Image
+                            src={settings}
+                            alt={'Settings'}
+                            width={25}
+                            height={25}
+                        />
+                    </>
+                ) : (
+                    <UserPhotoPlaceholder userName={user.name} />
+                )}
+            </div>
             <ul
                 className={clsx(classes.submenu, {
                     [classes.submenuShown]: isSubmenuShown,
