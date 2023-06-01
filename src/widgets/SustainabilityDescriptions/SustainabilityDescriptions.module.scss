@@ -1,31 +1,31 @@
 .heading {
-    font-size: 1.13rem;
-    font-weight: 500;
+  font-size: 1.13rem;
+  font-weight: 500;
 }
 
 .paper {
-    padding: 1.88rem;
-    @media screen and (max-width: 768px) {
-        padding: 1.88rem 1.25rem;
-    }
+  padding: 1.88rem;
+  @media screen and (max-width: 768px) {
+    padding: 1.88rem 1.25rem;
+  }
 }
 
 .goalHeading {
-    font-size: 0.88rem;
-    color: var(--clr-green-main);
-    font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--clr-green-main);
+  font-weight: 600;
 }
 
 .goalDescription {
-    font-size: 0.88rem;
-    font-weight: 400;
+  font-size: 0.88rem;
+  font-weight: 500;
 }
 
 .paperDescription {
-    padding: 1rem;
-    background: #4bb29e1a 0% 0% no-repeat padding-box;
+  padding: 1rem;
+  background: #4bb29e1a 0% 0% no-repeat padding-box;
 }
 
 .primaryText {
-    font-weight: 800;
+  font-weight: 800;
 }
