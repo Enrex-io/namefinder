@@ -58,10 +58,7 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
         const terms: string[] = data
             .slice(colonTermsIndex, postIndex)
             .split('\n');
-        const post: string = data
-            ?.slice(quotePostIndex)
-            .replaceAll('[', '')
-            .replaceAll(']', '');
+        const post: string = data?.slice(quotePostIndex);
         console.log(data);
 
         const descriptions: string[] = [summary, ...terms].filter(
