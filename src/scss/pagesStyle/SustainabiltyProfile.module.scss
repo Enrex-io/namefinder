@@ -1,0 +1,101 @@
+@import "../../static/styles/inc/global/variables";
+
+.blocks {
+  margin-top: 20px;
+  display: grid;
+  height: fit-content;
+  grid-template-columns: 430px 780px;
+  gap: 30px;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "a b"
+    "a c"
+    "d c"
+    ". c"
+}
+
+.firstBlock {
+  grid-area: a;
+}
+
+.secondBlock {
+  grid-area: b;
+}
+
+.thirdBlock {
+  grid-area: c;
+}
+
+.fourthBlock {
+  grid-area: d;
+}
+
+.skeleton_mini {
+  width: 430px;
+}
+
+.skeleton_max {
+  width: 780px;
+}
+
+@media (max-width: $mediaXxl) {
+  .blocks {
+    grid-template-columns: 35% 63%;
+    gap: 2%;
+  }
+
+  .skeleton_mini {
+    width: 399px;
+  }
+
+  .skeleton_max {
+    width: 718px;
+  }
+}
+
+@media (max-width: $mediaXl) {
+  .skeleton_mini {
+    width: 336px;
+    height: 120px;
+  }
+
+  .skeleton_max {
+    width: 604px;
+    height: 120px;
+  }
+}
+
+@media (max-width: $mediaLg) {
+  .blocks {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    grid-template-areas:
+    "a"
+    "b"
+    "c"
+    "d"
+  }
+
+  .skeleton_mini, .skeleton_max {
+    width: 100%;
+  }
+}
+
+@media (max-width: $mediaMd) {
+  .skeleton_max {
+    height: 140px;
+  }
+}
+
+@media (max-width: $mediaSm) {
+  .skeleton_mini, .skeleton_max {
+    height: 120px;
+  }
+}
+
+@media (max-width: 374px) {
+  .skeleton_mini, .skeleton_max {
+    place-items: center;
+  }
+}
+

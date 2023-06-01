@@ -1,6 +1,6 @@
 import { ReactElement, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../../hooks/useAuth';
+import useAuth from '../../hooks/useAuth';
 import Loader from '@/components/Loader/Loader';
 
 const AuthGuard = ({ children }: { children: ReactElement | null }) => {

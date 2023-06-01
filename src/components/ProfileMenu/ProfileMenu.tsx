@@ -7,7 +7,7 @@ import {
     IconLogout,
 } from '@tabler/icons-react';
 import Image from 'next/image';
-import { useAuth } from '@/hooks/useAuth';
+import useAuth from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Chip from '../Chip/Chip';
@@ -22,13 +22,13 @@ interface ProfileMenuProps {
 
 const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo }) => {
     const { push } = useRouter();
-    const { user, signout } = useAuth();
-    const [isSubmenuShown, setIsSumbenuShown] = useState<boolean>(false);
     const [openPopUp, setOpenPopUp] = useState<boolean>(false);
     const handleHandleClickLi = () => setIsSumbenuShown(!isSubmenuShown);
+    const { user, logout } = useAuth();
+    const [isSubmenuShown, setIsSumbenuShown] = useState(false);
 
     const handleLogout = () => {
-        signout?.();
+        logout?.();
     };
 
     const handlePopUp = () => {
