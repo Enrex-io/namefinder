@@ -6,7 +6,6 @@ import AuthWrapper1 from '@/components/authentication/AuthWrapper1';
 import Grid from '@mui/material/Grid';
 import AuthCardWrapper from '@/components/authentication/AuthCardWrapper';
 import { Divider, Stack, Typography, useMediaQuery } from '@mui/material';
-import AuthFooter from '@/components/authentication/AuthFooter';
 import AuthRegister from '@/components/authentication/auth-forms/AuthRegister';
 
 export default function Register() {
@@ -125,9 +124,6 @@ export default function Register() {
                                 </AuthCardWrapper>
                             </Grid>
                         </Grid>
-                    </Grid>
-                    <Grid item xs={12} sx={{ m: 3, mt: 1 }}>
-                        <AuthFooter />
                     </Grid>
                 </Grid>
             </AuthWrapper1>
