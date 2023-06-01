@@ -15,6 +15,14 @@
   }
 }
 
+.paperPrompt {
+  padding: 1rem;
+  margin-bottom: 15px;
+  @media screen and (max-width: 768px) {
+    padding: 1.88rem 1.25rem;
+  }
+}
+
 .heading {
   font-size: 1.13rem;
   font-weight: 600;
@@ -47,6 +55,19 @@
 }
 
 
+.heading {
+  text-align: left;
+  font-size: 1.13rem;
+  letter-spacing: 0px;
+  font-weight: 500;
+}
+
+.copy_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .post {
   display: flex;
   flex-direction: column;
@@ -62,16 +83,27 @@
 }
 
 .logo {
-  width: 3rem;
-  height: 3rem;
-  background-color: var(--clr-green-main);
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: #A4D8CE;
   border-radius: 50%;
 }
 
 .nickname {
+  font-size: 14px;
   font-weight: 700;
 }
 
 .description {
+  font-size: 14px;
+  font-weight: 500;
   text-align: left;
+}
+
+.paperPost {
+  margin-top: 15px;
+  padding: 20px;
+  @media screen and (max-width: 768px) {
+    padding: 1.88rem 1.25rem;
+  }
 }
