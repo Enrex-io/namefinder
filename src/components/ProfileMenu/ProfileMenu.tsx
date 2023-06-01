@@ -13,7 +13,8 @@ import clsx from 'clsx';
 import Chip from '../Chip/Chip';
 import UserPhotoPlaceholder from '../UserPhotoPlaceholder/UserPhotoPlaceholder';
 import { IGreenWashingUser } from '@/types';
-import settings from '../../../public/svg/settings.svg';
+
+// import logo from '/images/logo.png';
 
 interface ProfileMenuProps {
     userInfo: IGreenWashingUser | null;
@@ -22,14 +23,16 @@ interface ProfileMenuProps {
 const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo }) => {
     const { push } = useRouter();
     const { user, signout } = useAuth();
-    const [isSubmenuShown, setIsSumbenuShown] = useState(false);
-
-    const handleMouseEnterLi = () => setIsSumbenuShown(true);
-    const handleMouseLeaveUl = () =>
-        setTimeout(() => setIsSumbenuShown(false), 350);
+    const [isSubmenuShown, setIsSumbenuShown] = useState<boolean>(false);
+    const [openPopUp, setOpenPopUp] = useState<boolean>(false);
+    const handleHandleClickLi = () => setIsSumbenuShown(!isSubmenuShown);
 
     const handleLogout = () => {
         signout?.();
+    };
+
+    const handlePopUp = () => {
+        setOpenPopUp(!openPopUp);
     };
 
     if (!user) {
@@ -44,63 +47,77 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo }) => {
     }
 
     return (
-        <li className={classes.li} onMouseEnter={handleMouseEnterLi}>
-            <div className={classes.image_wrapper}>
-                {user.photo ? (
-                    <>
-                        <Image
-                            width={35}
-                            height={35}
-                            src={user.photo}
-                            className={classes.profile}
-                            alt="profile photo"
-                        />
-                        <Image
-                            src={settings}
-                            alt={'Settings'}
-                            width={25}
-                            height={25}
-                        />
-                    </>
-                ) : (
-                    <UserPhotoPlaceholder userName={user.name} />
-                )}
-            </div>
-            <ul
-                className={clsx(classes.submenu, {
-                    [classes.submenuShown]: isSubmenuShown,
-                })}
-                onMouseLeave={handleMouseLeaveUl}
-            >
-                <li className={clsx(classes.subItem, classes.bottomDivider)}>
-                    <p className={classes.semibold}>
-                        {user.email || user.name}
-                    </p>
-                </li>
-                <li className={clsx(classes.subItem, classes.bottomDivider)}>
-                    <Chip
-                        label={userInfo?.counter?.toFixed(0) || '0'}
-                        className={classes.checksChip}
-                    />
-                    <p>Free checks</p>
-                </li>
-                <li className={classes.subItem}>
-                    <IconCreditCard color="#091F3D" />
-                    <p>Subscription</p>
-                </li>
-                <li
-                    className={classes.subItem}
-                    onClick={() => push('/history')}
+        <div className={classes.profileMenu}>
+            <li className={classes.logo} onClick={() => push('/')}>
+                <Image
+                    src={'/images/logo.png'}
+                    alt={'Logo'}
+                    width={150}
+                    height={45}
+                />
+            </li>
+            <li className={classes.li} onClick={handleHandleClickLi}>
+                <div className={classes.image_wrapper}>
+                    {user.photo ? (
+                        <>
+                            <Image
+                                width={35}
+                                height={35}
+                                src={user.photo}
+                                className={classes.profile}
+                                alt="profile photo"
+                            />
+                            <Image
+                                src={'/svg/settings.svg'}
+                                alt={'Settings'}
+                                width={25}
+                                height={25}
+                            />
+                        </>
+                    ) : (
+                        <UserPhotoPlaceholder userName={user.name} />
+                    )}
+                </div>
+                <ul
+                    className={clsx(classes.submenu, {
+                        [classes.submenuShown]: isSubmenuShown,
+                    })}
                 >
-                    <IconHistory color="#091F3D" />
-                    <p>History</p>
-                </li>
-                <li className={classes.subItem} onClick={handleLogout}>
-                    <IconLogout color="#091F3D" />
-                    <p>Logout</p>
-                </li>
-            </ul>
-        </li>
+                    <li
+                        className={clsx(classes.subItem, classes.bottomDivider)}
+                    >
+                        <p className={classes.semibold}>
+                            {user.email || user.name}
+                        </p>
+                    </li>
+                    <li
+                        className={clsx(classes.subItem, classes.bottomDivider)}
+                        onClick={() => handlePopUp()}
+                    >
+                        <Chip
+                            label={userInfo?.counter?.toFixed(0) || '0'}
+                            className={classes.checksChip}
+                        />
+                        <p>Free checks</p>
+                    </li>
+                    <li className={classes.subItem}>
+                        <IconCreditCard color="#091F3D" size={20} />
+                        <p>Subscription</p>
+                    </li>
+                    <li
+                        className={classes.subItem}
+                        onClick={() => push('/history')}
+                    >
+                        <IconHistory color="#091F3D" size={20} />
+                        <p>History</p>
+                    </li>
+                    <li className={classes.subItem} onClick={handleLogout}>
+                        <IconLogout color="#091F3D" size={20} />
+                        <p>Logout</p>
+                    </li>
+                </ul>
+            </li>
+        </div>
     );
 };
 
