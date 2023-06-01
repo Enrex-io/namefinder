@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -70,6 +70,8 @@ const FirebaseLogin = ({ ...others }) => {
         firebaseGoogleSignIn,
         firebaseResendEmailVerification,
         checkFirebaseEmailVerification,
+        isEmailVerified,
+        user,
     } = useAuth();
     const [notification, setNotification] = React.useState<string>('');
 
@@ -103,10 +105,21 @@ const FirebaseLogin = ({ ...others }) => {
         }
     };
 
-    async function createUserThenRedirect() {
-        await GreenWashingUserService.createUser();
-        router.push('/');
-    }
+    const createUserThenRedirect = useCallback(
+        async function () {
+            await GreenWashingUserService.createUser();
+            router.push('/');
+        },
+        [router]
+    );
+
+    useEffect(() => {
+        if (user) {
+            if (user.claims?.firebase?.sign_in_provider === 'google.com') {
+                createUserThenRedirect();
+            }
+        }
+    }, [user, isEmailVerified, createUserThenRedirect]);
 
     return (
         <>
