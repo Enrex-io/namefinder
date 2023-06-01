@@ -270,78 +270,83 @@ const FirebaseLogin = ({ ...others }) => {
                     values,
                 }) => (
                     <form noValidate onSubmit={handleSubmit} {...others}>
-                        <FormControl
-                            fullWidth
-                            error={Boolean(touched.email && errors.email)}
-                        >
-                            <InputLabel htmlFor="outlined-adornment-email-login">
-                                Email Address / Username
-                            </InputLabel>
-                            <OutlinedInput
-                                id="outlined-adornment-email-login"
-                                type="email"
-                                value={values.email}
-                                name="email"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                label="Email Address / Username"
-                                inputProps={{}}
-                            />
-                            {touched.email && errors.email && (
-                                <FormHelperText
-                                    error
-                                    id="standard-weight-helper-text-email-login"
-                                >
-                                    {errors.email}
-                                </FormHelperText>
-                            )}
-                        </FormControl>
-
-                        <FormControl
-                            fullWidth
-                            error={Boolean(touched.password && errors.password)}
-                        >
-                            <InputLabel htmlFor="outlined-adornment-password-login">
-                                Password
-                            </InputLabel>
-                            <OutlinedInput
-                                id="outlined-adornment-password-login"
-                                type={showPassword ? 'text' : 'password'}
-                                value={values.password}
-                                name="password"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={handleClickShowPassword}
-                                            onMouseDown={
-                                                handleMouseDownPassword
-                                            }
-                                            edge="end"
-                                            size="large"
-                                        >
-                                            {showPassword ? (
-                                                <Visibility />
-                                            ) : (
-                                                <VisibilityOff />
-                                            )}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                                label="Password"
-                                inputProps={{}}
-                            />
-                            {touched.password && errors.password && (
-                                <FormHelperText
-                                    error
-                                    id="standard-weight-helper-text-password-login"
-                                >
-                                    {errors.password}
-                                </FormHelperText>
-                            )}
-                        </FormControl>
+                        <Stack spacing={2}>
+                            <FormControl
+                                fullWidth
+                                error={Boolean(touched.email && errors.email)}
+                            >
+                                <InputLabel htmlFor="outlined-adornment-email-login">
+                                    Email Address / Username
+                                </InputLabel>
+                                <OutlinedInput
+                                    id="outlined-adornment-email-login"
+                                    type="email"
+                                    value={values.email}
+                                    name="email"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    label="Email Address / Username"
+                                    inputProps={{}}
+                                />
+                                {touched.email && errors.email && (
+                                    <FormHelperText
+                                        error
+                                        id="standard-weight-helper-text-email-login"
+                                    >
+                                        {errors.email}
+                                    </FormHelperText>
+                                )}
+                            </FormControl>
+                            <FormControl
+                                fullWidth
+                                error={Boolean(
+                                    touched.password && errors.password
+                                )}
+                            >
+                                <InputLabel htmlFor="outlined-adornment-password-login">
+                                    Password
+                                </InputLabel>
+                                <OutlinedInput
+                                    id="outlined-adornment-password-login"
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={values.password}
+                                    name="password"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={
+                                                    handleClickShowPassword
+                                                }
+                                                onMouseDown={
+                                                    handleMouseDownPassword
+                                                }
+                                                edge="end"
+                                                size="large"
+                                            >
+                                                {showPassword ? (
+                                                    <Visibility />
+                                                ) : (
+                                                    <VisibilityOff />
+                                                )}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }
+                                    label="Password"
+                                    inputProps={{}}
+                                />
+                                {touched.password && errors.password && (
+                                    <FormHelperText
+                                        error
+                                        id="standard-weight-helper-text-password-login"
+                                    >
+                                        {errors.password}
+                                    </FormHelperText>
+                                )}
+                            </FormControl>
+                        </Stack>
                         <Stack
                             direction="row"
                             alignItems="center"
@@ -419,7 +424,6 @@ const FirebaseLogin = ({ ...others }) => {
                                 size="large"
                                 type="submit"
                                 variant="contained"
-                                color="secondary"
                             >
                                 Sign in
                             </Button>

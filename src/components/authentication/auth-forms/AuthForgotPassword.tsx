@@ -102,7 +102,6 @@ const AuthForgotPassword = ({ ...others }) => {
                             size="large"
                             type="submit"
                             variant="contained"
-                            color="secondary"
                         >
                             Send Mail
                         </Button>

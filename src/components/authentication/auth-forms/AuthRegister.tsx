@@ -16,6 +16,7 @@ import {
     InputAdornment,
     InputLabel,
     OutlinedInput,
+    Stack,
     TextField,
     Typography,
     useMediaQuery,
@@ -280,114 +281,120 @@ const FirebaseRegister = ({ ...others }) => {
                                 />
                             </Grid>
                         </Grid>
-                        <FormControl
-                            fullWidth
-                            error={Boolean(touched.email && errors.email)}
-                        >
-                            <InputLabel htmlFor="outlined-adornment-email-register">
-                                Email Address / Username
-                            </InputLabel>
-                            <OutlinedInput
-                                id="outlined-adornment-email-register"
-                                type="email"
-                                value={values.email}
-                                name="email"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                inputProps={{}}
-                            />
-                            {touched.email && errors.email && (
-                                <FormHelperText
-                                    error
-                                    id="standard-weight-helper-text--register"
-                                >
-                                    {errors.email}
-                                </FormHelperText>
-                            )}
-                        </FormControl>
-
-                        <FormControl
-                            fullWidth
-                            error={Boolean(touched.password && errors.password)}
-                        >
-                            <InputLabel htmlFor="outlined-adornment-password-register">
-                                Password
-                            </InputLabel>
-                            <OutlinedInput
-                                id="outlined-adornment-password-register"
-                                type={showPassword ? 'text' : 'password'}
-                                value={values.password}
-                                name="password"
-                                label="Password"
-                                onBlur={handleBlur}
-                                onChange={(e) => {
-                                    handleChange(e);
-                                    changePassword(e.target.value);
-                                }}
-                                endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label="toggle password visibility"
-                                            onClick={handleClickShowPassword}
-                                            onMouseDown={
-                                                handleMouseDownPassword
-                                            }
-                                            edge="end"
-                                            size="large"
-                                        >
-                                            {showPassword ? (
-                                                <Visibility />
-                                            ) : (
-                                                <VisibilityOff />
-                                            )}
-                                        </IconButton>
-                                    </InputAdornment>
-                                }
-                                inputProps={{}}
-                            />
-                            {touched.password && errors.password && (
-                                <FormHelperText
-                                    error
-                                    id="standard-weight-helper-text-password-register"
-                                >
-                                    {errors.password}
-                                </FormHelperText>
-                            )}
-                        </FormControl>
-
-                        {strength !== 0 && (
-                            <FormControl fullWidth>
-                                <Box sx={{ mb: 2 }}>
-                                    <Grid
-                                        container
-                                        spacing={2}
-                                        alignItems="center"
+                        <Stack spacing={2} marginTop={theme.spacing(2)}>
+                            <FormControl
+                                fullWidth
+                                error={Boolean(touched.email && errors.email)}
+                            >
+                                <InputLabel htmlFor="outlined-adornment-email-register">
+                                    Email Address / Username
+                                </InputLabel>
+                                <OutlinedInput
+                                    id="outlined-adornment-email-register"
+                                    type="email"
+                                    value={values.email}
+                                    name="email"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    inputProps={{}}
+                                />
+                                {touched.email && errors.email && (
+                                    <FormHelperText
+                                        error
+                                        id="standard-weight-helper-text--register"
                                     >
-                                        <Grid item>
-                                            <Box
-                                                style={{
-                                                    backgroundColor:
-                                                        level?.color,
-                                                }}
-                                                sx={{
-                                                    width: 85,
-                                                    height: 8,
-                                                    borderRadius: '7px',
-                                                }}
-                                            />
-                                        </Grid>
-                                        <Grid item>
-                                            <Typography
-                                                variant="subtitle1"
-                                                fontSize="0.75rem"
-                                            >
-                                                {level?.label}
-                                            </Typography>
-                                        </Grid>
-                                    </Grid>
-                                </Box>
+                                        {errors.email}
+                                    </FormHelperText>
+                                )}
                             </FormControl>
-                        )}
+
+                            <FormControl
+                                fullWidth
+                                error={Boolean(
+                                    touched.password && errors.password
+                                )}
+                            >
+                                <InputLabel htmlFor="outlined-adornment-password-register">
+                                    Password
+                                </InputLabel>
+                                <OutlinedInput
+                                    id="outlined-adornment-password-register"
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={values.password}
+                                    name="password"
+                                    label="Password"
+                                    onBlur={handleBlur}
+                                    onChange={(e) => {
+                                        handleChange(e);
+                                        changePassword(e.target.value);
+                                    }}
+                                    endAdornment={
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="toggle password visibility"
+                                                onClick={
+                                                    handleClickShowPassword
+                                                }
+                                                onMouseDown={
+                                                    handleMouseDownPassword
+                                                }
+                                                edge="end"
+                                                size="large"
+                                            >
+                                                {showPassword ? (
+                                                    <Visibility />
+                                                ) : (
+                                                    <VisibilityOff />
+                                                )}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    }
+                                    inputProps={{}}
+                                />
+                                {touched.password && errors.password && (
+                                    <FormHelperText
+                                        error
+                                        id="standard-weight-helper-text-password-register"
+                                    >
+                                        {errors.password}
+                                    </FormHelperText>
+                                )}
+                            </FormControl>
+
+                            {strength !== 0 && (
+                                <FormControl fullWidth>
+                                    <Box sx={{ mb: 2 }}>
+                                        <Grid
+                                            container
+                                            spacing={2}
+                                            alignItems="center"
+                                        >
+                                            <Grid item>
+                                                <Box
+                                                    style={{
+                                                        backgroundColor:
+                                                            level?.color,
+                                                    }}
+                                                    sx={{
+                                                        width: 85,
+                                                        height: 8,
+                                                        borderRadius: '7px',
+                                                    }}
+                                                />
+                                            </Grid>
+                                            <Grid item>
+                                                <Typography
+                                                    variant="subtitle1"
+                                                    fontSize="0.75rem"
+                                                >
+                                                    {level?.label}
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </Box>
+                                </FormControl>
+                            )}
+                        </Stack>
 
                         <Grid
                             container
@@ -447,7 +454,7 @@ const FirebaseRegister = ({ ...others }) => {
                                 size="large"
                                 type="submit"
                                 variant="contained"
-                                color="secondary"
+                                color="primary"
                             >
                                 Sign up
                             </Button>
