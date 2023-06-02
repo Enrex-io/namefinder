@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -35,6 +35,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from '../../../utils/axios';
 import { GreenWashingUserService } from '@/services/GreenWashingUserService';
+import { SnackbarContext } from '@/contexts/SnackbarContext';
 
 const Google = '/images/social-google.svg';
 
@@ -64,6 +65,7 @@ const FirebaseLogin = ({ ...others }) => {
     const matchDownSM = useMediaQuery('(min-width:900px)');
     const [checked, setChecked] = React.useState(true);
     const router = useRouter();
+    const { showSnackbar } = useContext(SnackbarContext);
     const [isVerified, setIsVerified] = useState<boolean>(true);
     const {
         firebaseEmailPasswordSignIn,
@@ -236,29 +238,22 @@ const FirebaseLogin = ({ ...others }) => {
                         await firebaseEmailPasswordSignIn(
                             values.email,
                             values.password
-                        ).then(
-                            async () => {
-                                const isEmailVerified =
-                                    await checkFirebaseEmailVerification();
-
-                                if (isEmailVerified) {
-                                    setIsVerified(true);
-                                    createUserThenRedirect();
-                                } else {
-                                    setIsVerified(false);
-                                }
-                                // WARNING: do not set any formik state here as formik might be already destroyed here. You may get following error by doing so.
-                                // Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application.
-                                // To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
-                                // github issue: https://github.com/formium/formik/issues/2430
-                            },
-                            (err: any) => {
-                                // setStatus({ success: false });
-                                // setErrors({ submit: err.message });
-                                // setSubmitting(false);
-                            }
                         );
+                        const isEmailVerified =
+                            await checkFirebaseEmailVerification();
+
+                        if (isEmailVerified) {
+                            setIsVerified(true);
+                            createUserThenRedirect();
+                        } else {
+                            setIsVerified(false);
+                        }
+                        // WARNING: do not set any formik state here as formik might be already destroyed here. You may get following error by doing so.
+                        // Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application.
+                        // To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
+                        // github issue: https://github.com/formium/formik/issues/2430
                     } catch (err: any) {
+                        showSnackbar('Firebase signin error', 'error');
                         console.error('Firebase signin error', err);
                         // setStatus({ success: false });
                         // setErrors({ submit: err.message });

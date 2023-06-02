@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import Link from 'next/link';
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -37,29 +37,10 @@ import {
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { StringColorProps } from '../../../types';
-import axiosServices from '../../../utils/axios';
+import { SnackbarContext } from '@/contexts/SnackbarContext';
+import { useRouter } from 'next/router';
+import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 const Google = '/images/social-google.svg';
-// ===========================|| FIREBASE - REGISTER ||=========================== //
-
-const triggerNewcomerEmailGreeting = async (
-    authToken: string,
-    isNewUser: boolean
-) => {
-    try {
-        await axiosServices.post(
-            '/api/emails/greeting',
-            {},
-            {
-                headers: {
-                    Authorization: 'Bearer ' + authToken,
-                    'is-new-user': isNewUser,
-                },
-            }
-        );
-    } catch (error: unknown) {
-        console.error('Trigger newcomer error', error);
-    }
-};
 
 const INITIAL_FORM_VALUES = {
     fname: '',
@@ -81,6 +62,8 @@ const FORM_VALIDATION_SCHEMA = Yup.object().shape({
 
 const FirebaseRegister = ({ ...others }) => {
     const theme = useTheme();
+    const router = useRouter();
+    const { showSnackbar } = useContext(SnackbarContext);
     const matchDownMD = useMediaQuery(theme.breakpoints.down('md'));
     const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
     const [showPassword, setShowPassword] = React.useState(false);
@@ -91,14 +74,22 @@ const FirebaseRegister = ({ ...others }) => {
     const [level, setLevel] = React.useState<StringColorProps>();
     const { firebaseRegister, firebaseGoogleSignIn } = useAuth();
 
+    const createUserThenRedirect = useCallback(
+        async function () {
+            await GreenWashingUserService.createUser();
+            router.push('/');
+        },
+        [router]
+    );
+
     const googleHandler = async () => {
         try {
             const userCredentials = await firebaseGoogleSignIn();
             const isNewUser = !!userCredentials.additionalUserInfo?.isNewUser;
             const token = await userCredentials.user?.getIdToken();
-            if (token && isNewUser)
-                triggerNewcomerEmailGreeting(token, isNewUser);
+            createUserThenRedirect();
         } catch (err) {
+            showSnackbar('Failed to sign up', 'error');
             console.error('Google handler error', err);
         }
     };
@@ -213,33 +204,31 @@ const FirebaseRegister = ({ ...others }) => {
                     { setErrors, setStatus, setSubmitting }
                 ) => {
                     try {
-                        await firebaseRegister(
+                        const result = await firebaseRegister(
                             values.email,
                             values.password
-                        ).then(
-                            async (result) => {
-                                // const isNewUser = !!result.additionalUserInfo?.isNewUser;
-                                // const token = await result.user?.getIdToken();
-                                // if (token && isNewUser) triggerNewcomerEmailGreeting(token, isNewUser);
-                                let profile = await result.user?.updateProfile({
-                                    displayName:
-                                        values.fname + ' ' + values.lname,
-                                });
-                                setIsValidated(true);
-                                return profile;
-                                // WARNING: do not set any formik state here as formik might be already destroyed here. You may get following error by doing so.
-                                // Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application.
-                                // To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
-                                // github issue: https://github.com/formium/formik/issues/2430
-                            },
-                            (err: any) => {
-                                // setStatus({ success: false });
-                                // setErrors({ submit: err.message });
-                                // setSubmitting(false);
-                            }
                         );
+
+                        // const isNewUser = !!result.additionalUserInfo?.isNewUser;
+                        // const token = await result.user?.getIdToken();
+                        // if (token && isNewUser) triggerNewcomerEmailGreeting(token, isNewUser);
+                        let profile = await result.user?.updateProfile({
+                            displayName: values.fname + ' ' + values.lname,
+                        });
+                        setIsValidated(true);
+                        return profile;
+                        // WARNING: do not set any formik state here as formik might be already destroyed here. You may get following error by doing so.
+                        // Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application.
+                        // To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
+                        // github issue: https://github.com/formium/formik/issues/2430
                     } catch (err: any) {
                         console.error('Firebase register error', err);
+                        let message = 'Failed to sign up';
+                        if (err.code === 'auth/email-already-in-use') {
+                            message =
+                                'The email address is already in use by another account.';
+                        }
+                        showSnackbar(message, 'error');
                         // setStatus({ success: false });
                         // setErrors({ submit: err.message });
                         // setSubmitting(false);
