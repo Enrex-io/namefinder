@@ -107,7 +107,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo, handlePopUp }) => {
                     </li>
                     <li
                         className={classes.subItem}
-                        onClick={() => isCounterMinus && handlePopUp()}
+                        onClick={() => handlePopUp()}
                     >
                         <IconCreditCard color="#091F3D" size={20} />
                         <p>Subscription</p>
