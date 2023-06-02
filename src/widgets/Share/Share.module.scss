@@ -1,20 +1,17 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
 }
 
 .heading {
-    text-align: left;
-    font-size: 1.13rem;
-    letter-spacing: 0px;
-    font-weight: 500;
+  text-align: left;
+  font-size: 1.13rem;
+  letter-spacing: 0px;
+  font-weight: 500;
 }
 
 .fieldsContainer {
-    width: 100%;
-    padding: 1.88rem;
-    @media screen and (max-width: 768px) {
-        padding: 1.88rem 1.25rem;
-    }
+  width: 100%;
+  padding: 1.88rem;
 }
