@@ -1,4 +1,10 @@
-import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
+import React, {
+    Dispatch,
+    SetStateAction,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 import Paper from '@/components/Paper/Paper';
 import { Details, IGreenWashingUser } from '@/types';
 import { OpenAIApi } from '@/services/OpenAIService';
@@ -16,11 +22,15 @@ import Regions from '@/consts/region';
 import useAuth from '@/hooks/useAuth';
 
 interface SustainabilityFormProps {
+    userInfo: IGreenWashingUser | null;
     setUserInfo: Dispatch<SetStateAction<IGreenWashingUser | null>>;
+    handlePopUp: () => void;
 }
 
 const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
     setUserInfo,
+    userInfo,
+    handlePopUp,
 }) => {
     const { user } = useAuth();
     const [error, setError] = useState<string | null>(null);
@@ -29,6 +39,8 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
     >([]);
     const detailsRef = useRef<Details | null>(null);
     const [post, setPost] = useState<string>('');
+    const [disabled, setDisabled] = useState<boolean>(false);
+
     const handleSubmitDescription = async (details: Details) => {
         const chars = getMediaCharByMedia(details.media as Medias);
         const res = await OpenAIApi.getAssistedBySustainabilityMarketing(
@@ -89,6 +101,13 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
         setPost('');
     };
 
+    useEffect(() => {
+        if (Number(userInfo?.counter?.toFixed(0)) <= 0) {
+            handlePopUp();
+            setDisabled(true);
+        }
+    }, [userInfo?.counter]);
+
     return (
         <Paper spacing={1.25} direction="column" className={classes.container}>
             <Sustainability
@@ -97,6 +116,7 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
                     await handleSubmitDescription(details);
                 }}
                 valuesRef={detailsRef}
+                disabled={disabled}
             />
             <>
                 <div id="descriptionsAnchor" className={classes.anchor} />

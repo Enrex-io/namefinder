@@ -33,6 +33,7 @@ const SelectField = ({
     value,
     options: defaultOptions,
     onFocus,
+    disabled,
     ...props
 }: PropsWithChildren<Props>) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -115,15 +116,16 @@ const SelectField = ({
             valueClassName={classes.selectField}
             value={searchValue}
             // inputMode="none"
+            disabled={disabled}
             endAdornment={
                 <ToggleButton
-                    isToggled={isOpen}
+                    isToggled={!disabled && isOpen}
                     onToggle={onClickToggleButton}
                 />
             }
             {...props}
         >
-            {isOpen && (
+            {isOpen && !disabled && (
                 <ClickAwayListener onClickAway={handleClickAway}>
                     <div className={classes.options}>
                         {!options.length ? (

@@ -30,6 +30,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, PropsWithChildren<Props>>(
             fieldClassName,
             valueClassName,
             maxLength,
+            disabled,
             autoComplete = 'off',
             ...props
         }: PropsWithChildren<Props>,
@@ -56,6 +57,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, PropsWithChildren<Props>>(
                         autoComplete={autoComplete}
                         rows={5}
                         ref={ref}
+                        disabled={disabled}
                         {...props}
                     >
                         {endAdornment}

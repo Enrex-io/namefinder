@@ -28,6 +28,7 @@ const TextField = forwardRef<HTMLInputElement, PropsWithChildren<Props>>(
             children,
             fieldClassName,
             valueClassName,
+            disabled,
             autoComplete = 'off',
             inputMode = 'text',
             ...props
@@ -51,6 +52,7 @@ const TextField = forwardRef<HTMLInputElement, PropsWithChildren<Props>>(
                         autoComplete={autoComplete}
                         {...props}
                         inputMode={inputMode}
+                        disabled={disabled}
                         ref={ref}
                     />
                     {children}
