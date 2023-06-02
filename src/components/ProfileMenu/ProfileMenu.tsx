@@ -13,25 +13,20 @@ import clsx from 'clsx';
 import Chip from '../Chip/Chip';
 import UserPhotoPlaceholder from '../UserPhotoPlaceholder/UserPhotoPlaceholder';
 import { IGreenWashingUser } from '@/types';
-import PopUp from '@/components/PopUp/PopUp';
 
 interface ProfileMenuProps {
     userInfo: IGreenWashingUser | null;
+    handlePopUp: () => void;
 }
 
-const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo }) => {
+const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo, handlePopUp }) => {
     const { push } = useRouter();
-    const [openPopUp, setOpenPopUp] = useState<boolean>(false);
-    const handleHandleClickLi = () => setIsSumbenuShown(!isSubmenuShown);
+    const handleHandleClickLi = () => setIsSubMenuShown(!isSubmenuShown);
     const { user, logout } = useAuth();
-    const [isSubmenuShown, setIsSumbenuShown] = useState(false);
+    const [isSubmenuShown, setIsSubMenuShown] = useState(false);
 
     const handleLogout = () => {
         logout?.();
-    };
-
-    const handlePopUp = () => {
-        setOpenPopUp(!openPopUp);
     };
 
     if (!user) {
@@ -45,11 +40,13 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo }) => {
         );
     }
 
+    const isCounterMinus = Number(userInfo?.counter?.toFixed(0)) <= 0;
+
     return (
         <div className={classes.profileMenu}>
-            {openPopUp && <PopUp handlePopUp={handlePopUp} />}
             <li className={classes.logo} onClick={() => push('/')}>
                 <Image
+                    priority={true}
                     src={'/images/logo.png'}
                     alt={'Logo'}
                     width={150}
@@ -91,16 +88,27 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo }) => {
                         </p>
                     </li>
                     <li
-                        className={clsx(classes.subItem, classes.bottomDivider)}
-                        onClick={() => handlePopUp()}
+                        className={clsx(
+                            classes.subItem,
+                            classes.bottomDivider,
+                            isCounterMinus && classes.freeChecks
+                        )}
+                        onClick={() => isCounterMinus && handlePopUp()}
                     >
                         <Chip
-                            label={userInfo?.counter?.toFixed(0) || '0'}
+                            label={
+                                isCounterMinus
+                                    ? '0'
+                                    : String(userInfo?.counter?.toFixed(0))
+                            }
                             className={classes.checksChip}
                         />
                         <p>Free checks</p>
                     </li>
-                    <li className={classes.subItem}>
+                    <li
+                        className={classes.subItem}
+                        onClick={() => isCounterMinus && handlePopUp()}
+                    >
                         <IconCreditCard color="#091F3D" size={20} />
                         <p>Subscription</p>
                     </li>
