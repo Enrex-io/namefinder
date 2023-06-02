@@ -4,11 +4,14 @@
 }
 
 .profilePlaceholder {
-    background-color: #ff7f50;
+    background-color: #009688;
     width: 40px;
     height: 40px;
     color: #ffffff;
     font-size: 26px;
     text-transform: uppercase;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

@@ -21,10 +21,20 @@ function Home() {
 
     useEffect(() => {
         async function fetchUser() {
-            const userData = await GreenWashingUserService.getUser();
-            if (userData.result) {
-                setUserInfo(userData.result);
-                return;
+            try {
+                const userData = await GreenWashingUserService.getUser();
+                if (userData.result) {
+                    setUserInfo(userData.result);
+                    return;
+                } else {
+                    const createUserData =
+                        await GreenWashingUserService.createUser();
+                    if (createUserData.result) {
+                        setUserInfo(createUserData.result);
+                    }
+                }
+            } catch (e) {
+                console.log('Error while fetching user');
             }
         }
 

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -34,7 +34,6 @@ import useAuth from '../../../hooks/useAuth';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from '../../../utils/axios';
-import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 import { SnackbarContext } from '@/contexts/SnackbarContext';
 
 const Google = '/images/social-google.svg';
@@ -72,8 +71,8 @@ const FirebaseLogin = ({ ...others }) => {
         firebaseGoogleSignIn,
         firebaseResendEmailVerification,
         checkFirebaseEmailVerification,
-        isEmailVerified,
         user,
+        isEmailVerified,
     } = useAuth();
     const [notification, setNotification] = React.useState<string>('');
 
@@ -107,21 +106,17 @@ const FirebaseLogin = ({ ...others }) => {
         }
     };
 
-    const createUserThenRedirect = useCallback(
-        async function () {
-            await GreenWashingUserService.createUser();
-            router.push('/');
-        },
-        [router]
-    );
-
     useEffect(() => {
         if (user) {
-            if (user.claims?.firebase?.sign_in_provider === 'google.com') {
-                createUserThenRedirect();
+            if (
+                user.claims?.firebase?.sign_in_provider === 'google.com' ||
+                isEmailVerified ||
+                user.isEmailVerified
+            ) {
+                router.push('/');
             }
         }
-    }, [user, isEmailVerified, createUserThenRedirect]);
+    }, [user, isEmailVerified, router]);
 
     return (
         <>
@@ -244,17 +239,17 @@ const FirebaseLogin = ({ ...others }) => {
 
                         if (isEmailVerified) {
                             setIsVerified(true);
-                            createUserThenRedirect();
                         } else {
                             setIsVerified(false);
                         }
-                        // WARNING: do not set any formik state here as formik might be already destroyed here. You may get following error by doing so.
-                        // Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application.
-                        // To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
-                        // github issue: https://github.com/formium/formik/issues/2430
+                        router.reload();
                     } catch (err: any) {
-                        showSnackbar('Firebase signin error', 'error');
-                        console.error('Firebase signin error', err);
+                        let message = 'Firebase signin error';
+                        if (err.code === 'auth/user-not-found') {
+                            message = 'User not found';
+                        }
+                        showSnackbar(message, 'error');
+                        console.error(message, err);
                         // setStatus({ success: false });
                         // setErrors({ submit: err.message });
                         // setSubmitting(false);

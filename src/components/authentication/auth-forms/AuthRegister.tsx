@@ -72,22 +72,13 @@ const FirebaseRegister = ({ ...others }) => {
 
     const [strength, setStrength] = React.useState(0);
     const [level, setLevel] = React.useState<StringColorProps>();
-    const { firebaseRegister, firebaseGoogleSignIn } = useAuth();
-
-    const createUserThenRedirect = useCallback(
-        async function () {
-            await GreenWashingUserService.createUser();
-            router.push('/');
-        },
-        [router]
-    );
+    const { firebaseRegister, firebaseGoogleSignIn, user } = useAuth();
 
     const googleHandler = async () => {
         try {
             const userCredentials = await firebaseGoogleSignIn();
             const isNewUser = !!userCredentials.additionalUserInfo?.isNewUser;
             const token = await userCredentials.user?.getIdToken();
-            createUserThenRedirect();
         } catch (err) {
             showSnackbar('Failed to sign up', 'error');
             console.error('Google handler error', err);
@@ -107,6 +98,14 @@ const FirebaseRegister = ({ ...others }) => {
         setStrength(temp);
         setLevel(strengthColor(temp));
     };
+
+    useEffect(() => {
+        if (user) {
+            if (user.claims?.firebase?.sign_in_provider === 'google.com') {
+                router.push('/');
+            }
+        }
+    }, [user, router]);
 
     useEffect(() => {
         changePassword('123456');
