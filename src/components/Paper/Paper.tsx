@@ -20,8 +20,6 @@ const Paper = forwardRef<HTMLDivElement, Props>(
                     border: hasBorder
                         ? '1px solid var(--clr-grey-main)'
                         : 'none',
-                    // borderRadius: 'var(--border-radius-main)',
-                    borderRadius: '8px',
                 }}
                 {...rest}
             >

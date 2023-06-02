@@ -136,6 +136,7 @@ const FirebaseLogin = ({ ...others }) => {
                         onClick={googleHandler}
                         size="large"
                         variant="outlined"
+                        color="secondary"
                         sx={{
                             color: 'grey.700',
                             backgroundColor: '#fafafa',
