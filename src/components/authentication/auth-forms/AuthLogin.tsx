@@ -253,8 +253,12 @@ const FirebaseLogin = ({ ...others }) => {
                         // To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
                         // github issue: https://github.com/formium/formik/issues/2430
                     } catch (err: any) {
-                        showSnackbar('Firebase signin error', 'error');
-                        console.error('Firebase signin error', err);
+                        let message = 'Firebase signin error';
+                        if (err.code === 'auth/user-not-found') {
+                            message = 'User not found';
+                        }
+                        showSnackbar(message, 'error');
+                        console.error(message, err);
                         // setStatus({ success: false });
                         // setErrors({ submit: err.message });
                         // setSubmitting(false);
