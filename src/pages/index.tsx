@@ -4,14 +4,20 @@ import Sustainability from '@/containers/SustainabilityForm';
 import classes from './index.module.scss';
 import NavBar from '@/components/NavBar/NavBar';
 import AuthGuard from '@/utils/route-guard/AuthGuard';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IGreenWashingUser } from '@/types';
 import useAuth from '@/hooks/useAuth';
 import { GreenWashingUserService } from '@/services/GreenWashingUserService';
+import PopUp from '@/components/PopUp/PopUp';
 
 function Home() {
     const [userInfo, setUserInfo] = useState<IGreenWashingUser | null>(null);
     const { user } = useAuth();
+    const [openPopUp, setOpenPopUp] = useState<boolean>(false);
+
+    const handlePopUp = () => {
+        setOpenPopUp(!openPopUp);
+    };
 
     useEffect(() => {
         async function fetchUser() {
@@ -39,9 +45,14 @@ function Home() {
                         content="width=device-width, initial-scale=1"
                     />
                 </Head>
-                <NavBar userInfo={userInfo} />
+                {openPopUp && <PopUp handlePopUp={handlePopUp} />}
+                <NavBar userInfo={userInfo} handlePopUp={handlePopUp} />
                 <div className={classes.container}>
-                    <Sustainability setUserInfo={setUserInfo} />
+                    <Sustainability
+                        userInfo={userInfo}
+                        setUserInfo={setUserInfo}
+                        handlePopUp={handlePopUp}
+                    />
                 </div>
             </>
         </AuthGuard>
