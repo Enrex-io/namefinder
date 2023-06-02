@@ -18,7 +18,6 @@ import useAuth from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { SnackbarContext } from '@/contexts/SnackbarContext';
-import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 
 export default function Verification() {
     const { verifyEmail, checkActionCode } = useAuth();
@@ -27,14 +26,6 @@ export default function Verification() {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     const [email, setEmail] = useState<string>('');
-
-    const createUserThenRedirect = useCallback(
-        async function () {
-            await GreenWashingUserService.createUser();
-            router.push('/');
-        },
-        [router]
-    );
 
     useEffect(() => {
         (async () => {
@@ -217,11 +208,11 @@ export default function Verification() {
                                                 variant="outlined"
                                                 color="secondary"
                                                 onClick={() => {
-                                                    createUserThenRedirect();
+                                                    router.push('/login');
                                                 }}
                                             >
                                                 Sustainability marketing
-                                                assistant homepage
+                                                assistant login page
                                             </Button>
                                         </Grid>
                                     </Grid>
