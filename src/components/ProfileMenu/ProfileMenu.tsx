@@ -20,13 +20,14 @@ interface ProfileMenuProps {
 }
 
 const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo, handlePopUp }) => {
-    const { push } = useRouter();
+    const { push, pathname } = useRouter();
     const handleHandleClickLi = () => setIsSubMenuShown(!isSubmenuShown);
     const { user, logout } = useAuth();
     const [isSubmenuShown, setIsSubMenuShown] = useState(false);
 
     const handleLogout = () => {
         logout?.();
+        push('/login');
     };
 
     if (!user) {
@@ -93,7 +94,13 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo, handlePopUp }) => {
                             classes.bottomDivider,
                             isCounterMinus && classes.freeChecks
                         )}
-                        onClick={() => isCounterMinus && handlePopUp()}
+                        onClick={() => {
+                            if (pathname === '/history') {
+                                push('/');
+                                return;
+                            }
+                            if (isCounterMinus) handlePopUp();
+                        }}
                     >
                         <Chip
                             label={
