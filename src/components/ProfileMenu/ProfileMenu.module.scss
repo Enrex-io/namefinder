@@ -96,13 +96,25 @@
   cursor: pointer;
 }
 
+.container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1240px;
+}
+
+.navbarContainer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  background: #ffffff;
+}
+
 .profileMenu {
   display: flex;
   gap: 2rem;
   width: 100%;
   justify-content: space-between;
-  position: fixed;
   padding: 0 2rem;
-  top: 2rem;
-  right: 0rem;
+  padding-top: 2rem;
 }
