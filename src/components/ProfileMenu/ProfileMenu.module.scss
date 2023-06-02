@@ -46,7 +46,12 @@
   border-bottom: 1px solid #d8d8d8;
 }
 
-.subItem:hover:not(:nth-child(1)) {
+.freeChecks:hover {
+  cursor: pointer;
+  background-color: rgba(216, 216, 216, 0.5);
+}
+
+.subItem:hover:not(:nth-child(1), :nth-child(2)) {
   cursor: pointer;
   background-color: rgba(216, 216, 216, 0.5);
 }
@@ -97,7 +102,7 @@
   width: 100%;
   justify-content: space-between;
   position: fixed;
-  padding: 2rem;
-  top: 0rem;
+  padding: 0 2rem;
+  top: 2rem;
   right: 0rem;
 }
