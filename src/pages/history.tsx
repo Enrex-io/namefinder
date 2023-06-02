@@ -9,12 +9,18 @@ import NavBar from '@/components/NavBar/NavBar';
 import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 import Head from 'next/head';
 import { META } from '@/consts/meta';
+import PopUp from '@/components/PopUp/PopUp';
 
 export default function History() {
     const HEADING_TEXT = 'History';
     const [userInfo, setUserInfo] = useState<IGreenWashingUser | null>(null);
     const [history, setHistory] = useState<Array<IPrompt>>([]);
     const { user } = useAuth();
+    const [openPopUp, setOpenPopUp] = useState<boolean>(false);
+
+    const handlePopUp = () => {
+        setOpenPopUp(!openPopUp);
+    };
     useEffect(() => {
         async function fetchUser() {
             const userData = await GreenWashingUserService.getUser();
@@ -49,7 +55,8 @@ export default function History() {
                     content="width=device-width, initial-scale=1"
                 />
             </Head>
-            <NavBar userInfo={userInfo} />
+            {openPopUp && <PopUp handlePopUp={handlePopUp} />}
+            <NavBar userInfo={userInfo} handlePopUp={handlePopUp} />
             <Stack
                 className={classes.container}
                 spacing={1.25}
