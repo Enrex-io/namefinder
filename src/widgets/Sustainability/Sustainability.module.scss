@@ -9,6 +9,9 @@
   font-size: 1.13rem;
   letter-spacing: 0px;
   font-weight: 500;
+  @media screen and (max-width: 768px) {
+    margin-top: 5rem;
+  }
 }
 
 .form {
@@ -30,6 +33,10 @@
   border: 1px solid var(--clr-grey-main);
   align-items: center;
   justify-content: center;
+
+  @media screen and (max-width: 768px) {
+    padding: 20px;
+  }
 }
 
 .fieldsContainerFirst {
@@ -38,17 +45,17 @@
   gap: 0.88rem;
   @media screen and (max-width: 768px) {
     grid-template-columns: 1fr;
-    padding: 1.88rem 1.25rem;
+    //padding: 1rem 1.25rem;
+  }
+  @media screen and (max-width: 650px) {
+    grid-template-columns: 1fr;
+    //padding: 1rem 1.25rem;
   }
 }
 
 .fieldsContainerSecond {
   display: grid;
   grid-template-columns: 1fr;
-  @media screen and (max-width: 768px) {
-    grid-template-columns: 1fr;
-    padding: 1.88rem 1.25rem;
-  }
 }
 
 .fieldDescription {
@@ -60,9 +67,6 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  @media screen and (max-width: 768px) {
-    width: 100%;
-  }
 }
 
 .button:hover {
