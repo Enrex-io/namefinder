@@ -16,7 +16,6 @@ export default function Document() {
     })(window, document, "clarity", "script", "hdhrjdacjc");`,
                     }}
                 />
-                ;
             </Head>
             <body>
                 <Main />
