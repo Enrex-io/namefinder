@@ -3,11 +3,11 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import { LOGIN, LOGOUT } from '../store/actions';
 import accountReducer from '../store/accountReducer';
-import Loader from '../components/Loader/Loader';
 import { FirebaseContextType, InitialLoginContextProps } from '../types';
 import axios from '../utils/axios';
 import { firebaseConfig } from '@/config/firebaseApp.config';
 import { AxiosError, AxiosResponse } from 'axios';
+import FullscreenLoader from '@/components/Loader/FullscreenLoader';
 
 // firebase initialize
 if (!firebase.apps.length) {
@@ -147,7 +147,7 @@ export const FirebaseProvider = ({
     };
 
     if (state.isInitialized !== undefined && !state.isInitialized) {
-        return <Loader />;
+        return <FullscreenLoader />;
     }
 
     return (

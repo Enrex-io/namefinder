@@ -81,7 +81,8 @@ const FORM_VALIDATION_SCHEMA = Yup.object().shape({
 
 const FirebaseRegister = ({ ...others }) => {
     const theme = useTheme();
-    const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
+    const matchDownMD = useMediaQuery(theme.breakpoints.down('md'));
+    const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
     const [showPassword, setShowPassword] = React.useState(false);
     const [checked, setChecked] = React.useState(true);
     const [isValidated, setIsValidated] = React.useState<boolean>(false);
@@ -146,7 +147,7 @@ const FirebaseRegister = ({ ...others }) => {
                                 mr: { xs: 1, sm: 2 },
                                 width: 20,
                                 height: 20,
-                                marginRight: matchDownSM ? 8 : 16,
+                                marginRight: matchDownMD ? 8 : 16,
                             }}
                         >
                             <Image
@@ -296,6 +297,7 @@ const FirebaseRegister = ({ ...others }) => {
                                     name="email"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
+                                    label="Email Address / Username"
                                     inputProps={{}}
                                 />
                                 {touched.email && errors.email && (
