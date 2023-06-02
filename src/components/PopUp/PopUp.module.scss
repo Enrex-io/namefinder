@@ -12,19 +12,26 @@
   align-items: center;
   justify-content: center;
   gap: 20px;
-  text-align: center;
-
-  padding: 1rem;
 
   position: absolute;
   width: 450px;
   height: 362px;
-  top: 8rem;
-  right: 35%;
+  top: 25%;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+
+  text-align: center;
+
+  padding: 1rem;
   border: 1px solid green;
 
   background-color: #fff;
   border-radius: 16px;
+  @media screen and (max-width: 1200px) {
+    padding: 20px;
+  }
 }
 
 .title {
