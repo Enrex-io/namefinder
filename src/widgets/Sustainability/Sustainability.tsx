@@ -23,9 +23,10 @@ const SUBMIT_BUTTON_TEXT = 'Check post';
 interface Props {
     onSubmitDetails: (values: Details) => Promise<void>;
     valuesRef?: MutableRefObject<Record<string, any> | null>;
+    disabled: boolean;
 }
 
-const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
+const Sustainability = ({ onSubmitDetails, valuesRef, disabled }: Props) => {
     const innerRef = useRef<Record<string, any> | null>(null);
     const ref = valuesRef || innerRef;
     const handleSubmit = async (values: Record<string, any>, form: FormApi) => {
@@ -82,6 +83,7 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
                                                     hasAsterisk
                                                     label="Select social media platform"
                                                     options={MEDIAS_OPTIONS}
+                                                    disabled={disabled}
                                                     isError={
                                                         meta.touched &&
                                                         meta.error
@@ -105,6 +107,7 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
                                                     hasAsterisk
                                                     label="Select Region"
                                                     options={REGIONS_OPTIONS}
+                                                    disabled={disabled}
                                                     isError={
                                                         meta.touched &&
                                                         meta.error
@@ -131,6 +134,7 @@ const Sustainability = ({ onSubmitDetails, valuesRef }: Props) => {
                                                     tabIndex={1}
                                                     label="Insert your post here"
                                                     placeholder="Enter text here"
+                                                    disabled={disabled}
                                                     isError={
                                                         meta.touched &&
                                                         meta.error
