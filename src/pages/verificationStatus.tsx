@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useCallback } from 'react';
 import Head from 'next/head';
 import { META } from '@/consts/meta';
 import Link from 'next/link';
@@ -208,11 +208,11 @@ export default function Verification() {
                                                 variant="outlined"
                                                 color="secondary"
                                                 onClick={() => {
-                                                    router.push('/');
+                                                    router.push('/login');
                                                 }}
                                             >
                                                 Sustainability marketing
-                                                assistant homepage
+                                                assistant login page
                                             </Button>
                                         </Grid>
                                     </Grid>
