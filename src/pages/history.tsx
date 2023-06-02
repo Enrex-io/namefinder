@@ -10,6 +10,9 @@ import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 import Head from 'next/head';
 import { META } from '@/consts/meta';
 import PopUp from '@/components/PopUp/PopUp';
+import clsx from 'clsx';
+import Button from '@/components/Button/Button';
+import Image from 'next/image';
 
 export default function History() {
     const HEADING_TEXT = 'History';
@@ -17,6 +20,7 @@ export default function History() {
     const [history, setHistory] = useState<Array<IPrompt>>([]);
     const { user } = useAuth();
     const [openPopUp, setOpenPopUp] = useState<boolean>(false);
+    const SUBMIT_BUTTON_TEXT = 'Check post';
 
     const handlePopUp = () => {
         setOpenPopUp(!openPopUp);
@@ -162,9 +166,46 @@ export default function History() {
                             );
                         })
                     ) : (
-                        <h2 className={classes.heading}>
-                            No checks has been performed yet.
-                        </h2>
+                        <>
+                            <Paper
+                                className={clsx(
+                                    classes.paper,
+                                    classes.paperEmpty
+                                )}
+                                direction="column"
+                                spacing={1.5}
+                                hasBorder
+                            >
+                                <h3 className={classes.historyDescriptionTitle}>
+                                    <span>No history yet</span>
+                                </h3>
+                                <p className={classes.historyDescriptionEmpty}>
+                                    Once you check your first social post, it
+                                    will promptly show up and be stored in this
+                                    location.
+                                </p>
+                            </Paper>
+                            <Stack
+                                direction="column"
+                                spacing={1.25}
+                                className={classes.stackEmpty}
+                            >
+                                <Button
+                                    tabIndex={1}
+                                    type="submit"
+                                    className={classes.button}
+                                    funnyLoadingMessage
+                                >
+                                    <Image
+                                        src={'/svg/check.svg'}
+                                        alt={'Check'}
+                                        width={18}
+                                        height={18}
+                                    />
+                                    <span>{SUBMIT_BUTTON_TEXT}</span>
+                                </Button>
+                            </Stack>
+                        </>
                     )}
                 </Stack>
             </Stack>

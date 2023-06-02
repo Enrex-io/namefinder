@@ -101,3 +101,36 @@
   margin-top: 15px;
   padding: 20px;
 }
+
+.paperEmpty {
+  gap: 20px;
+}
+
+.historyDescriptionTitle {
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--clr-green-main);
+}
+
+.historyDescriptionEmpty {
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  color: #091F3D;
+}
+
+.button {
+  margin: 0 auto;
+  width: 11.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.button:hover {
+  border: 1px solid #4BB29E;
+  background-color: #4BB29E;
+}
