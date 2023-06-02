@@ -11,16 +11,13 @@
 .paper {
   padding: 2rem;
   @media screen and (max-width: 768px) {
-    padding: 1.88rem 1.25rem;
+    padding: 20px;
   }
 }
 
 .paperPrompt {
   padding: 1rem;
   margin-bottom: 15px;
-  @media screen and (max-width: 768px) {
-    padding: 1.88rem 1.25rem;
-  }
 }
 
 .heading {
@@ -103,7 +100,4 @@
 .paperPost {
   margin-top: 15px;
   padding: 20px;
-  @media screen and (max-width: 768px) {
-    padding: 1.88rem 1.25rem;
-  }
 }
