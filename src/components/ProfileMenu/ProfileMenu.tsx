@@ -58,8 +58,8 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo }) => {
             </li>
             <li className={classes.li} onClick={handleHandleClickLi}>
                 <div className={classes.image_wrapper}>
-                    {user.photo ? (
-                        <>
+                    <>
+                        {user.photo ? (
                             <Image
                                 width={35}
                                 height={35}
@@ -67,16 +67,16 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo }) => {
                                 className={classes.profile}
                                 alt="profile photo"
                             />
-                            <Image
-                                src={'/svg/settings.svg'}
-                                alt={'Settings'}
-                                width={25}
-                                height={25}
-                            />
-                        </>
-                    ) : (
-                        <UserPhotoPlaceholder userName={user.name} />
-                    )}
+                        ) : (
+                            <UserPhotoPlaceholder userName={user.name} />
+                        )}
+                        <Image
+                            src={'/svg/settings.svg'}
+                            alt={'Settings'}
+                            width={25}
+                            height={25}
+                        />
+                    </>
                 </div>
                 <ul
                     className={clsx(classes.submenu, {
