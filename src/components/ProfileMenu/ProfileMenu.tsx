@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import classes from './ProfileMenu.module.scss';
 import {
     IconCreditCard,
@@ -13,6 +13,7 @@ import clsx from 'clsx';
 import Chip from '../Chip/Chip';
 import UserPhotoPlaceholder from '../UserPhotoPlaceholder/UserPhotoPlaceholder';
 import { IGreenWashingUser } from '@/types';
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 
 interface ProfileMenuProps {
     userInfo: IGreenWashingUser | null;
@@ -21,9 +22,17 @@ interface ProfileMenuProps {
 
 const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo, handlePopUp }) => {
     const { push, pathname } = useRouter();
-    const handleHandleClickLi = () => setIsSubMenuShown(!isSubmenuShown);
+    const handleSubmenuClick = () => {
+        setIsSubMenuShown(!isSubmenuShown);
+    };
     const { user, logout } = useAuth();
     const [isSubmenuShown, setIsSubMenuShown] = useState(false);
+    const submenuRef = useRef<HTMLLIElement | null>(null);
+    useOnClickOutside(submenuRef, () => {
+        if (isSubmenuShown) {
+            setIsSubMenuShown(false);
+        }
+    });
 
     const handleLogout = async () => {
         await logout?.();
@@ -44,8 +53,8 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo, handlePopUp }) => {
     const isCounterMinus = Number(userInfo?.counter?.toFixed(0)) <= 0;
 
     return (
-        <div className={clsx(classes.container, classes.navbarContainer)}>
-            <div className={classes.profileMenu}>
+        <div className={classes.fixedNavbar}>
+            <div className={clsx(classes.container, classes.profileMenu)}>
                 <li className={classes.logo} onClick={() => push('/')}>
                     <Image
                         priority={true}
@@ -55,7 +64,11 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo, handlePopUp }) => {
                         height={45}
                     />
                 </li>
-                <li className={classes.li} onClick={handleHandleClickLi}>
+                <li
+                    ref={submenuRef}
+                    className={classes.li}
+                    onClick={handleSubmenuClick}
+                >
                     <div className={classes.image_wrapper}>
                         <>
                             {user.photo ? (
