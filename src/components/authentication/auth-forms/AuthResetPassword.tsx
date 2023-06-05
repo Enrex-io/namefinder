@@ -135,7 +135,11 @@ const AuthResetPassword: FC<ResetPasswordProps> = ({ oobCode, email }) => {
                                                 }
                                             ) => {
                                                 try {
-                                                    if (!email) {
+                                                    if (
+                                                        !email ||
+                                                        typeof oobCode !==
+                                                            'string'
+                                                    ) {
                                                         showSnackbar(
                                                             'Verification code should be valid',
                                                             'error'
@@ -144,11 +148,13 @@ const AuthResetPassword: FC<ResetPasswordProps> = ({ oobCode, email }) => {
                                                     }
 
                                                     await updateUserPassword(
+                                                        oobCode,
                                                         values.confirmedPassword
                                                     );
 
                                                     router.push('/login');
                                                 } catch (err: any) {
+                                                    console.error('error', err);
                                                     showSnackbar(
                                                         'Error occured',
                                                         'error'
@@ -169,7 +175,8 @@ const AuthResetPassword: FC<ResetPasswordProps> = ({ oobCode, email }) => {
                                                     isSubmitting ||
                                                     !email ||
                                                     !!Object.keys(errors)
-                                                        .length;
+                                                        .length ||
+                                                    !values.confirmedPassword;
                                                 return (
                                                     <form
                                                         noValidate
