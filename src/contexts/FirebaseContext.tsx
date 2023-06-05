@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useReducer } from 'react';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
+import { updatePassword } from 'firebase/auth';
 import { LOGIN, LOGOUT } from '../store/actions';
 import accountReducer from '../store/accountReducer';
 import { FirebaseContextType, InitialLoginContextProps } from '../types';
@@ -129,6 +130,12 @@ export const FirebaseProvider = ({
         await firebase.auth().sendPasswordResetEmail(email);
     };
 
+    const updateUserPassword = async (newPassword: string) => {
+        const user = firebase.auth().currentUser;
+        if (!user) throw new Error('User is not signed in');
+        updatePassword(user, newPassword);
+    };
+
     const updateProfile = async (name: string, email: string) => {
         const user = firebase.auth().currentUser;
         if (user?.email !== email) {
@@ -160,6 +167,7 @@ export const FirebaseProvider = ({
                 firebaseGoogleSignIn,
                 logout,
                 resetPassword,
+                updateUserPassword,
                 updateProfile,
                 updatePhoto,
                 firebaseResendEmailVerification,

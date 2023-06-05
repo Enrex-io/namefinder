@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import { FC, useContext } from 'react';
 import Link from 'next/link';
 import Logo from '@/components/Logo/Logo';
 import AuthWrapper1 from '@/components/authentication/AuthWrapper1';
@@ -14,28 +14,18 @@ import {
 } from '@mui/material';
 import useAuth from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { SnackbarContext } from '@/contexts/SnackbarContext';
 
-export default function Verification() {
-    const { verifyEmail, checkActionCode } = useAuth();
+interface VerificationProps {
+    oobCode: string | string[] | undefined;
+    email: string;
+}
+
+const Verification: FC<VerificationProps> = ({ oobCode, email }) => {
+    const { verifyEmail } = useAuth();
     const router = useRouter();
-    const { oobCode } = router.query;
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-    const [email, setEmail] = useState<string>('');
-
-    useEffect(() => {
-        (async () => {
-            if (typeof oobCode === 'string') {
-                const res = await checkActionCode(oobCode);
-                if (res.data.email) {
-                    setEmail(res.data.email);
-                }
-            }
-        })();
-    }, [oobCode, checkActionCode]);
-
     const { showSnackbar } = useContext(SnackbarContext);
 
     return (
@@ -207,4 +197,6 @@ export default function Verification() {
             </Grid>
         </AuthWrapper1>
     );
-}
+};
+
+export default Verification;

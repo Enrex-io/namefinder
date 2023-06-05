@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react';
+import { useContext, FC } from 'react';
 import Link from 'next/link';
 import Logo from '@/components/Logo/Logo';
 import AuthWrapper1 from '@/components/authentication/AuthWrapper1';
@@ -17,32 +17,21 @@ import {
     useMediaQuery,
     useTheme,
 } from '@mui/material';
-import useAuth from '@/hooks/useAuth';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { SnackbarContext } from '@/contexts/SnackbarContext';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import useAuth from '@/hooks/useAuth';
 
-export default function Verification() {
-    const { checkActionCode } = useAuth();
+interface ResetPasswordProps {
+    oobCode: string | string[] | undefined;
+    email: string;
+}
+const AuthResetPassword: FC<ResetPasswordProps> = ({ oobCode, email }) => {
+    const { updateUserPassword } = useAuth();
     const router = useRouter();
-    const { oobCode } = router.query;
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-    const [email, setEmail] = useState<string>('');
-
-    useEffect(() => {
-        (async () => {
-            if (typeof oobCode === 'string') {
-                const res = await checkActionCode(oobCode);
-                if (res.data.email) {
-                    setEmail(res.data.email);
-                }
-            }
-        })();
-    }, [oobCode, checkActionCode]);
-
     const { showSnackbar } = useContext(SnackbarContext);
 
     return (
@@ -146,33 +135,24 @@ export default function Verification() {
                                                 }
                                             ) => {
                                                 try {
-                                                    // await firebaseEmailPasswordSignIn(
-                                                    //     values.email,
-                                                    //     values.password
-                                                    // );
-                                                    // const isEmailVerified =
-                                                    //     await checkFirebaseEmailVerification();
-                                                    // if (isEmailVerified) {
-                                                    //     setIsVerified(true);
-                                                    // } else {
-                                                    //     setIsVerified(false);
-                                                    // }
-                                                    // router.reload();
+                                                    if (!email) {
+                                                        showSnackbar(
+                                                            'Verification code should be valid',
+                                                            'error'
+                                                        );
+                                                        return;
+                                                    }
+
+                                                    await updateUserPassword(
+                                                        values.confirmedPassword
+                                                    );
+
+                                                    router.push('/login');
                                                 } catch (err: any) {
-                                                    // let message =
-                                                    //     'Firebase signin error';
-                                                    // if (
-                                                    //     err.code ===
-                                                    //     'auth/user-not-found'
-                                                    // ) {
-                                                    //     message =
-                                                    //         'User not found';
-                                                    // }
-                                                    // showSnackbar(
-                                                    //     message,
-                                                    //     'error'
-                                                    // );
-                                                    // console.error(message, err);
+                                                    showSnackbar(
+                                                        'Error occured',
+                                                        'error'
+                                                    );
                                                 }
                                             }}
                                         >
@@ -187,6 +167,7 @@ export default function Verification() {
                                             }) => {
                                                 const isSubmitDisabled =
                                                     isSubmitting ||
+                                                    !email ||
                                                     !!Object.keys(errors)
                                                         .length;
                                                 return (
@@ -319,4 +300,6 @@ export default function Verification() {
             </Grid>
         </AuthWrapper1>
     );
-}
+};
+
+export default AuthResetPassword;
