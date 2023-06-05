@@ -44,8 +44,8 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo, handlePopUp }) => {
     const isCounterMinus = Number(userInfo?.counter?.toFixed(0)) <= 0;
 
     return (
-        <div className={clsx(classes.container, classes.navbarContainer)}>
-            <div className={classes.profileMenu}>
+        <div className={classes.fixedNavbar}>
+            <div className={clsx(classes.container, classes.profileMenu)}>
                 <li className={classes.logo} onClick={() => push('/')}>
                     <Image
                         priority={true}
