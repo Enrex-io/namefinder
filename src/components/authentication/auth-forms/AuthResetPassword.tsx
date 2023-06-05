@@ -22,6 +22,10 @@ import { SnackbarContext } from '@/contexts/SnackbarContext';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import useAuth from '@/hooks/useAuth';
+import {
+    strengthColor,
+    strengthIndicator,
+} from '../../../utils/password-strength';
 
 interface ResetPasswordProps {
     oobCode: string | string[] | undefined;
@@ -177,6 +181,14 @@ const AuthResetPassword: FC<ResetPasswordProps> = ({ oobCode, email }) => {
                                                     !!Object.keys(errors)
                                                         .length ||
                                                     !values.confirmedPassword;
+                                                const strengthNumber =
+                                                    strengthIndicator(
+                                                        values.password
+                                                    );
+                                                const strengthValue =
+                                                    strengthColor(
+                                                        strengthNumber
+                                                    );
                                                 return (
                                                     <form
                                                         noValidate
@@ -260,6 +272,55 @@ const AuthResetPassword: FC<ResetPasswordProps> = ({ oobCode, email }) => {
                                                                         </FormHelperText>
                                                                     )}
                                                             </FormControl>
+                                                            {strengthNumber !==
+                                                                0 && (
+                                                                <FormControl
+                                                                    fullWidth
+                                                                >
+                                                                    <Box
+                                                                        sx={{
+                                                                            mb: 2,
+                                                                        }}
+                                                                    >
+                                                                        <Grid
+                                                                            container
+                                                                            spacing={
+                                                                                2
+                                                                            }
+                                                                            alignItems="center"
+                                                                        >
+                                                                            <Grid
+                                                                                item
+                                                                            >
+                                                                                <Box
+                                                                                    style={{
+                                                                                        backgroundColor:
+                                                                                            strengthValue?.color,
+                                                                                    }}
+                                                                                    sx={{
+                                                                                        width: 85,
+                                                                                        height: 8,
+                                                                                        borderRadius:
+                                                                                            '7px',
+                                                                                    }}
+                                                                                />
+                                                                            </Grid>
+                                                                            <Grid
+                                                                                item
+                                                                            >
+                                                                                <Typography
+                                                                                    variant="subtitle1"
+                                                                                    fontSize="0.75rem"
+                                                                                >
+                                                                                    {
+                                                                                        strengthValue?.label
+                                                                                    }
+                                                                                </Typography>
+                                                                            </Grid>
+                                                                        </Grid>
+                                                                    </Box>
+                                                                </FormControl>
+                                                            )}
                                                         </Stack>
                                                         <Box sx={{ mt: 2 }}>
                                                             <Button
