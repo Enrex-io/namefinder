@@ -129,6 +129,10 @@ export const FirebaseProvider = ({
         await firebase.auth().sendPasswordResetEmail(email);
     };
 
+    const updateUserPassword = async (code: string, newPassword: string) => {
+        await firebase.auth().confirmPasswordReset(code, newPassword);
+    };
+
     const updateProfile = async (name: string, email: string) => {
         const user = firebase.auth().currentUser;
         if (user?.email !== email) {
@@ -160,6 +164,7 @@ export const FirebaseProvider = ({
                 firebaseGoogleSignIn,
                 logout,
                 resetPassword,
+                updateUserPassword,
                 updateProfile,
                 updatePhoto,
                 firebaseResendEmailVerification,
