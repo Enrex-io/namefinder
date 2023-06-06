@@ -62,7 +62,7 @@ export default function Subscription() {
                 <h2 className={classes.heading}>{HEADING_TEXT}</h2>
                 <div
                     dangerouslySetInnerHTML={{
-                        __html: `<stripe-pricing-table pricing-table-id=${STRIPE_PRICING_TABLE_ID} publishable-key="${STRIPE_PUBLISHABLE_ID}"></stripe-pricing-table>`,
+                        __html: `<stripe-pricing-table pricing-table-id=${STRIPE_PRICING_TABLE_ID} publishable-key="${STRIPE_PUBLISHABLE_ID}" client-reference-id="${user?.id}"></stripe-pricing-table>`,
                     }}
                 ></div>
             </Stack>
