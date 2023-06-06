@@ -62,7 +62,7 @@ export default function History() {
                 />
             </Head>
             {openPopUp && <PopUp handlePopUp={handlePopUp} />}
-            <NavBar userInfo={userInfo} handlePopUp={handlePopUp} />
+            <NavBar userInfo={userInfo} />
             <Stack
                 className={classes.container}
                 spacing={1.25}

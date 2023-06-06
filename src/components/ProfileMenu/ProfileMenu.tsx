@@ -17,10 +17,9 @@ import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 
 interface ProfileMenuProps {
     userInfo: IGreenWashingUser | null;
-    handlePopUp: () => void;
 }
 
-const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo, handlePopUp }) => {
+const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo }) => {
     const { push, pathname } = useRouter();
     const handleSubmenuClick = () => {
         setIsSubMenuShown(!isSubmenuShown);
@@ -116,7 +115,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo, handlePopUp }) => {
                                     push('/');
                                     return;
                                 }
-                                if (isCounterMinus) handlePopUp();
+                                if (isCounterMinus) push('/subscription');
                             }}
                         >
                             <Chip
@@ -131,7 +130,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo, handlePopUp }) => {
                         </li>
                         <li
                             className={classes.subItem}
-                            onClick={() => handlePopUp()}
+                            onClick={() => push('/subscription')}
                         >
                             <IconCreditCard color="#091F3D" size={20} />
                             <p>Subscription</p>

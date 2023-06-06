@@ -55,7 +55,7 @@ function Home() {
                 />
             </Head>
             {openPopUp && <PopUp handlePopUp={handlePopUp} />}
-            <NavBar userInfo={userInfo} handlePopUp={handlePopUp} />
+            <NavBar userInfo={userInfo} />
             <div className={classes.container}>
                 <Sustainability
                     userInfo={userInfo}

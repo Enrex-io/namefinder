@@ -53,7 +53,7 @@ export default function Subscription() {
                 src="https://js.stripe.com/v3/pricing-table.js"
             />
             {openPopUp && <PopUp handlePopUp={handlePopUp} />}
-            <NavBar userInfo={userInfo} handlePopUp={handlePopUp} />
+            <NavBar userInfo={userInfo} />
             <Stack
                 className={classes.container}
                 spacing={1.25}

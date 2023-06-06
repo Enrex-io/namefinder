@@ -5,14 +5,13 @@ import { IGreenWashingUser } from '@/types';
 
 interface NavBarProps {
     userInfo: IGreenWashingUser | null;
-    handlePopUp: () => void;
 }
 
-const NavBar: React.FC<NavBarProps> = ({ userInfo, handlePopUp }) => {
+const NavBar: React.FC<NavBarProps> = ({ userInfo }) => {
     return (
         <nav className={classes.nav}>
             <ul className={classes.ul}>
-                <ProfileMenu userInfo={userInfo} handlePopUp={handlePopUp} />
+                <ProfileMenu userInfo={userInfo} />
             </ul>
         </nav>
     );
