@@ -13,6 +13,7 @@ import PopUp from '@/components/PopUp/PopUp';
 import clsx from 'clsx';
 import Button from '@/components/Button/Button';
 import Image from 'next/image';
+import AuthGuard from '@/utils/route-guard/AuthGuard';
 
 export default function History() {
     const HEADING_TEXT = 'History';
@@ -48,8 +49,9 @@ export default function History() {
 
         getHistory();
     }, [user]);
+
     return (
-        <>
+        <AuthGuard>
             <Head>
                 <title>{META.title}</title>
                 <link rel="icon" href={META.favicon} />
@@ -209,6 +211,6 @@ export default function History() {
                     )}
                 </Stack>
             </Stack>
-        </>
+        </AuthGuard>
     );
 }

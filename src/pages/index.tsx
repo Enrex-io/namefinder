@@ -45,26 +45,24 @@ function Home() {
 
     return (
         <AuthGuard>
-            <>
-                <Head>
-                    <title>{META.title}</title>
-                    <link rel="icon" href={META.favicon} />
-                    <meta name="description" content={META.description} />
-                    <meta
-                        name="viewport"
-                        content="width=device-width, initial-scale=1"
-                    />
-                </Head>
-                {openPopUp && <PopUp handlePopUp={handlePopUp} />}
-                <NavBar userInfo={userInfo} handlePopUp={handlePopUp} />
-                <div className={classes.container}>
-                    <Sustainability
-                        userInfo={userInfo}
-                        setUserInfo={setUserInfo}
-                        handlePopUp={handlePopUp}
-                    />
-                </div>
-            </>
+            <Head>
+                <title>{META.title}</title>
+                <link rel="icon" href={META.favicon} />
+                <meta name="description" content={META.description} />
+                <meta
+                    name="viewport"
+                    content="width=device-width, initial-scale=1"
+                />
+            </Head>
+            {openPopUp && <PopUp handlePopUp={handlePopUp} />}
+            <NavBar userInfo={userInfo} handlePopUp={handlePopUp} />
+            <div className={classes.container}>
+                <Sustainability
+                    userInfo={userInfo}
+                    setUserInfo={setUserInfo}
+                    handlePopUp={handlePopUp}
+                />
+            </div>
         </AuthGuard>
     );
 }

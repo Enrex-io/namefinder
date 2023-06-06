@@ -9,12 +9,13 @@ import { META } from '@/consts/meta';
 import PopUp from '@/components/PopUp/PopUp';
 import Script from 'next/script';
 import Stack from '@/components/Stack/Stack';
+import AuthGuard from '@/utils/route-guard/AuthGuard';
+
+const HEADING_TEXT = 'Subscription';
+const STRIPE_PRICING_TABLE_ID = process.env.NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID;
+const STRIPE_PUBLISHABLE_ID = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_ID;
 
 export default function Subscription() {
-    const HEADING_TEXT = 'Subscription';
-    const STRIPE_PRICING_TABLE_ID =
-        process.env.NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID;
-    const STRIPE_PUBLISHABLE_ID = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_ID;
     const [userInfo, setUserInfo] = useState<IGreenWashingUser | null>(null);
     const { user } = useAuth();
     const [openPopUp, setOpenPopUp] = useState<boolean>(false);
@@ -37,7 +38,7 @@ export default function Subscription() {
     }, [user]);
 
     return (
-        <>
+        <AuthGuard>
             <Head>
                 <title>{META.title}</title>
                 <link rel="icon" href={META.favicon} />
@@ -65,6 +66,6 @@ export default function Subscription() {
                     }}
                 ></div>
             </Stack>
-        </>
+        </AuthGuard>
     );
 }
