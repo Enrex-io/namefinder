@@ -13,8 +13,10 @@ import PopUp from '@/components/PopUp/PopUp';
 import clsx from 'clsx';
 import Button from '@/components/Button/Button';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 export default function History() {
+    const { push } = useRouter();
     const HEADING_TEXT = 'History';
     const [userInfo, setUserInfo] = useState<IGreenWashingUser | null>(null);
     const [history, setHistory] = useState<Array<IPrompt>>([]);
@@ -35,7 +37,7 @@ export default function History() {
         }
 
         if (user) {
-            fetchUser();
+            fetchUser().then((r) => console.log(r));
         }
     }, [user]);
     useEffect(() => {
@@ -46,7 +48,7 @@ export default function History() {
             setHistory(data);
         };
 
-        getHistory();
+        getHistory().then((r) => console.log(r));
     }, [user]);
     return (
         <>
@@ -69,7 +71,7 @@ export default function History() {
                 <h2 className={classes.heading}>{HEADING_TEXT}</h2>
                 <Stack direction="column" spacing={1.25}>
                     {history && history?.[0] ? (
-                        history.map((prompt: IPrompt, index: number) => {
+                        history.map((prompt: IPrompt) => {
                             const date: Date = new Date(
                                 prompt!.date as unknown as Date
                             );
@@ -195,6 +197,7 @@ export default function History() {
                                     type="submit"
                                     className={classes.button}
                                     funnyLoadingMessage
+                                    onClick={() => push('/')}
                                 >
                                     <Image
                                         src={'/svg/check.svg'}
