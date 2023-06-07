@@ -17,16 +17,22 @@ import { REGIONS_OPTIONS } from '@/consts/region';
 import { FormApi } from 'final-form';
 import Image from 'next/image';
 
-const HEADING_TEXT = 'Sustainability Marketing Assistant';
+const HEADING_TEXT = 'Fill information';
 const SUBMIT_BUTTON_TEXT = 'Check post';
 
 interface Props {
     onSubmitDetails: (values: Details) => Promise<void>;
     valuesRef?: MutableRefObject<Record<string, any> | null>;
     disabled: boolean;
+    description: string;
 }
 
-const Sustainability = ({ onSubmitDetails, valuesRef, disabled }: Props) => {
+const Sustainability = ({
+    onSubmitDetails,
+    valuesRef,
+    disabled,
+    description,
+}: Props) => {
     const innerRef = useRef<Record<string, any> | null>(null);
     const ref = valuesRef || innerRef;
     const handleSubmit = async (values: Record<string, any>, form: FormApi) => {
@@ -44,7 +50,6 @@ const Sustainability = ({ onSubmitDetails, valuesRef, disabled }: Props) => {
 
     return (
         <div className={classes.container}>
-            <h2 className={classes.heading}>{HEADING_TEXT}</h2>
             <Form
                 validate={(values) => {
                     return {
@@ -69,6 +74,9 @@ const Sustainability = ({ onSubmitDetails, valuesRef, disabled }: Props) => {
                         <form onSubmit={handleSubmit} className={classes.form}>
                             <Paper className={classes.paper}>
                                 <div className={classes.fieldsContainer}>
+                                    <h2 className={classes.heading}>
+                                        {HEADING_TEXT}
+                                    </h2>
                                     <div
                                         className={classes.fieldsContainerFirst}
                                     >
@@ -153,24 +161,27 @@ const Sustainability = ({ onSubmitDetails, valuesRef, disabled }: Props) => {
                                     </div>
                                 </div>
                             </Paper>
-                            <Button
-                                tabIndex={1}
-                                type="submit"
-                                className={classes.button}
-                                isDisabled={
-                                    !dirty || !!Object.keys(errors || {}).length
-                                }
-                                isSubmitting={submitting}
-                                funnyLoadingMessage
-                            >
-                                <Image
-                                    src={'/svg/check.svg'}
-                                    alt={'Check'}
-                                    width={18}
-                                    height={18}
-                                />
-                                <span>{SUBMIT_BUTTON_TEXT}</span>
-                            </Button>
+                            {!description?.[0] && (
+                                <Button
+                                    tabIndex={1}
+                                    type="submit"
+                                    className={classes.button}
+                                    isDisabled={
+                                        !dirty ||
+                                        !!Object.keys(errors || {}).length
+                                    }
+                                    isSubmitting={submitting}
+                                    funnyLoadingMessage
+                                >
+                                    <Image
+                                        src={'/svg/check.svg'}
+                                        alt={'Check'}
+                                        width={18}
+                                        height={18}
+                                    />
+                                    <span>{SUBMIT_BUTTON_TEXT}</span>
+                                </Button>
+                            )}
                         </form>
                     );
                 }}
