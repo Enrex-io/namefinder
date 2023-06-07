@@ -11,11 +11,13 @@ import Medias from '@/consts/medias';
 import Regions from '@/consts/region';
 import Button from '@/components/Button/Button';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import Layout from '@/pages/layout';
 import SustainabilityDescription from '@/widgets/SustainabilityDescriptions/SustainabilityDescriptions';
 import MediaPost from '@/widgets/MediaPost/MediaPost';
 
 function History() {
+     const { push } = useRouter();
     const { user } = useAuth();
     const HEADING_TEXT = 'History';
     const SUBMIT_BUTTON_TEXT = 'Check post';
@@ -116,6 +118,7 @@ function History() {
                                     type="submit"
                                     className={classes.button}
                                     funnyLoadingMessage
+                                    onClick={() => push('/')}
                                 >
                                     <Image
                                         src={'/svg/check.svg'}
