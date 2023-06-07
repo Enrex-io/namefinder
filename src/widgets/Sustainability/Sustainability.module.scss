@@ -5,10 +5,14 @@
 }
 
 .heading {
+  color: #4BB29E;
   text-align: left;
   font-size: 1.13rem;
   letter-spacing: 0px;
   font-weight: 500;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #C8E8E2;
   @media screen and (max-width: 768px) {
     margin-top: 5rem;
   }
@@ -28,7 +32,7 @@
 
 .fieldsContainer {
   width: 100%;
-  padding: 1.88rem;
+  padding: 20px 30px;
   border-radius: 1rem;
   border: 1px solid var(--clr-grey-main);
   align-items: center;
