@@ -1,6 +1,10 @@
 .container {
   max-width: 730px;
   margin: 2rem auto 5rem;
+  @media screen and (max-width: 980px) {
+    margin-top: 4rem;
+    padding: 1rem;
+  }
 }
 
 .paper {
@@ -30,9 +34,6 @@
   padding-bottom: 15px;
   margin-bottom: 20px;
   border-bottom: 1px solid #C8E8E2;
-  @media screen and (max-width: 768px) {
-    margin-top: 5rem;
-  }
 }
 
 .dateHeading {
@@ -63,9 +64,6 @@
   padding-bottom: 15px;
   margin-bottom: 20px;
   border-bottom: 1px solid #C8E8E2;
-  @media screen and (max-width: 768px) {
-    margin-top: 5rem;
-  }
 }
 
 .copy_wrapper {
