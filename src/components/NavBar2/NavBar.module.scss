@@ -1,0 +1,115 @@
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 30px 0;
+  width: 340px;
+  height: 100vh;
+  background: #F6F7FB;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  text-align: left;
+  gap: 30px;
+}
+
+.logo {
+  padding-left: 30px;
+}
+
+.containerList {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.ul {
+  width: 100%;
+}
+
+.historyUl {
+  max-height: 55vh;
+  overflow-y: auto;
+}
+
+.subItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.725rem;
+  text-align: left;
+  font: normal normal medium 12px/24px Inter;
+  color: #6D7C8F;
+  cursor: pointer;
+  padding-left: 30px;
+}
+
+.subItemPost {
+  padding: 10px 20px 10px 30px;
+  color: #091F3D;
+  font-weight: 600;
+}
+
+.subItemPrompt {
+  width: 100%;
+  padding: 10px 10px 10px 30px;
+  text-align: left;
+  font: normal normal medium 12px/24px Inter;
+  color: #091F3D;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.subHistory {
+  text-align: left;
+  font: normal normal medium 12px/24px Inter;
+  letter-spacing: 0px;
+  color: #6D7C8F;
+  opacity: 1
+}
+
+.subItemPrompt:hover {
+  background: #fff;
+}
+
+.subChecks {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  padding-right: 15px;
+}
+
+.subChecks > p {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  gap: 5px;
+}
+
+.checksChip {
+  width: 24px;
+  height: 24px;
+  padding: 4px 8px;
+  background: #C8E8E2;
+}
+
+.subItemProfile {
+  margin: 5px 0;
+}
+
+.profilePhoto {
+  border-radius: 50%;
+}
