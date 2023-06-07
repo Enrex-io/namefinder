@@ -117,6 +117,7 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
                 }}
                 valuesRef={detailsRef}
                 disabled={disabled}
+                description={generatedDescription[0]}
             />
             <>
                 <div id="descriptionsAnchor" className={classes.anchor} />
