@@ -13,14 +13,9 @@ export default function MediaPost({ media, post }: IMedia) {
     const HEADING_TEXT = `Revised ${media} post example`;
     return (
         <Stack spacing={1.25} direction="column">
-            <h2 className={classes.heading}>{HEADING_TEXT}</h2>
             <Stack direction="column" spacing={1.25}>
-                <Paper
-                    className={classes.paper}
-                    direction="column"
-                    spacing={1}
-                    hasBorder
-                >
+                <Paper className={classes.paper} direction="column" hasBorder>
+                    <h2 className={classes.heading}>{HEADING_TEXT}</h2>
                     <Paper
                         className={classes.paper}
                         direction="column"
