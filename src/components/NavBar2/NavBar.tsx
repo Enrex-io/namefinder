@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from './NavBar.module.scss';
 import Image from 'next/image';
 import {
@@ -31,8 +31,8 @@ function NavBar({
         process.env.NEXT_PUBLIC_ENREX_API_URL
     }/api/sustainabilityMarketing/getHistory/${user ? user.id : ''}`;
     const { data, isLoading } = useSWR(endpoint);
-    console.log(data);
     const isCounterMinus = Number(userInfo?.counter?.toFixed(0)) <= 0;
+    const [isOpen, setIsOpen] = useState<boolean>(true);
     const handleLogout = async () => {
         await logout?.();
         push('/login');
@@ -49,9 +49,20 @@ function NavBar({
         );
     }
 
-    console.log(data);
     return (
-        <nav className={classes.container}>
+        <nav className={clsx(classes.container)}>
+            <div
+                className={classes.hamburger}
+                onClick={() => setIsOpen(!isOpen)}
+            >
+                <Image
+                    priority={true}
+                    src={'/svg/hamburger.svg'}
+                    alt={'Logo'}
+                    width={36}
+                    height={36}
+                />
+            </div>
             <div className={classes.logo}>
                 <Image
                     priority={true}
@@ -61,7 +72,9 @@ function NavBar({
                     height={45}
                 />
             </div>
-            <div className={classes.containerList}>
+            <div
+                className={clsx(classes.containerList, isOpen && classes.open)}
+            >
                 <ul className={classes.ul}>
                     <li
                         className={clsx(classes.subItemPost, classes.subItem)}
