@@ -71,6 +71,7 @@ export interface IGreenWashingUser {
     userId: string;
     counter: number;
     plan: string;
+    history: IPrompt[];
 }
 
 export type FirebaseContextType = {
@@ -111,6 +112,7 @@ export interface InitialLoginContextProps {
 export type KeyedObject = {
     [key: string]: string | number | KeyedObject | any;
 };
+
 export interface StringColorProps {
     id?: string;
     label?: string;
