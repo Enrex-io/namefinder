@@ -57,7 +57,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ userInfo }) => {
                 <li className={classes.logo} onClick={() => push('/')}>
                     <Image
                         priority={true}
-                        src={'/images/logo.png'}
+                        src={'/images/logo.svg'}
                         alt={'Logo'}
                         width={150}
                         height={45}
