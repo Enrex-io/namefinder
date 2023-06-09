@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import classes from './NavBar.module.scss';
 import Image from 'next/image';
 import {
@@ -15,6 +15,7 @@ import useAuth from '@/hooks/useAuth';
 import { IGreenWashingUser, IPrompt } from '@/types';
 import Chip from '@/components/Chip/Chip';
 import UserPhotoPlaceholder from '@/components/UserPhotoPlaceholder/UserPhotoPlaceholder';
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 
 interface ProfileMenuProps {
     userInfo: IGreenWashingUser | null;
@@ -30,13 +31,27 @@ function NavBar({
     const isCounterMinus = Number(userInfo?.counter?.toFixed(0)) <= 0;
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [activePage, setActivePage] = useState<string>('/');
+    const ref = useRef(null);
+    useOnClickOutside(ref, (event: MouseEvent | TouchEvent) => {
+        const target = event.target as Element;
+        if (
+            target &&
+            Array.from(target.classList).some((el) => {
+                const element = el as string;
+                return element.includes('hamburger');
+            })
+        ) {
+            return;
+        }
+        setIsOpen(false);
+    });
+
     const handleLogout = async () => {
         await logout?.();
         push('/login');
     };
 
     const getActiveList = () => {
-        console.log(pathname);
         if (pathname === '/') {
             setActivePage('/');
         } else if (pathname === '/history') {
@@ -51,14 +66,12 @@ function NavBar({
         });
     }, [events, getActiveList]);
 
-    console.log(activePage);
-
     if (!user) {
         return (
             <li
                 className={classes.li}
                 onClick={() => {
-                    setIsOpen(false);
+                    setIsOpen(!isOpen);
                     push('/login');
                 }}
             >
@@ -73,11 +86,14 @@ function NavBar({
     return (
         <nav className={clsx(classes.container)}>
             <div
-                className={classes.hamburger}
-                onClick={() => setIsOpen(!isOpen)}
+                className={clsx(classes.hamburger, 'hamburgerWrapper')}
+                onClick={() => {
+                    setIsOpen(!isOpen);
+                }}
             >
                 <Image
                     priority={true}
+                    className="hamburger"
                     src={'/svg/hamburger.svg'}
                     alt={'Logo'}
                     width={36}
@@ -94,6 +110,7 @@ function NavBar({
                 />
             </div>
             <div
+                ref={ref}
                 className={clsx(classes.containerList, isOpen && classes.open)}
             >
                 <ul className={classes.ul}>
@@ -173,7 +190,7 @@ function NavBar({
                         onClick={() => {
                             setIsOpen(false);
                             if (pathname === '/history') {
-                                push('/').then((r) => console.log(r));
+                                push('/');
                                 return;
                             }
                             if (isCounterMinus) handlePopUp();
