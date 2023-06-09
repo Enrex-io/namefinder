@@ -1,7 +1,17 @@
 .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+@media screen and (max-width: 980px) {
+  .container {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     min-height: 100vh;
-    padding: 1rem;
+    padding-top: 20vh;
+  }
 }
