@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from './NavBar.module.scss';
 import Image from 'next/image';
 import {
@@ -7,6 +7,7 @@ import {
     IconHistory,
     IconLogin,
     IconLogout,
+    IconProgressCheck,
 } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
@@ -25,17 +26,42 @@ function NavBar({
     handlePopUp,
 }: ProfileMenuProps): React.ReactElement {
     const { user, logout } = useAuth();
-    const { push, pathname } = useRouter();
+    const { push, pathname, query, events } = useRouter();
     const isCounterMinus = Number(userInfo?.counter?.toFixed(0)) <= 0;
-    const [isOpen, setIsOpen] = useState<boolean>(true);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [activePage, setActivePage] = useState<string>('/');
     const handleLogout = async () => {
         await logout?.();
         push('/login');
     };
 
+    const getActiveList = () => {
+        console.log(pathname);
+        if (pathname === '/') {
+            setActivePage('/');
+        } else if (pathname === '/history') {
+            setActivePage(`/history&order=${query.order}`);
+        }
+        return;
+    };
+
+    useEffect(() => {
+        events.on('routeChangeComplete', () => {
+            getActiveList();
+        });
+    }, [events, getActiveList]);
+
+    console.log(activePage);
+
     if (!user) {
         return (
-            <li className={classes.li} onClick={() => push('/login')}>
+            <li
+                className={classes.li}
+                onClick={() => {
+                    setIsOpen(false);
+                    push('/login');
+                }}
+            >
                 <span className={classes.materialIconsOutlined}>
                     <IconLogin />
                 </span>
@@ -63,8 +89,8 @@ function NavBar({
                     priority={true}
                     src={'/svg/logo.svg'}
                     alt={'Logo'}
-                    width={150}
-                    height={45}
+                    width={105}
+                    height={30}
                 />
             </div>
             <div
@@ -72,24 +98,34 @@ function NavBar({
             >
                 <ul className={classes.ul}>
                     <li
-                        className={clsx(classes.subItemPost, classes.subItem)}
-                        onClick={() => push('/')}
+                        className={clsx(
+                            classes.subItemPost,
+                            classes.subItem,
+                            activePage === '/' && classes.active
+                        )}
+                        onClick={() => {
+                            setIsOpen(false);
+                            push('/');
+                        }}
                     >
                         <IconCirclePlus color="#091F3D" size={18} />
                         <p>New post</p>
                     </li>
+                    <li
+                        className={clsx(
+                            classes.subItemPost,
+                            classes.subItem,
+                            classes.subHistory
+                        )}
+                    >
+                        <IconHistory
+                            color="#091F3D"
+                            size={18}
+                            strokeWidth={2}
+                        />
+                        <p>History</p>
+                    </li>
                     <ul className={classes.historyUl}>
-                        <li
-                            className={clsx(
-                                classes.subItemPost,
-                                classes.subItem,
-                                classes.subHistory
-                            )}
-                            onClick={() => push('/history')}
-                        >
-                            <IconHistory color="#091F3D" size={18} />
-                            <p>History</p>
-                        </li>
                         {userInfo?.history ? (
                             userInfo?.history?.map(
                                 (
@@ -98,15 +134,21 @@ function NavBar({
                                 ): React.ReactElement => {
                                     return (
                                         <li
-                                            className={classes.subItemPrompt}
+                                            className={clsx(
+                                                classes.subItemPrompt,
+                                                activePage ===
+                                                    `/history&order=${index}` &&
+                                                    classes.active
+                                            )}
                                             key={
                                                 prompt.userId +
                                                 prompt.unparsedResponse +
                                                 prompt.date
                                             }
-                                            onClick={() =>
-                                                push(`/history?order=${index}`)
-                                            }
+                                            onClick={() => {
+                                                setIsOpen(false);
+                                                push(`/history?order=${index}`);
+                                            }}
                                         >
                                             {prompt.request}
                                         </li>
@@ -114,7 +156,9 @@ function NavBar({
                                 }
                             )
                         ) : (
-                            <li>No previous prompts</li>
+                            <li className={classes.previousPrompts}>
+                                No previous prompts
+                            </li>
                         )}
                     </ul>
                 </ul>
@@ -127,6 +171,7 @@ function NavBar({
                             isCounterMinus && classes.freeChecks
                         )}
                         onClick={() => {
+                            setIsOpen(false);
                             if (pathname === '/history') {
                                 push('/').then((r) => console.log(r));
                                 return;
@@ -135,7 +180,7 @@ function NavBar({
                         }}
                     >
                         <p>
-                            <IconHistory color="#091F3D" size={18} />
+                            <IconProgressCheck color="#091F3D" size={18} />
                             <span>Checks left</span>
                         </p>
                         <Chip
@@ -167,21 +212,31 @@ function NavBar({
                         ) : (
                             <UserPhotoPlaceholder userName={user.name} />
                         )}
-                        <div className="">
-                            <p>{user.name}</p>
-                            <p>{user.email || ''}</p>
+                        <div className={classes.subItemProfileInfo}>
+                            <p className={classes.subItemProfileInfoName}>
+                                {user.name}
+                            </p>
+                            <p className={classes.subItemProfileInfoEmail}>
+                                {user.email || ''}
+                            </p>
                         </div>
                     </li>
                     <li
                         className={clsx(classes.subItemPost, classes.subItem)}
-                        onClick={() => handlePopUp()}
+                        onClick={() => {
+                            setIsOpen(false);
+                            handlePopUp();
+                        }}
                     >
                         <IconCreditCard color="#091F3D" size={20} />
                         <p>Subscription</p>
                     </li>
                     <li
                         className={clsx(classes.subItemPost, classes.subItem)}
-                        onClick={handleLogout}
+                        onClick={() => {
+                            setIsOpen(false);
+                            handleLogout();
+                        }}
                     >
                         <IconLogout color="#091F3D" size={20} />
                         <p>Logout</p>
