@@ -5,6 +5,13 @@
   }
 }
 
+.paperPost {
+  padding: 20px 30px 20px 20px;
+  @media screen and (max-width: 768px) {
+    padding: 20px;
+  }
+}
+
 .heading {
   color: #4BB29E;
   text-align: left;
