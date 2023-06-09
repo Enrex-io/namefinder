@@ -3,8 +3,9 @@
   top: 0;
   left: 0;
   padding: 30px 0;
-  width: 340px;
+  width: 260px;
   height: 100vh;
+  font-size: 14px;
   background: #F6F7FB;
   box-sizing: border-box;
 
@@ -14,7 +15,7 @@
   justify-content: flex-start;
 
   text-align: left;
-  gap: 30px;
+  gap: 10px;
 }
 
 .logo {
@@ -35,12 +36,12 @@
 }
 
 .historyUl {
-  max-height: 55vh;
+  max-height: 48vh;
   overflow-y: auto;
 }
 
 .subItem {
-  width: 100%;
+  width: 95%;
   display: flex;
   align-items: center;
   gap: 0.725rem;
@@ -48,13 +49,23 @@
   font: normal normal medium 12px/24px Inter;
   color: #6D7C8F;
   cursor: pointer;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
   padding-left: 30px;
+}
+
+.active {
+  background-color: #fff;
 }
 
 .subItemPost {
   padding: 10px 20px 10px 30px;
   color: #091F3D;
   font-weight: 600;
+}
+
+.subItemPost:hover(:not(:nth-child(2))) {
+  background-color: #fff;
 }
 
 .subItemPrompt {
@@ -72,22 +83,30 @@
 .subHistory {
   text-align: left;
   font: normal normal medium 12px/24px Inter;
-  letter-spacing: 0px;
-  color: #6D7C8F;
+  color: #a0abba;
+  padding-bottom: 20px;
+  cursor: initial;
   opacity: 1
 }
 
+.subHistory > svg {
+  filter: invert(71%) sepia(31%) saturate(138%) hue-rotate(175deg) brightness(91%) contrast(86%);
+}
+
 .subItemPrompt:hover {
+  cursor: pointer;
   background: #fff;
 }
 
 .subChecks {
+  padding-top: 20px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   text-align: center;
   padding-right: 15px;
+  font-weight: 500;
 }
 
 .subChecks > p {
@@ -96,18 +115,39 @@
   align-items: center;
   justify-content: space-between;
   text-align: center;
+  color: #a0abba;
   gap: 5px;
 }
 
+.subChecks > p > svg {
+  filter: invert(71%) sepia(31%) saturate(138%) hue-rotate(175deg) brightness(91%) contrast(86%);
+}
+
 .checksChip {
-  width: 24px;
-  height: 24px;
-  padding: 4px 8px;
-  background: #C8E8E2;
+  width: 30px !important;
+  height: 30px !important;
+  padding: 4px 8px !important;
+  background: #C8E8E2 !important;
+  font-weight: 600 !important;
 }
 
 .subItemProfile {
+  font-size: 11px;
   margin: 5px 0;
+}
+
+.subItemProfileInfoName {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.subItemProfileInfoEmail {
+  width: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .profilePhoto {
@@ -130,39 +170,30 @@
 
   .containerList {
     position: absolute;
-    justify-content: flex-start;
     top: 66px;
     width: 240px;
     left: -240px;
     background-color: #F6F7FB;
-    transition: all 2s;
-    //animation: 2s linear 0s slideOut;
-    //animation-fill-mode: forwards;
+    transition: all .7s;
+    justify-content: space-between;
+    height: 100%;
+    padding-bottom: 7.5%;
+  }
+
+  .containerList > ul:nth-child(2) {
+    padding-bottom: 5vh;
   }
 
   .open {
     display: flex;
     left: 0;
-    animation: 1s ease-in-out 0s slideIn, 1s ease-in-out 3s slideOut;
+    animation: .5s ease-in-out 0s slideIn, .5s ease-in-out 0s slideOut;
   }
 
-  //@keyframes slideIn {
-  //  from {
-  //    transform: translateX(-240px);
-  //  }
-  //  to {
-  //    transform: translateX(0);
-  //  }
-  //}
-  //
-  //@keyframes slideOut {
-  //  from {
-  //    transform: translateX(0);
-  //  }
-  //  to {
-  //    transform: translateX(-240px);
-  //  }
-  //}
+  .previousPrompts {
+    padding-left: 15px;
+    font-weight: 500;
+  }
 
   .hamburger {
     position: absolute;
@@ -171,8 +202,12 @@
     display: initial;
   }
 
+  .subChecks {
+    padding-top: 0;
+  }
+
   .historyUl {
-    max-height: 60vh;
+    max-height: 58vh;
   }
 
   .logo {
@@ -187,15 +222,7 @@
     height: 30px;
   }
 
-  .subChecks {
-    margin-top: 15px;
-  }
-
   .subItemPrompt, .subItemPost, .subChecks {
     padding-left: 15px;
-  }
-
-  .subItemProfile {
-    font-size: 12px;
   }
 }

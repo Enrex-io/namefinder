@@ -6,7 +6,6 @@ import useAuth from '@/hooks/useAuth';
 import { OpenAIApi } from '@/services/OpenAIService';
 import Paper from '@/components/Paper/Paper';
 import clsx from 'clsx';
-import { useRouter } from 'next/router';
 import Medias from '@/consts/medias';
 import Regions from '@/consts/region';
 import Button from '@/components/Button/Button';
@@ -17,9 +16,8 @@ import SustainabilityDescription from '@/widgets/SustainabilityDescriptions/Sust
 import MediaPost from '@/widgets/MediaPost/MediaPost';
 
 function History() {
-     const { push } = useRouter();
+    const { push } = useRouter();
     const { user } = useAuth();
-    const HEADING_TEXT = 'History';
     const SUBMIT_BUTTON_TEXT = 'Check post';
     const [history, setHistory] = useState<IPrompt>({
         userId: '',
