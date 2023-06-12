@@ -1,6 +1,7 @@
 import Paper from '@/components/Paper/Paper';
 import Stack from '@/components/Stack/Stack';
 import classes from './SustainabilityDescriptions.module.scss';
+import { ReactElement } from 'react';
 
 const HEADING_TEXT = 'Your post analysis';
 
@@ -14,15 +15,35 @@ function SustainabilityDescription({ descriptions }: Props) {
             <Stack direction="column" spacing={1.25}>
                 <Paper className={classes.paper} direction="column" hasBorder>
                     <h2 className={classes.heading}>{HEADING_TEXT}</h2>
-                    {descriptions.map((description) => {
-                        if (description.trim() === '') return;
+                    {descriptions.map((description: string): ReactElement => {
+                        if (
+                            description
+                                .replaceAll(`'`, '')
+                                .replaceAll(' ', '')
+                                .trim() === ''
+                        )
+                            return <></>;
+                        const firstIndex: number =
+                            description.indexOf('±±±±±±') === -1
+                                ? 0
+                                : description.indexOf('±±±±±±');
+                        const heading: string = description.slice(
+                            0,
+                            firstIndex
+                        );
+                        const subHeading: string = description.slice(
+                            firstIndex ? firstIndex + 6 : 0
+                        );
+                        console.log(heading);
                         return (
                             <Paper
-                                key={description}
+                                key={subHeading}
                                 className={classes.paperDescription}
+                                direction={'column'}
                             >
                                 <p className={classes.goalDescription}>
-                                    <span>{description}</span>
+                                    <span>{heading}</span>
+                                    <span>{subHeading}</span>
                                 </p>
                             </Paper>
                         );

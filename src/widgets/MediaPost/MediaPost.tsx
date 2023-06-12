@@ -17,7 +17,7 @@ export default function MediaPost({ media, post }: IMedia) {
                 <Paper className={classes.paper} direction="column" hasBorder>
                     <h2 className={classes.heading}>{HEADING_TEXT}</h2>
                     <Paper
-                        className={classes.paper}
+                        className={classes.paperPost}
                         direction="column"
                         spacing={1}
                         hasBorder

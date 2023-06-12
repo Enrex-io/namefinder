@@ -1,22 +1,228 @@
-.nav {
-  //margin-top: 30px;
-  background-color: #fff;
-  padding: 0 3rem;
-  border-radius: 0.625rem;
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 30px 0;
+  width: 260px;
+  height: 100vh;
+  font-size: 14px;
+  background: #F6F7FB;
+  box-sizing: border-box;
+
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  text-align: left;
+  gap: 10px;
+}
+
+.logo {
+  padding-left: 30px;
+}
+
+.containerList {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
 }
 
 .ul {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  gap: 3rem;
+  width: 100%;
 }
 
-.li {
-  list-style-type: none;
-  position: relative;
-  padding: 0.625rem 0 0.5rem;
+.historyUl {
+  max-height: 48vh;
+  overflow-y: auto;
+}
+
+.subItem {
+  width: 95%;
+  display: flex;
+  align-items: center;
+  gap: 0.725rem;
+  text-align: left;
+  font: normal normal medium 12px/24px Inter;
+  color: #6D7C8F;
+  cursor: pointer;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  padding-left: 30px;
+}
+
+.active {
+  background-color: #fff;
+}
+
+.subItemPost {
+  padding: 10px 20px 10px 30px;
+  color: #091F3D;
+  font-weight: 600;
+}
+
+.subItemPost:hover(:not(:nth-child(2))) {
+  background-color: #fff;
+}
+
+.subItemPrompt {
+  width: 100%;
+  padding: 10px 10px 10px 30px;
+  text-align: left;
+  font: normal normal medium 12px/24px Inter;
+  color: #091F3D;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.subHistory {
+  text-align: left;
+  font: normal normal medium 12px/24px Inter;
+  color: #a0abba;
+  padding-bottom: 20px;
+  cursor: initial;
+  opacity: 1
+}
+
+.subHistory > svg {
+  filter: invert(71%) sepia(31%) saturate(138%) hue-rotate(175deg) brightness(91%) contrast(86%);
+}
+
+.subItemPrompt:hover {
+  cursor: pointer;
+  background: #fff;
+}
+
+.subChecks {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  padding-right: 15px;
+  font-weight: 500;
+}
+
+.subChecks > p {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  color: #a0abba;
+  gap: 5px;
+}
+
+.subChecks > p > svg {
+  filter: invert(71%) sepia(31%) saturate(138%) hue-rotate(175deg) brightness(91%) contrast(86%);
+}
+
+.checksChip {
+  width: 30px !important;
+  height: 30px !important;
+  padding: 4px 8px !important;
+  background: #C8E8E2 !important;
+  font-weight: 600 !important;
+}
+
+.subItemProfile {
+  font-size: 11px;
+  margin: 5px 0;
+}
+
+.subItemProfileInfoName {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.subItemProfileInfoEmail {
+  width: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.profilePhoto {
+  border-radius: 50%;
+}
+
+.hamburger {
+  display: none;
+}
+
+@media screen and (max-width: 980px) {
+  .container {
+    width: 100%;
+    scroll-behavior: smooth;
+    background: none;
+    padding: 0;
+    gap: 0;
+    z-index: 1;
+  }
+
+  .containerList {
+    position: absolute;
+    top: 66px;
+    width: 240px;
+    left: -240px;
+    background-color: #F6F7FB;
+    transition: all .7s;
+    justify-content: space-between;
+    height: 100%;
+    padding-bottom: 7.5%;
+  }
+
+  .containerList > ul:nth-child(2) {
+    padding-bottom: 5vh;
+  }
+
+  .open {
+    display: flex;
+    left: 0;
+    animation: .5s ease-in-out 0s slideIn, .5s ease-in-out 0s slideOut;
+  }
+
+  .previousPrompts {
+    padding-left: 15px;
+    font-weight: 500;
+  }
+
+  .hamburger {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    display: initial;
+  }
+
+  .subChecks {
+    padding-top: 0;
+  }
+
+  .historyUl {
+    max-height: 50vh;
+  }
+
+  .logo {
+    width: 100%;
+    text-align: center;
+    background-color: #F6F7FB;
+    padding: 15px;
+  }
+
+  .logo > img {
+    width: 105px;
+    height: 30px;
+  }
+
+  .subItemPrompt, .subItemPost, .subChecks {
+    padding-left: 15px;
+  }
 }

@@ -54,6 +54,8 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
             setUserInfo(userData);
         }
 
+        console.log(data);
+
         setError(null);
         if (res.error) return setError(res.error);
 
@@ -69,9 +71,11 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
         const summary: string = data.slice(colonSummaryIndex, termsIndex);
         const terms: string[] = data
             .slice(colonTermsIndex, postIndex)
-            .split('\n');
+            .split('\n±±±±±± ');
+
+        console.log(terms);
+
         const post: string = data?.slice(quotePostIndex);
-        console.log(data);
 
         const descriptions: string[] = [summary, ...terms].filter(
             (description: string) => !!description.trim()

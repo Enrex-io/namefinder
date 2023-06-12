@@ -1,42 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import NavBar from '@/components/NavBar2/NavBar';
+import React, { useState } from 'react';
+import NavBar from '@/components/NavBar/NavBar';
 import { fontInter } from '@/styles/fonts';
 import clsx from 'clsx';
 import classes from './layout.module.scss';
-import { IGreenWashingUser } from '@/types';
-import { GreenWashingUserService } from '@/services/GreenWashingUserService';
-import useAuth from '@/hooks/useAuth';
 import PopUp from '@/components/PopUp/PopUp';
 import Head from 'next/head';
 import { META } from '@/consts/meta';
 import AuthGuard from '@/utils/route-guard/AuthGuard';
+import useSWR from 'swr';
+import axios from '@/utils/axios';
+
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 interface ILayout {
     children: React.ReactElement;
 }
 
 export default function Layout({ children }: ILayout) {
-    const { user } = useAuth();
-    const [userInfo, setUserInfo] = useState<IGreenWashingUser | null>(null);
+    const { data, isLoading } = useSWR(
+        '/api/sustainabilityMarketing/user',
+        fetcher,
+        {
+            refreshInterval: 5000,
+        }
+    );
     const [openPopUp, setOpenPopUp] = useState<boolean>(false);
-
     const handlePopUp = () => {
         setOpenPopUp(!openPopUp);
     };
-    useEffect(() => {
-        async function fetchUser() {
-            const userData = await GreenWashingUserService.getUser();
-            if (userData.result) {
-                setUserInfo(userData.result);
-                return;
-            }
-            return userData;
-        }
-
-        if (user) {
-            fetchUser().then((r) => console.log(r));
-        }
-    }, [user]);
     return (
         <>
             <Head>
@@ -51,7 +42,10 @@ export default function Layout({ children }: ILayout) {
             <AuthGuard>
                 <div className={clsx(fontInter.className)}>
                     {openPopUp && <PopUp handlePopUp={handlePopUp} />}
-                    <NavBar handlePopUp={handlePopUp} userInfo={userInfo} />
+                    <NavBar
+                        handlePopUp={handlePopUp}
+                        userInfo={!isLoading && data?.result}
+                    />
                     <main className={classes.main}>{children}</main>
                 </div>
             </AuthGuard>
