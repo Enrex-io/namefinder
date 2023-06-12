@@ -6,6 +6,7 @@ import useAuth from '@/hooks/useAuth';
 import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 import { NextPageWithLayout } from '@/pages/_app';
 import Layout from '@/pages/layout';
+import MarketingRegulations from '@/components/MarketingRegulations/MarketingRegulations';
 
 const Home: NextPageWithLayout = () => {
     const [userInfo, setUserInfo] = useState<IGreenWashingUser | null>(null);
@@ -42,6 +43,7 @@ const Home: NextPageWithLayout = () => {
 
     return (
         <div className={classes.container}>
+            <MarketingRegulations />
             <Sustainability
                 userInfo={userInfo}
                 setUserInfo={setUserInfo}
