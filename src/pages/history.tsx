@@ -13,9 +13,10 @@ import Image from 'next/image';
 import Layout from '@/pages/layout';
 import SustainabilityDescription from '@/widgets/SustainabilityDescriptions/SustainabilityDescriptions';
 import MediaPost from '@/widgets/MediaPost/MediaPost';
+import { useRouter } from 'next/router';
 
 function History() {
-    const { push } = useRouter();
+    const { push, query } = useRouter();
     const { user } = useAuth();
     const SUBMIT_BUTTON_TEXT = 'Check post';
     const [history, setHistory] = useState<IPrompt>({
@@ -30,7 +31,6 @@ function History() {
         },
         date: '',
     });
-    const { query } = useRouter();
     useEffect(() => {
         const getHistory = async () => {
             if (!user) return;
@@ -49,8 +49,7 @@ function History() {
         history && `${date.getFullYear()}/${date.getMonth()}/${date.getDay()}`;
 
     return (
-        <Stack className={classes.container} spacing={1.25} direction="column">
-            <h2 className={classes.heading}>{HEADING_TEXT}</h2>
+        <Stack className={classes.container} direction="column">
             <Stack direction="column" spacing={1.25}>
                 {history ? (
                     <>
