@@ -15,7 +15,7 @@
     width: 100%;
     border-radius: 100rem;
     border: 1px solid var(--clr-grey-main);
-    font-size: inherit;
+    font-size: 14px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -26,7 +26,7 @@
       border: none;
       outline: none;
       background: transparent;
-      font-size: inherit;
+      font-size: 14px;
     }
 
     &::placeholder {
