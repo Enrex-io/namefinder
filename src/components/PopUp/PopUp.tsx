@@ -1,31 +1,41 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import classes from './PopUp.module.scss';
-import Button from '@/components/Button/Button';
 import Image from 'next/image';
+import Button from '../Button/Button';
 
 interface IPopUp {
     handlePopUp: () => void;
+    title: string;
+    okText: string;
+    content: string;
+    image: string;
+    children?: ReactNode;
+    imageAlt?: string;
 }
 
-const PopUp: React.FC<IPopUp> = ({ handlePopUp }) => {
+const PopUp: React.FC<IPopUp> = ({
+    handlePopUp,
+    title,
+    okText,
+    content,
+    image,
+    imageAlt,
+    children,
+}) => {
     return (
         <div className={classes.wrapper}>
             <div className={classes.container}>
                 <Image
-                    src={'/images/mail.png'}
-                    alt={'Mail'}
+                    src={image}
+                    alt={imageAlt || 'popup icon'}
                     width={130}
                     height={130}
                 />
-                <h5 className={classes.title}>
-                    Thank you for your interest in Greenifs.ai!
-                </h5>
-                <p>
-                    Stay tuned, as our subscription plans will be ready soon.
-                    Thank you for your patience!
-                </p>
+                <h5 className={classes.title}>{title}</h5>
+                <p>{content}</p>
+                {children ? children : null}
                 <Button className={classes.btn} onClick={() => handlePopUp()}>
-                    Got it
+                    {okText}
                 </Button>
             </div>
         </div>

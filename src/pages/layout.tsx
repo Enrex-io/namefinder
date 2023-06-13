@@ -3,12 +3,12 @@ import NavBar from '@/components/NavBar/NavBar';
 import { fontInter } from '@/styles/fonts';
 import clsx from 'clsx';
 import classes from './layout.module.scss';
-import PopUp from '@/components/PopUp/PopUp';
 import Head from 'next/head';
 import { META } from '@/consts/meta';
 import AuthGuard from '@/utils/route-guard/AuthGuard';
 import useSWR from 'swr';
 import axios from '@/utils/axios';
+import ComingSoonPopUp from '@/components/PopUp/ComingSoonPopup';
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
@@ -41,7 +41,7 @@ export default function Layout({ children }: ILayout) {
             </Head>
             <AuthGuard>
                 <div className={clsx(fontInter.className)}>
-                    {openPopUp && <PopUp handlePopUp={handlePopUp} />}
+                    {openPopUp && <ComingSoonPopUp handlePopUp={handlePopUp} />}
                     <NavBar
                         handlePopUp={handlePopUp}
                         userInfo={!isLoading && data?.result}
