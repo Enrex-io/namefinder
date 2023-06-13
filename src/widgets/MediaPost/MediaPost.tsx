@@ -30,8 +30,10 @@ export default function MediaPost({ media, post }: IMedia) {
                                 </div>
                             </div>
                             <div className={classes.description}>
-                                {post.split('\n').map((postText) => {
-                                    return <p key={postText}>{postText}</p>;
+                                {post.split('\n').map((postText, index) => {
+                                    return (
+                                        <p key={postText + index}>{postText}</p>
+                                    );
                                 })}
                             </div>
                         </div>

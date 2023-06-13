@@ -34,7 +34,6 @@ function SustainabilityDescription({ descriptions }: Props) {
                         const subHeading: string = description.slice(
                             firstIndex ? firstIndex + 6 : 0
                         );
-                        console.log(heading);
                         return (
                             <Paper
                                 key={subHeading}

@@ -20,6 +20,7 @@
 
 .logo {
   padding-left: 30px;
+  cursor: pointer;
 }
 
 .containerList {
@@ -65,6 +66,10 @@
 }
 
 .subItemPost:hover(:not(:nth-child(2))) {
+  background-color: #fff;
+}
+
+.ul:nth-child(2) > .subItemPost:hover, .ul:nth-child(1) > .subItemPost:nth-child(1):hover {
   background-color: #fff;
 }
 

@@ -45,7 +45,7 @@ function History() {
         getHistory().then((r) => console.log(r));
     }, [query?.order, user]);
 
-    const date = history && new Date(history!.date as unknown as Date);
+    const date = new Date(history!.date as unknown as Date);
     const dateText =
         history && `${date.getFullYear()}/${date.getMonth()}/${date.getDay()}`;
     return (
