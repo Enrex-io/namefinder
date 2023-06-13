@@ -169,24 +169,33 @@
     scroll-behavior: smooth;
     background: none;
     padding: 0;
+    height: initial;
     gap: 0;
     z-index: 1;
   }
 
   .containerList {
     position: absolute;
-    top: 66px;
+    top: 65.8px;
     width: 240px;
     left: -240px;
     background-color: #F6F7FB;
     transition: all .7s;
     justify-content: space-between;
+    height: calc(100vh - 65.8px);
+  }
+
+  .containerList > ul:nth-child(1) {
+    height: calc(100% - 201px);
+  }
+
+  .historyUl {
     height: 100%;
-    padding-bottom: 7.5%;
+    max-height: calc(100% - 105.8px);
   }
 
   .containerList > ul:nth-child(2) {
-    padding-bottom: 5vh;
+    height: 201px;
   }
 
   .open {
@@ -209,10 +218,6 @@
 
   .subChecks {
     padding-top: 0;
-  }
-
-  .historyUl {
-    max-height: 50vh;
   }
 
   .logo {
