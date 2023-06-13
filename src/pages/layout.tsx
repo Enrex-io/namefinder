@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import NavBar from '@/components/NavBar/NavBar';
 import { fontInter } from '@/styles/fonts';
 import clsx from 'clsx';
@@ -8,7 +8,15 @@ import { META } from '@/consts/meta';
 import AuthGuard from '@/utils/route-guard/AuthGuard';
 import useSWR from 'swr';
 import axios from '@/utils/axios';
-import ComingSoonPopUp from '@/components/PopUp/ComingSoonPopup';
+import ComingSoonPopUp from '../components/PopUp/ComingSoonPopUp';
+import {
+    IGreenWashingUser,
+    SubscriptionIssue,
+    SubscriptionStatus,
+} from '@/types';
+import FullscreenLoader from '@/components/Loader/FullscreenLoader';
+import { useRouter } from 'next/router';
+import SubscriptionIssuePopUp from '@/components/PopUp/SubscriptionIssuePopUp';
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
@@ -17,7 +25,8 @@ interface ILayout {
 }
 
 export default function Layout({ children }: ILayout) {
-    const { data, isLoading } = useSWR(
+    const router = useRouter();
+    const { data, isLoading } = useSWR<{ result: IGreenWashingUser }>(
         '/api/sustainabilityMarketing/user',
         fetcher,
         {
@@ -28,6 +37,30 @@ export default function Layout({ children }: ILayout) {
     const handlePopUp = () => {
         setOpenPopUp(!openPopUp);
     };
+    const handleSubscriptionIssuePopUp = () => {
+        router.push('/subscription');
+    };
+
+    const subscriptionIssue: SubscriptionIssue | null = useMemo(() => {
+        if (!data?.result) {
+            return null;
+        }
+        if (data.result.subscriptionStatus === SubscriptionStatus.FAILED) {
+            return SubscriptionIssue.PAYMENT_FAILED;
+        }
+        if (data.result.counter < 1) {
+            return SubscriptionIssue.ZERO_CREDITS;
+        }
+        return null;
+    }, [data?.result]);
+
+    const showSubscriptionIssue =
+        subscriptionIssue && router.pathname !== '/subscription';
+
+    if (isLoading) {
+        return <FullscreenLoader />;
+    }
+
     return (
         <>
             <Head>
@@ -42,9 +75,15 @@ export default function Layout({ children }: ILayout) {
             <AuthGuard>
                 <div className={clsx(fontInter.className)}>
                     {openPopUp && <ComingSoonPopUp handlePopUp={handlePopUp} />}
+                    {showSubscriptionIssue && (
+                        <SubscriptionIssuePopUp
+                            issue={subscriptionIssue}
+                            handlePopUp={handleSubscriptionIssuePopUp}
+                        />
+                    )}
                     <NavBar
                         handlePopUp={handlePopUp}
-                        userInfo={!isLoading && data?.result}
+                        userInfo={!isLoading && (data?.result || null)}
                     />
                     <main className={classes.main}>{children}</main>
                 </div>

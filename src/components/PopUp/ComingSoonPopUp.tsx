@@ -9,7 +9,7 @@ const ComingSoonPopUp: FC<IPopUp> = ({ handlePopUp }) => {
     return (
         <PopUp
             handlePopUp={handlePopUp}
-            okText="Got it"
+            mainActionTitle="Got it"
             title="Thank you for your interest in Greenifs.ai!"
             image="/images/mail.png"
             imageAlt="Mail"

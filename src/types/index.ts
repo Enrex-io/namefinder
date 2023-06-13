@@ -38,6 +38,16 @@ export enum FeedbackTagsEnum {
     COLLABORATE = 'COLLABORATE',
 }
 
+export enum SubscriptionStatus {
+    ACTIVE = 'active',
+    FAILED = 'failed',
+}
+
+export enum SubscriptionIssue {
+    PAYMENT_FAILED = 'paymentFailed',
+    ZERO_CREDITS = 'zeroCredits',
+}
+
 export interface TagsToUpdate {
     name: FeedbackTags;
     status: TagStatus;
@@ -74,6 +84,7 @@ export interface IGreenWashingUser {
     history: IPrompt[];
     updateDates?: number[];
     subscriptionId?: string;
+    subscriptionStatus: SubscriptionStatus;
 }
 
 export type FirebaseContextType = {

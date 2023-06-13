@@ -6,7 +6,7 @@ import Button from '../Button/Button';
 interface IPopUp {
     handlePopUp: () => void;
     title: string;
-    okText: string;
+    mainActionTitle: string;
     content: string;
     image: string;
     children?: ReactNode;
@@ -16,7 +16,7 @@ interface IPopUp {
 const PopUp: React.FC<IPopUp> = ({
     handlePopUp,
     title,
-    okText,
+    mainActionTitle,
     content,
     image,
     imageAlt,
@@ -35,7 +35,7 @@ const PopUp: React.FC<IPopUp> = ({
                 <p>{content}</p>
                 {children ? children : null}
                 <Button className={classes.btn} onClick={() => handlePopUp()}>
-                    {okText}
+                    {mainActionTitle}
                 </Button>
             </div>
         </div>
