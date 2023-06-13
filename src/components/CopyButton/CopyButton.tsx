@@ -25,8 +25,6 @@ const CopyButton = ({ copyText }: Props) => {
             size="small"
             variant="outlined"
             className={classes.btn}
-            onTouchEnd={helperCopy}
-            onTouchStart={helperCopy}
             onClick={helperCopy}
         >
             <Image src={'/svg/copy.svg'} alt={'Copy'} width={18} height={18} />
