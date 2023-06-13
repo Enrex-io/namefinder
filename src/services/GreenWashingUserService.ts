@@ -38,4 +38,16 @@ export class GreenWashingUserService {
             return { error: errorMessage };
         }
     };
+
+    public static cancelSubscription = async (): Promise<ResponsePayload> => {
+        try {
+            await axios.post('/api/sustainabilityMarketing/cancelSubscription');
+            return { result: 'Subscription cancelled' };
+        } catch (error: unknown) {
+            console.error('GreenWashingUserService.createUser: ', error);
+            if (!isAxiosError(error)) return { error: DEFAULT_ERROR_MESSAGE };
+            let errorMessage = DEFAULT_ERROR_MESSAGE;
+            return { error: errorMessage };
+        }
+    };
 }

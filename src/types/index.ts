@@ -72,6 +72,8 @@ export interface IGreenWashingUser {
     counter: number;
     plan: string;
     history: IPrompt[];
+    updateDates?: number[];
+    subscriptionId?: string;
 }
 
 export type FirebaseContextType = {
