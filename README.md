@@ -8,6 +8,7 @@ Before running the project, make sure you have the following environment variabl
 
 - `NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID`: The Stripe pricing table ID.
 - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_ID`: The Stripe publishable ID.
+- `NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_LINK`: The Stripe customer portal link.
 - `NEXT_PUBLIC_ENREX_API_URL`
 - `NEXT_PUBLIC_FIREBASE_API_KEY`
 - `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`
@@ -44,5 +45,6 @@ The frontend part of this project includes Stripe integration. The subheader bel
 
 - `NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID`: The ID of the Stripe pricing table.
 - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_ID`: The publishable key obtained from Stripe.
+- `NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_LINK`: The stripe customer portal link.
 
 Make sure to set these environment variables before running the project.
