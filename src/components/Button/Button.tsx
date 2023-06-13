@@ -9,6 +9,7 @@ interface Props extends Omit<ComponentProps<'button'>, 'disabled'> {
     size?: 'small' | 'medium' | 'large';
     variant?: 'contained' | 'outlined';
     isSubmitting?: boolean;
+    onClick?: () => void;
     funnyLoadingMessage?: boolean;
 }
 
@@ -20,6 +21,7 @@ const Button = ({
     variant = 'contained',
     isSubmitting,
     funnyLoadingMessage,
+    onClick,
     ...rest
 }: PropsWithChildren<Props>) => {
     const computed = clsx(
@@ -35,7 +37,15 @@ const Button = ({
 
     return (
         <>
-            <button disabled={isDisabled} className={computed} {...rest}>
+            <button
+                disabled={isDisabled}
+                className={computed}
+                {...rest}
+                onClick={onClick}
+                onTouchStart={onClick}
+                onTouchStartCapture={onClick}
+                onTouchEnd={onClick}
+            >
                 {isSubmitting ? <Loader height={21} /> : children}
             </button>
             {funnyLoadingMessage && isSubmitting && <LoadingMessage />}
