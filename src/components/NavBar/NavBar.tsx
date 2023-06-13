@@ -100,7 +100,10 @@ function NavBar({
                     height={36}
                 />
             </div>
-            <div className={classes.logo}>
+            <div
+                className={classes.logo}
+                onClick={() => push('https://www.greenifs.ai/')}
+            >
                 <Image
                     priority={true}
                     src={'/svg/logo.svg'}
