@@ -84,7 +84,7 @@ function NavBar({
     }
 
     return (
-        <nav className={clsx(classes.container)}>
+        <nav className={clsx(classes.container, isOpen && classes.open)}>
             <div
                 className={clsx(classes.hamburger, 'hamburgerWrapper')}
                 onClick={() => {
@@ -100,16 +100,14 @@ function NavBar({
                     height={36}
                 />
             </div>
-            <div
-                className={classes.logo}
-                onClick={() => push('https://www.greenifs.ai/')}
-            >
+            <div className={classes.logo}>
                 <Image
                     priority={true}
                     src={'/svg/logo.svg'}
                     alt={'Logo'}
                     width={105}
                     height={30}
+                    onClick={() => push('https://www.greenifs.ai/')}
                 />
             </div>
             <div
