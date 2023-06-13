@@ -69,6 +69,10 @@
   background-color: #fff;
 }
 
+.ul:nth-child(2) > .subItemPost:hover, .ul:nth-child(1) > .subItemPost:nth-child(1):hover {
+  background-color: #fff;
+}
+
 .subItemPrompt {
   width: 100%;
   padding: 10px 10px 10px 30px;
