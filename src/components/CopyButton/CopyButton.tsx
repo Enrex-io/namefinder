@@ -25,6 +25,7 @@ const CopyButton = ({ copyText }: Props) => {
             size="small"
             variant="outlined"
             className={classes.btn}
+            onTouchEnd={helperCopy}
             onTouchStart={helperCopy}
             onClick={helperCopy}
         >
