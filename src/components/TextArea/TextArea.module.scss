@@ -32,6 +32,9 @@
       font-size: 14px;
       font-weight: 500;
       resize: vertical;
+      @media screen and (max-width: 768px) {
+        z-index: -1;
+      }
     }
 
     &::placeholder {

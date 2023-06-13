@@ -1,21 +1,33 @@
 .paper {
-  padding: 20px;
+  padding: 20px 30px;
+  @media screen and (max-width: 768px) {
+    padding: 20px;
+  }
+}
+
+.paperPost {
+  padding: 20px 30px 20px 20px;
   @media screen and (max-width: 768px) {
     padding: 20px;
   }
 }
 
 .heading {
+  color: #4BB29E;
   text-align: left;
   font-size: 1.13rem;
   letter-spacing: 0px;
   font-weight: 500;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #C8E8E2;
 }
 
 .copy_wrapper {
+  margin-top: 20px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .post {

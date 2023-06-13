@@ -69,9 +69,9 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
         const summary: string = data.slice(colonSummaryIndex, termsIndex);
         const terms: string[] = data
             .slice(colonTermsIndex, postIndex)
-            .split('\n');
+            .split('\n±±±±±± ');
+
         const post: string = data?.slice(quotePostIndex);
-        console.log(data);
 
         const descriptions: string[] = [summary, ...terms].filter(
             (description: string) => !!description.trim()
@@ -117,6 +117,7 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
                 }}
                 valuesRef={detailsRef}
                 disabled={disabled}
+                description={generatedDescription[0]}
             />
             <>
                 <div id="descriptionsAnchor" className={classes.anchor} />

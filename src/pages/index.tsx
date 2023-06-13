@@ -1,16 +1,14 @@
-import Head from 'next/head';
-import { META } from '@/consts/meta';
 import Sustainability from '@/containers/SustainabilityForm';
 import classes from './index.module.scss';
-import NavBar from '@/components/NavBar/NavBar';
-import AuthGuard from '@/utils/route-guard/AuthGuard';
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { IGreenWashingUser } from '@/types';
 import useAuth from '@/hooks/useAuth';
 import { GreenWashingUserService } from '@/services/GreenWashingUserService';
-import PopUp from '@/components/PopUp/PopUp';
+import { NextPageWithLayout } from '@/pages/_app';
+import Layout from '@/pages/layout';
+import MarketingRegulations from '@/components/MarketingRegulations/MarketingRegulations';
 
-function Home() {
+const Home: NextPageWithLayout = () => {
     const [userInfo, setUserInfo] = useState<IGreenWashingUser | null>(null);
     const { user } = useAuth();
     const [openPopUp, setOpenPopUp] = useState<boolean>(false);
@@ -44,29 +42,19 @@ function Home() {
     }, [user]);
 
     return (
-        <AuthGuard>
-            <>
-                <Head>
-                    <title>{META.title}</title>
-                    <link rel="icon" href={META.favicon} />
-                    <meta name="description" content={META.description} />
-                    <meta
-                        name="viewport"
-                        content="width=device-width, initial-scale=1"
-                    />
-                </Head>
-                {openPopUp && <PopUp handlePopUp={handlePopUp} />}
-                <NavBar userInfo={userInfo} handlePopUp={handlePopUp} />
-                <div className={classes.container}>
-                    <Sustainability
-                        userInfo={userInfo}
-                        setUserInfo={setUserInfo}
-                        handlePopUp={handlePopUp}
-                    />
-                </div>
-            </>
-        </AuthGuard>
+        <div className={classes.container}>
+            <MarketingRegulations />
+            <Sustainability
+                userInfo={userInfo}
+                setUserInfo={setUserInfo}
+                handlePopUp={handlePopUp}
+            />
+        </div>
     );
-}
+};
+
+Home.getLayout = function getLayout(page: ReactElement) {
+    return <Layout>{page}</Layout>;
+};
 
 export default Home;
