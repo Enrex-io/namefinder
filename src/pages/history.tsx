@@ -45,9 +45,8 @@ function History() {
         getHistory().then((r) => console.log(r));
     }, [query?.order, user]);
 
-    const date = new Date(history!.date as unknown as Date);
-    const dateText =
-        history && `${date.getFullYear()}/${date.getMonth()}/${date.getDay()}`;
+    const date = new Date(Date.parse(history!.date as string));
+    const dateText = `${date.getUTCFullYear()}/${date.getUTCMonth()}/${date.getUTCDate()}`;
     return (
         <>
             <Stack className={classes.container} direction="column">
@@ -55,6 +54,7 @@ function History() {
                     {history ? (
                         <>
                             <Paper
+                                key={history.unparsedResponse}
                                 className={classes.paper}
                                 direction="column"
                                 hasBorder
