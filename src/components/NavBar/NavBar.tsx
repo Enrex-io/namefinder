@@ -16,6 +16,7 @@ import { IGreenWashingUser, IPrompt } from '@/types';
 import Chip from '@/components/Chip/Chip';
 import UserPhotoPlaceholder from '@/components/UserPhotoPlaceholder/UserPhotoPlaceholder';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
+import useWindowSize from '@/hooks/useWindowSize';
 
 interface ProfileMenuProps {
     userInfo: IGreenWashingUser | null;
@@ -32,6 +33,7 @@ function NavBar({
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [activePage, setActivePage] = useState<string>('/');
     const ref = useRef(null);
+    const { height } = useWindowSize();
     useOnClickOutside(ref, (event: MouseEvent | TouchEvent) => {
         const target = event.target as Element;
         if (
@@ -112,6 +114,9 @@ function NavBar({
             </div>
             <div
                 ref={ref}
+                style={{
+                    height: `${(height || 0) - 65.8}px`,
+                }}
                 className={clsx(classes.containerList, isOpen && classes.open)}
             >
                 <ul className={classes.ul}>
