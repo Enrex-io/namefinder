@@ -56,8 +56,8 @@
 
 .numberTitle {
   color: #4BB29E;
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 700;
 }
 
 .olDescription {
@@ -67,7 +67,7 @@
   color: #091F3D;
 }
 
-@media screen and (max-width: 620px) {
+@media screen and (max-width: 768px) {
   .container {
     max-width: 730px;
     width: 100%;

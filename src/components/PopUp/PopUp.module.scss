@@ -3,7 +3,7 @@
   width: 100vw;
   height: 100%;
   background-color: rgba(9, 31, 61, 0.6);
-  z-index: 1;
+  z-index: 2;
 }
 
 .container {
@@ -30,6 +30,14 @@
   background-color: #fff;
   border-radius: 16px;
   @media screen and (max-width: 1200px) {
+    padding: 20px;
+  }
+  @media screen and (max-width: 500px) {
+    margin: 0 20px;
+    max-width: 450px;
+    max-height: 500px;
+    height: auto;
+    width: auto;
     padding: 20px;
   }
 }

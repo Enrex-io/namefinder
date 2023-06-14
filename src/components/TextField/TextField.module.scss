@@ -27,6 +27,9 @@
       outline: none;
       background: transparent;
       font-size: 14px;
+      @media screen and (max-width: 768px) {
+        z-index: -1;
+      }
     }
 
     &::placeholder {
