@@ -77,7 +77,7 @@ export default function Layout({ children }: ILayout) {
                     {openPopUp && <ComingSoonPopUp handlePopUp={handlePopUp} />}
                     {showSubscriptionIssue && (
                         <SubscriptionIssuePopUp
-                            issue={subscriptionIssue}
+                            issue={SubscriptionIssue.ZERO_CREDITS}
                             handlePopUp={handleSubscriptionIssuePopUp}
                         />
                     )}

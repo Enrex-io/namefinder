@@ -35,6 +35,7 @@ const SubscriptionIssuePopUp: FC<IPopUp> = ({ handlePopUp, issue }) => {
             image={image}
             imageAlt={imageAlt}
             content={content}
+            buttonColor="secondary"
         />
     );
 };
