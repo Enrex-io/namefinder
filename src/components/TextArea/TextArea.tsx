@@ -36,6 +36,11 @@ const TextArea = forwardRef<HTMLTextAreaElement, PropsWithChildren<Props>>(
         }: PropsWithChildren<Props>,
         ref: React.Ref<HTMLTextAreaElement>
     ) => {
+        const handleInputChange = (e: React.FormEvent<HTMLTextAreaElement>) => {
+            const textarea = e.target as HTMLTextAreaElement;
+            textarea.style.height = 'auto';
+            textarea.style.height = `${textarea.scrollHeight}px`;
+        };
         const computedLabel = `${label}${hasAsterisk ? ' *' : ''}`;
         return (
             <label className={clsx(classes.field, fieldClassName)}>
@@ -58,6 +63,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, PropsWithChildren<Props>>(
                         rows={5}
                         ref={ref}
                         disabled={disabled}
+                        onInput={handleInputChange}
                         {...props}
                     >
                         {endAdornment}
