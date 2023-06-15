@@ -86,7 +86,6 @@ function NavBar({
     }
 
     const arr: IPrompt[] = userInfo?.history?.concat()?.reverse() || [];
-
     return (
         <nav className={clsx(classes.container, isOpen && classes.open)}>
             <div
@@ -130,6 +129,7 @@ function NavBar({
                         )}
                         onClick={() => {
                             setIsOpen(false);
+                            if (isCounterMinus) handlePopUp();
                             if (activePage !== '/') push('/');
                         }}
                     >
@@ -173,6 +173,10 @@ function NavBar({
                                             }
                                             onClick={() => {
                                                 setIsOpen(false);
+                                                if (isCounterMinus) {
+                                                    handlePopUp();
+                                                    return;
+                                                }
                                                 push(`/history?order=${order}`);
                                             }}
                                         >
@@ -198,11 +202,11 @@ function NavBar({
                         )}
                         onClick={() => {
                             setIsOpen(false);
+                            if (isCounterMinus) handlePopUp();
                             if (pathname === '/history') {
                                 push('/');
                                 return;
                             }
-                            if (isCounterMinus) handlePopUp();
                         }}
                     >
                         <p>
@@ -226,6 +230,12 @@ function NavBar({
                             classes.subItem,
                             classes.subItemProfile
                         )}
+                        onClick={() => {
+                            if (isCounterMinus) {
+                                handlePopUp();
+                                return;
+                            }
+                        }}
                     >
                         {user.photo ? (
                             <Image
@@ -251,7 +261,10 @@ function NavBar({
                         className={clsx(classes.subItemPost, classes.subItem)}
                         onClick={() => {
                             setIsOpen(false);
-                            handlePopUp();
+                            if (isCounterMinus) {
+                                handlePopUp();
+                                return;
+                            }
                         }}
                     >
                         <IconCreditCard color="#091F3D" size={20} />
