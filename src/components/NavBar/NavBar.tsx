@@ -85,6 +85,8 @@ function NavBar({
         );
     }
 
+    const arr: IPrompt[] = userInfo?.history?.concat()?.reverse() || [];
+
     return (
         <nav className={clsx(classes.container, isOpen && classes.open)}>
             <div
@@ -128,7 +130,7 @@ function NavBar({
                         )}
                         onClick={() => {
                             setIsOpen(false);
-                            push('/');
+                            if (activePage !== '/') push('/');
                         }}
                     >
                         <IconCirclePlus color="#091F3D" size={18} />
@@ -149,18 +151,19 @@ function NavBar({
                         <p>History</p>
                     </li>
                     <ul className={classes.historyUl}>
-                        {userInfo?.history ? (
-                            userInfo?.history?.map(
+                        {arr[0] ? (
+                            arr.map(
                                 (
                                     prompt: IPrompt,
                                     index: number
                                 ): React.ReactElement => {
+                                    const order = arr.length - 1 - index;
                                     return (
                                         <li
                                             className={clsx(
                                                 classes.subItemPrompt,
                                                 activePage ===
-                                                    `/history&order=${index}` &&
+                                                    `/history&order=${order}` &&
                                                     classes.active
                                             )}
                                             key={
@@ -170,7 +173,7 @@ function NavBar({
                                             }
                                             onClick={() => {
                                                 setIsOpen(false);
-                                                push(`/history?order=${index}`);
+                                                push(`/history?order=${order}`);
                                             }}
                                         >
                                             {prompt.request}
