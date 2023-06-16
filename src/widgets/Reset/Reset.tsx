@@ -6,19 +6,11 @@ import classes from './Reset.module.scss';
 const RESET_BUTTON_TEXT = 'Start over';
 
 interface Props {
-    // setError: Dispatch<SetStateAction<string | null>>;
-    // descriptionRef: MutableRefObject<Description | null>;
     onClick: () => void;
-    // feedback?: Feedback;
 }
 
-function Sendme({
-    // setError,
-    // feedback,
-    onClick,
-}: // descriptionRef,
-Props) {
-    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+function Sendme({ onClick }: Props) {
+    const [isSubmitting] = useState<boolean>(false);
     const handleSendmeClick = async () => {
         onClick();
     };
