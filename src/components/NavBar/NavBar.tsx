@@ -186,7 +186,7 @@ function NavBar({
                                 }
                             )
                         ) : (
-                            <li className={classes.previousPrompts}>
+                            <li className={classes.noPreviousPrompts}>
                                 No previous prompts
                             </li>
                         )}
