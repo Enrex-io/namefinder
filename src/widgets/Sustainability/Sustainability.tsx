@@ -25,6 +25,8 @@ interface Props {
     valuesRef?: MutableRefObject<Record<string, any> | null>;
     disabled: boolean;
     description: string;
+    isCounterZero: boolean;
+    handlePopUp: () => void;
 }
 
 const Sustainability = ({
@@ -32,10 +34,16 @@ const Sustainability = ({
     valuesRef,
     disabled,
     description,
+    isCounterZero,
+    handlePopUp,
 }: Props) => {
     const innerRef = useRef<Record<string, any> | null>(null);
     const ref = valuesRef || innerRef;
     const handleSubmit = async (values: Record<string, any>, form: FormApi) => {
+        if (isCounterZero) {
+            handlePopUp();
+            return;
+        }
         const result = parseDetails(values);
         await onSubmitDetails(result);
         form.reset(result);
