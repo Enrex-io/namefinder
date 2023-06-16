@@ -1,31 +1,50 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import classes from './PopUp.module.scss';
-import Button from '@/components/Button/Button';
 import Image from 'next/image';
+import Button from '../Button/Button';
+import clsx from 'clsx';
 
 interface IPopUp {
     handlePopUp: () => void;
+    title: string;
+    mainActionTitle: string;
+    content: string;
+    image: string;
+    children?: ReactNode;
+    imageAlt?: string;
+    buttonColor?: 'primary' | 'secondary';
 }
 
-const PopUp: React.FC<IPopUp> = ({ handlePopUp }) => {
+const PopUp: React.FC<IPopUp> = ({
+    handlePopUp,
+    title,
+    mainActionTitle,
+    content,
+    image,
+    imageAlt,
+    buttonColor = 'primary',
+    children,
+}) => {
     return (
         <div className={classes.wrapper}>
             <div className={classes.container}>
                 <Image
-                    src={'/images/mail.png'}
-                    alt={'Mail'}
+                    src={image}
+                    alt={imageAlt || 'popup icon'}
                     width={130}
                     height={130}
                 />
-                <h5 className={classes.title}>
-                    Thank you for your interest in Greenifs.ai!
-                </h5>
-                <p>
-                    Stay tuned, as our subscription plans will be ready soon.
-                    Thank you for your patience!
-                </p>
-                <Button className={classes.btn} onClick={() => handlePopUp()}>
-                    Got it
+                <h5 className={classes.title}>{title}</h5>
+                <p>{content}</p>
+                {children ? children : null}
+                <Button
+                    className={clsx(classes.btn, {
+                        [classes.btnPrimary]: buttonColor === 'primary',
+                        [classes.btnSecondary]: buttonColor === 'secondary',
+                    })}
+                    onClick={() => handlePopUp()}
+                >
+                    {mainActionTitle}
                 </Button>
             </div>
         </div>
