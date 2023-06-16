@@ -24,13 +24,11 @@ import useAuth from '@/hooks/useAuth';
 interface SustainabilityFormProps {
     userInfo: IGreenWashingUser | null;
     setUserInfo: Dispatch<SetStateAction<IGreenWashingUser | null>>;
-    handlePopUp: () => void;
 }
 
 const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
     setUserInfo,
     userInfo,
-    handlePopUp,
 }) => {
     const { user } = useAuth();
     const [error, setError] = useState<string | null>(null);
@@ -101,13 +99,6 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
         setPost('');
     };
 
-    useEffect(() => {
-        if (Number(userInfo?.counter?.toFixed(0)) <= 0) {
-            handlePopUp();
-            setDisabled(true);
-        }
-    }, [userInfo?.counter]);
-
     return (
         <Paper spacing={1.25} direction="column" className={classes.container}>
             <Sustainability
@@ -119,7 +110,6 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
                 disabled={disabled}
                 description={generatedDescription[0]}
                 isCounterZero={(userInfo?.counter || 0) < 1}
-                handlePopUp={handlePopUp}
             />
             <>
                 <div id="descriptionsAnchor" className={classes.anchor} />

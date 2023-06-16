@@ -1,6 +1,6 @@
 import { Field, Form } from 'react-final-form';
 import Button from '@/components/Button/Button';
-import { Details } from '@/types';
+import { Details, PopupVariant } from '@/types';
 import {
     validateDescription,
     validateMedia,
@@ -16,6 +16,7 @@ import Medias, { MEDIAS_OPTIONS } from '@/consts/medias';
 import { REGIONS_OPTIONS } from '@/consts/region';
 import { FormApi } from 'final-form';
 import Image from 'next/image';
+import { usePopup } from '@/contexts/PopupContext';
 
 const HEADING_TEXT = 'Fill information';
 const SUBMIT_BUTTON_TEXT = 'Check post';
@@ -26,7 +27,6 @@ interface Props {
     disabled: boolean;
     description: string;
     isCounterZero: boolean;
-    handlePopUp: () => void;
 }
 
 const Sustainability = ({
@@ -35,13 +35,13 @@ const Sustainability = ({
     disabled,
     description,
     isCounterZero,
-    handlePopUp,
 }: Props) => {
     const innerRef = useRef<Record<string, any> | null>(null);
     const ref = valuesRef || innerRef;
+    const { setPopup } = usePopup();
     const handleSubmit = async (values: Record<string, any>, form: FormApi) => {
         if (isCounterZero) {
-            handlePopUp();
+            setPopup(PopupVariant.THANK_YOU);
             return;
         }
         const result = parseDetails(values);

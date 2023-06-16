@@ -13,6 +13,7 @@ import { IGreenWashingUser, PopupVariant, SubscriptionStatus } from '@/types';
 import FullscreenLoader from '@/components/Loader/FullscreenLoader';
 import { useRouter } from 'next/router';
 import SubscriptionIssuePopUp from '@/components/PopUp/SubscriptionIssuePopUp';
+import { usePopup } from '@/contexts/PopupContext';
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
@@ -29,11 +30,10 @@ export default function Layout({ children }: ILayout) {
             refreshInterval: 5000,
         }
     );
-    const [openPopUp, setOpenPopUp] = useState<boolean>(false);
-    const handlePopUp = () => {
-        setOpenPopUp(!openPopUp);
-    };
+
+    const { variant, setPopup, hidePopup } = usePopup();
     const handleSubscriptionIssuePopUp = () => {
+        if (router.pathname === '/subscription') hidePopup();
         router.push('/subscription');
     };
 
@@ -50,8 +50,12 @@ export default function Layout({ children }: ILayout) {
         return null;
     }, [data?.result]);
 
-    const showSubscriptionIssue =
-        subscriptionIssue && router.pathname !== '/subscription';
+    useEffect(() => {
+        if (subscriptionIssue && router.pathname !== '/subscription') {
+            setPopup(subscriptionIssue);
+            return;
+        }
+    }, [subscriptionIssue, router, setPopup]);
 
     if (isLoading) {
         return <FullscreenLoader />;
@@ -70,17 +74,15 @@ export default function Layout({ children }: ILayout) {
             </Head>
             <AuthGuard>
                 <div className={clsx(fontInter.className)}>
-                    {openPopUp && <ComingSoonPopUp handlePopUp={handlePopUp} />}
-                    {showSubscriptionIssue && (
+                    {variant === PopupVariant.THANK_YOU && <ComingSoonPopUp />}
+                    {(variant === PopupVariant.PAYMENT_FAILED ||
+                        variant === PopupVariant.ZERO_CREDITS) && (
                         <SubscriptionIssuePopUp
-                            issue={PopupVariant.ZERO_CREDITS}
+                            issue={variant}
                             handlePopUp={handleSubscriptionIssuePopUp}
                         />
                     )}
-                    <NavBar
-                        handlePopUp={handlePopUp}
-                        userInfo={!isLoading && (data?.result || null)}
-                    />
+                    <NavBar userInfo={!isLoading && (data?.result || null)} />
                     <main className={classes.main}>{children}</main>
                 </div>
             </AuthGuard>

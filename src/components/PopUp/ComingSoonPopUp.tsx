@@ -1,11 +1,21 @@
 import React, { FC } from 'react';
 import PopUp from './PopUp';
+import { usePopup } from '@/contexts/PopupContext';
+import { PopupVariant } from '@/types';
 
-interface IPopUp {
-    handlePopUp: () => void;
-}
+interface IPopUp {}
 
-const ComingSoonPopUp: FC<IPopUp> = ({ handlePopUp }) => {
+const ComingSoonPopUp: FC<IPopUp> = () => {
+    const { variant, setPopup, hidePopup } = usePopup();
+    const handlePopUp = () => {
+        if (variant) {
+            console.log('hidePopup');
+            hidePopup();
+            return;
+        }
+        setPopup(PopupVariant.THANK_YOU);
+    };
+
     return (
         <PopUp
             handlePopUp={handlePopUp}
