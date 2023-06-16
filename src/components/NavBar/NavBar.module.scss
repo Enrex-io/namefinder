@@ -163,6 +163,11 @@
   display: none;
 }
 
+.noPreviousPrompts {
+  padding-left: 15px;
+  font-weight: 500;
+}
+
 @media screen and (max-width: 980px) {
   .container {
     width: 100%;
@@ -202,11 +207,6 @@
     display: flex;
     left: 0;
     animation: .5s ease-in-out 0s slideIn, .5s ease-in-out 0s slideOut;
-  }
-
-  .previousPrompts {
-    padding-left: 15px;
-    font-weight: 500;
   }
 
   .hamburger {
