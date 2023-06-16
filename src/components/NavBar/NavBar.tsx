@@ -28,7 +28,7 @@ function NavBar({
     handlePopUp,
 }: ProfileMenuProps): React.ReactElement {
     const { user, logout } = useAuth();
-    const { push, pathname, query, events } = useRouter();
+    const { push, pathname, query, events, reload } = useRouter();
     const isCounterMinus = Number(userInfo?.counter?.toFixed(0)) <= 0;
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [activePage, setActivePage] = useState<string>('/');
@@ -129,8 +129,21 @@ function NavBar({
                         )}
                         onClick={() => {
                             setIsOpen(false);
-                            if (isCounterMinus) handlePopUp();
-                            if (activePage !== '/') push('/');
+                            if (isCounterMinus) {
+                                handlePopUp();
+                                return;
+                            }
+                            const el =
+                                (
+                                    document.querySelector(
+                                        '.analyze'
+                                    ) as HTMLElement
+                                )?.innerHTML?.includes('Your post') || false;
+                            if (el && pathname === '/') {
+                                reload();
+                                return;
+                            }
+                            push('/');
                         }}
                     >
                         <IconCirclePlus color="#091F3D" size={18} />
