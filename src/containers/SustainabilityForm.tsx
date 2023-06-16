@@ -118,6 +118,8 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
                 valuesRef={detailsRef}
                 disabled={disabled}
                 description={generatedDescription[0]}
+                isCounterZero={(userInfo?.counter || 0) < 1}
+                handlePopUp={handlePopUp}
             />
             <>
                 <div id="descriptionsAnchor" className={classes.anchor} />
