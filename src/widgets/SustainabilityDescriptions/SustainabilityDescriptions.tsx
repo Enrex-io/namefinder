@@ -2,6 +2,7 @@ import Paper from '@/components/Paper/Paper';
 import Stack from '@/components/Stack/Stack';
 import classes from './SustainabilityDescriptions.module.scss';
 import { ReactElement } from 'react';
+import clsx from 'clsx';
 
 const HEADING_TEXT = 'Your post analysis';
 
@@ -14,7 +15,9 @@ function SustainabilityDescription({ descriptions }: Props) {
         <Stack spacing={1.25} direction="column">
             <Stack direction="column" spacing={1.25}>
                 <Paper className={classes.paper} direction="column" hasBorder>
-                    <h2 className={classes.heading}>{HEADING_TEXT}</h2>
+                    <h2 className={clsx(classes.heading, 'analyze')}>
+                        {HEADING_TEXT}
+                    </h2>
                     {descriptions.map((description: string): ReactElement => {
                         if (
                             description
