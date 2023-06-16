@@ -18,10 +18,18 @@ export enum SubscriptionStatus {
     FAILED = 'failed',
 }
 
-export enum SubscriptionIssue {
+export enum PopupVariant {
     PAYMENT_FAILED = 'paymentFailed',
     ZERO_CREDITS = 'zeroCredits',
+    THANK_YOU = 'thankYou',
 }
+
+type PopupVariantType = (typeof PopupVariant)[keyof typeof PopupVariant];
+
+export type SubscriptionPopupVariantType = Omit<
+    PopupVariantType,
+    PopupVariant.THANK_YOU
+>;
 
 export type UserProfile = {
     id: string;

@@ -9,11 +9,7 @@ import AuthGuard from '@/utils/route-guard/AuthGuard';
 import useSWR from 'swr';
 import axios from '@/utils/axios';
 import ComingSoonPopUp from '../components/PopUp/ComingSoonPopUp';
-import {
-    IGreenWashingUser,
-    SubscriptionIssue,
-    SubscriptionStatus,
-} from '@/types';
+import { IGreenWashingUser, PopupVariant, SubscriptionStatus } from '@/types';
 import FullscreenLoader from '@/components/Loader/FullscreenLoader';
 import { useRouter } from 'next/router';
 import SubscriptionIssuePopUp from '@/components/PopUp/SubscriptionIssuePopUp';
@@ -41,15 +37,15 @@ export default function Layout({ children }: ILayout) {
         router.push('/subscription');
     };
 
-    const subscriptionIssue: SubscriptionIssue | null = useMemo(() => {
+    const subscriptionIssue: PopupVariant | null = useMemo(() => {
         if (!data?.result) {
             return null;
         }
         if (data.result.subscriptionStatus === SubscriptionStatus.FAILED) {
-            return SubscriptionIssue.PAYMENT_FAILED;
+            return PopupVariant.PAYMENT_FAILED;
         }
         if (data.result.counter < 1) {
-            return SubscriptionIssue.ZERO_CREDITS;
+            return PopupVariant.ZERO_CREDITS;
         }
         return null;
     }, [data?.result]);
@@ -77,7 +73,7 @@ export default function Layout({ children }: ILayout) {
                     {openPopUp && <ComingSoonPopUp handlePopUp={handlePopUp} />}
                     {showSubscriptionIssue && (
                         <SubscriptionIssuePopUp
-                            issue={SubscriptionIssue.ZERO_CREDITS}
+                            issue={PopupVariant.ZERO_CREDITS}
                             handlePopUp={handleSubscriptionIssuePopUp}
                         />
                     )}
