@@ -259,13 +259,7 @@ function NavBar({
                     </li>
                     <li
                         className={clsx(classes.subItemPost, classes.subItem)}
-                        onClick={() => {
-                            setIsOpen(false);
-                            if (isCounterMinus) {
-                                handlePopUp();
-                                return;
-                            }
-                        }}
+                        onClick={() => push('/subscription')}
                     >
                         <IconCreditCard color="#091F3D" size={20} />
                         <p>Subscription</p>

@@ -2,18 +2,6 @@ import firebase from 'firebase/compat';
 import Regions from '@/consts/region';
 import Medias from '@/consts/medias';
 
-export type Phone = `${number}` | `${number}-${number}`;
-export type Label = Capitalize<string>;
-
-export type Country = {
-    code: Uppercase<string>;
-    label: Label;
-    phone: Phone;
-    isSuggested?: boolean;
-};
-
-export type Industry = `${Label} - ${Label}`;
-
 export interface Details {
     region: string;
     media: string;
@@ -25,22 +13,14 @@ export type ResponsePayload<T = unknown> = {
     error?: string;
 };
 
-export type FeedbackTags = 'NEWSLETTER' | 'DEMO' | 'COLLABORATE';
-
-export enum TagStatus {
-    inactive = 'inactive',
-    active = 'active',
+export enum SubscriptionStatus {
+    ACTIVE = 'active',
+    FAILED = 'failed',
 }
 
-export enum FeedbackTagsEnum {
-    NEWSLETTER = 'NEWSLETTER',
-    DEMO = 'DEMO',
-    COLLABORATE = 'COLLABORATE',
-}
-
-export interface TagsToUpdate {
-    name: FeedbackTags;
-    status: TagStatus;
+export enum SubscriptionIssue {
+    PAYMENT_FAILED = 'paymentFailed',
+    ZERO_CREDITS = 'zeroCredits',
 }
 
 export type UserProfile = {
@@ -72,6 +52,9 @@ export interface IGreenWashingUser {
     counter: number;
     plan: string;
     history: IPrompt[];
+    updateDates?: number[];
+    subscriptionId?: string;
+    subscriptionStatus: SubscriptionStatus;
 }
 
 export type FirebaseContextType = {
