@@ -12,22 +12,20 @@ import {
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import useAuth from '@/hooks/useAuth';
-import { IGreenWashingUser, IPrompt } from '@/types';
+import { IGreenWashingUser, IPrompt, PopupVariant } from '@/types';
 import Chip from '@/components/Chip/Chip';
 import UserPhotoPlaceholder from '@/components/UserPhotoPlaceholder/UserPhotoPlaceholder';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import useWindowSize from '@/hooks/useWindowSize';
+import { usePopup } from '@/contexts/PopupContext';
 
 interface ProfileMenuProps {
     userInfo: IGreenWashingUser | null;
-    handlePopUp: () => void;
 }
 
-function NavBar({
-    userInfo,
-    handlePopUp,
-}: ProfileMenuProps): React.ReactElement {
+function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
     const { user, logout } = useAuth();
+    const { setPopup } = usePopup();
     const { push, pathname, query, events, reload } = useRouter();
     const isCounterMinus = Number(userInfo?.counter?.toFixed(0)) <= 0;
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -129,10 +127,6 @@ function NavBar({
                         )}
                         onClick={() => {
                             setIsOpen(false);
-                            if (isCounterMinus) {
-                                handlePopUp();
-                                return;
-                            }
                             const el =
                                 (
                                     document.querySelector(
@@ -186,10 +180,6 @@ function NavBar({
                                             }
                                             onClick={() => {
                                                 setIsOpen(false);
-                                                if (isCounterMinus) {
-                                                    handlePopUp();
-                                                    return;
-                                                }
                                                 push(`/history?order=${order}`);
                                             }}
                                         >
@@ -215,7 +205,8 @@ function NavBar({
                         )}
                         onClick={() => {
                             setIsOpen(false);
-                            if (isCounterMinus) handlePopUp();
+                            if (isCounterMinus)
+                                setPopup(PopupVariant.THANK_YOU);
                             if (pathname === '/history') {
                                 push('/');
                                 return;
@@ -245,7 +236,7 @@ function NavBar({
                         )}
                         onClick={() => {
                             if (isCounterMinus) {
-                                handlePopUp();
+                                setPopup(PopupVariant.ZERO_CREDITS);
                                 return;
                             }
                         }}
@@ -272,7 +263,13 @@ function NavBar({
                     </li>
                     <li
                         className={clsx(classes.subItemPost, classes.subItem)}
-                        onClick={() => push('/subscription')}
+                        onClick={() => {
+                            if (isCounterMinus) {
+                                setPopup(PopupVariant.ZERO_CREDITS);
+                                return;
+                            }
+                            push('/subscription');
+                        }}
                     >
                         <IconCreditCard color="#091F3D" size={20} />
                         <p>Subscription</p>
