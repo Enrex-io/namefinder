@@ -127,10 +127,6 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                         )}
                         onClick={() => {
                             setIsOpen(false);
-                            if (isCounterMinus) {
-                                setPopup(PopupVariant.ZERO_CREDITS);
-                                return;
-                            }
                             const el =
                                 (
                                     document.querySelector(
@@ -184,12 +180,6 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                                             }
                                             onClick={() => {
                                                 setIsOpen(false);
-                                                if (isCounterMinus) {
-                                                    setPopup(
-                                                        PopupVariant.ZERO_CREDITS
-                                                    );
-                                                    return;
-                                                }
                                                 push(`/history?order=${order}`);
                                             }}
                                         >
@@ -273,7 +263,13 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                     </li>
                     <li
                         className={clsx(classes.subItemPost, classes.subItem)}
-                        onClick={() => push('/subscription')}
+                        onClick={() => {
+                            if (isCounterMinus) {
+                                setPopup(PopupVariant.ZERO_CREDITS);
+                                return;
+                            }
+                            push('/subscription');
+                        }}
                     >
                         <IconCreditCard color="#091F3D" size={20} />
                         <p>Subscription</p>

@@ -41,7 +41,7 @@ const Sustainability = ({
     const { setPopup } = usePopup();
     const handleSubmit = async (values: Record<string, any>, form: FormApi) => {
         if (isCounterZero) {
-            setPopup(PopupVariant.THANK_YOU);
+            setPopup(PopupVariant.ZERO_CREDITS);
             return;
         }
         const result = parseDetails(values);

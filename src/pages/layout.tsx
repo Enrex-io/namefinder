@@ -31,14 +31,6 @@ export default function Layout({ children }: ILayout) {
     );
 
     const { variant, setPopup, hidePopup } = usePopup();
-
-    const handlePopUp = () => {
-        if (variant) {
-            hidePopup();
-            return;
-        }
-        setPopup(PopupVariant.THANK_YOU);
-    };
     const handleSubscriptionIssuePopUp = () => {
         if (router.pathname === '/subscription') {
             hidePopup();
@@ -61,8 +53,11 @@ export default function Layout({ children }: ILayout) {
     }, [data?.result]);
 
     useEffect(() => {
-        if (subscriptionIssue && router.pathname !== '/subscription') {
-            console.log('set popup in useEffect');
+        if (
+            subscriptionIssue &&
+            router.pathname !== '/subscription' &&
+            router.pathname !== '/history'
+        ) {
             setPopup(subscriptionIssue);
             return;
         }
@@ -88,11 +83,7 @@ export default function Layout({ children }: ILayout) {
                     {variant && (
                         <PopUpVariant
                             variant={variant}
-                            handlePopUp={
-                                variant === PopupVariant.THANK_YOU
-                                    ? handlePopUp
-                                    : handleSubscriptionIssuePopUp
-                            }
+                            handlePopUp={handleSubscriptionIssuePopUp}
                         />
                     )}
                     <NavBar userInfo={!isLoading && (data?.result || null)} />
