@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import NavBar from '@/components/NavBar/NavBar';
 import { fontInter } from '@/styles/fonts';
 import clsx from 'clsx';
@@ -8,15 +8,11 @@ import { META } from '@/consts/meta';
 import AuthGuard from '@/utils/route-guard/AuthGuard';
 import useSWR from 'swr';
 import axios from '@/utils/axios';
-import ComingSoonPopUp from '../components/PopUp/ComingSoonPopUp';
-import {
-    IGreenWashingUser,
-    SubscriptionIssue,
-    SubscriptionStatus,
-} from '@/types';
+import { IGreenWashingUser, PopupVariant, SubscriptionStatus } from '@/types';
 import FullscreenLoader from '@/components/Loader/FullscreenLoader';
 import { useRouter } from 'next/router';
-import SubscriptionIssuePopUp from '@/components/PopUp/SubscriptionIssuePopUp';
+import PopUpVariant from '@/components/PopUp/PopUpVariant';
+import { usePopup } from '@/contexts/PopupContext';
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
@@ -33,29 +29,39 @@ export default function Layout({ children }: ILayout) {
             refreshInterval: 5000,
         }
     );
-    const [openPopUp, setOpenPopUp] = useState<boolean>(false);
-    const handlePopUp = () => {
-        setOpenPopUp(!openPopUp);
-    };
+
+    const { variant, setPopup, hidePopup } = usePopup();
     const handleSubscriptionIssuePopUp = () => {
-        router.push('/subscription');
+        if (router.pathname === '/subscription') {
+            hidePopup();
+            return;
+        }
+        router.push('/subscription').then(() => hidePopup());
     };
 
-    const subscriptionIssue: SubscriptionIssue | null = useMemo(() => {
+    const subscriptionIssue: PopupVariant | null = useMemo(() => {
         if (!data?.result) {
             return null;
         }
         if (data.result.subscriptionStatus === SubscriptionStatus.FAILED) {
-            return SubscriptionIssue.PAYMENT_FAILED;
+            return PopupVariant.PAYMENT_FAILED;
         }
         if (data.result.counter < 1) {
-            return SubscriptionIssue.ZERO_CREDITS;
+            return PopupVariant.ZERO_CREDITS;
         }
         return null;
     }, [data?.result]);
 
-    const showSubscriptionIssue =
-        subscriptionIssue && router.pathname !== '/subscription';
+    useEffect(() => {
+        if (
+            subscriptionIssue &&
+            router.pathname !== '/subscription' &&
+            router.pathname !== '/history'
+        ) {
+            setPopup(subscriptionIssue);
+            return;
+        }
+    }, [subscriptionIssue, router, setPopup]);
 
     if (isLoading) {
         return <FullscreenLoader />;
@@ -74,17 +80,13 @@ export default function Layout({ children }: ILayout) {
             </Head>
             <AuthGuard>
                 <div className={clsx(fontInter.className)}>
-                    {openPopUp && <ComingSoonPopUp handlePopUp={handlePopUp} />}
-                    {showSubscriptionIssue && (
-                        <SubscriptionIssuePopUp
-                            issue={SubscriptionIssue.ZERO_CREDITS}
+                    {variant && (
+                        <PopUpVariant
+                            variant={variant}
                             handlePopUp={handleSubscriptionIssuePopUp}
                         />
                     )}
-                    <NavBar
-                        handlePopUp={handlePopUp}
-                        userInfo={!isLoading && (data?.result || null)}
-                    />
+                    <NavBar userInfo={!isLoading && (data?.result || null)} />
                     <main className={classes.main}>{children}</main>
                 </div>
             </AuthGuard>

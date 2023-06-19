@@ -7,6 +7,7 @@ import theme from '../theme';
 import { ReactElement, ReactNode } from 'react';
 import { NextPage } from 'next';
 import { SWRConfig } from 'swr';
+import { PopupProvider } from '@/contexts/PopupContext';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -21,18 +22,22 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
     return (
         <AuthProvider>
             <SnackbarProvider>
-                <ThemeProvider theme={theme}>
-                    <SWRConfig
-                        value={{
-                            provider: () => new Map(),
-                            refreshInterval: 10000,
-                            fetcher: (resource, init) =>
-                                fetch(resource, init).then((res) => res.json()),
-                        }}
-                    >
-                        {getLayout(<Component {...pageProps} />)}
-                    </SWRConfig>
-                </ThemeProvider>
+                <PopupProvider>
+                    <ThemeProvider theme={theme}>
+                        <SWRConfig
+                            value={{
+                                provider: () => new Map(),
+                                refreshInterval: 10000,
+                                fetcher: (resource, init) =>
+                                    fetch(resource, init).then((res) =>
+                                        res.json()
+                                    ),
+                            }}
+                        >
+                            {getLayout(<Component {...pageProps} />)}
+                        </SWRConfig>
+                    </ThemeProvider>
+                </PopupProvider>
             </SnackbarProvider>
         </AuthProvider>
     );

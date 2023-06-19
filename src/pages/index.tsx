@@ -11,11 +11,6 @@ import MarketingRegulations from '@/components/MarketingRegulations/MarketingReg
 const Home: NextPageWithLayout = () => {
     const [userInfo, setUserInfo] = useState<IGreenWashingUser | null>(null);
     const { user } = useAuth();
-    const [openPopUp, setOpenPopUp] = useState<boolean>(false);
-
-    const handlePopUp = () => {
-        setOpenPopUp(!openPopUp);
-    };
 
     useEffect(() => {
         async function fetchUser() {
@@ -44,11 +39,7 @@ const Home: NextPageWithLayout = () => {
     return (
         <div className={classes.container}>
             <MarketingRegulations />
-            <Sustainability
-                userInfo={userInfo}
-                setUserInfo={setUserInfo}
-                handlePopUp={handlePopUp}
-            />
+            <Sustainability userInfo={userInfo} setUserInfo={setUserInfo} />
         </div>
     );
 };
