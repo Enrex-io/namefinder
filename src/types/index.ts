@@ -26,11 +26,6 @@ export enum PopupVariant {
 
 type PopupVariantType = (typeof PopupVariant)[keyof typeof PopupVariant];
 
-export type SubscriptionPopupVariantType = Omit<
-    PopupVariantType,
-    PopupVariant.THANK_YOU
->;
-
 export type UserProfile = {
     id: string;
     photo: string | null;

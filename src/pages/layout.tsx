@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import NavBar from '@/components/NavBar/NavBar';
 import { fontInter } from '@/styles/fonts';
 import clsx from 'clsx';
@@ -8,11 +8,10 @@ import { META } from '@/consts/meta';
 import AuthGuard from '@/utils/route-guard/AuthGuard';
 import useSWR from 'swr';
 import axios from '@/utils/axios';
-import ComingSoonPopUp from '../components/PopUp/ComingSoonPopUp';
 import { IGreenWashingUser, PopupVariant, SubscriptionStatus } from '@/types';
 import FullscreenLoader from '@/components/Loader/FullscreenLoader';
 import { useRouter } from 'next/router';
-import SubscriptionIssuePopUp from '@/components/PopUp/SubscriptionIssuePopUp';
+import PopUpVariant from '@/components/PopUp/PopUpVariant';
 import { usePopup } from '@/contexts/PopupContext';
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
@@ -32,9 +31,20 @@ export default function Layout({ children }: ILayout) {
     );
 
     const { variant, setPopup, hidePopup } = usePopup();
+
+    const handlePopUp = () => {
+        if (variant) {
+            hidePopup();
+            return;
+        }
+        setPopup(PopupVariant.THANK_YOU);
+    };
     const handleSubscriptionIssuePopUp = () => {
-        if (router.pathname === '/subscription') hidePopup();
-        router.push('/subscription');
+        if (router.pathname === '/subscription') {
+            hidePopup();
+            return;
+        }
+        router.push('/subscription').then(() => hidePopup());
     };
 
     const subscriptionIssue: PopupVariant | null = useMemo(() => {
@@ -52,6 +62,7 @@ export default function Layout({ children }: ILayout) {
 
     useEffect(() => {
         if (subscriptionIssue && router.pathname !== '/subscription') {
+            console.log('set popup in useEffect');
             setPopup(subscriptionIssue);
             return;
         }
@@ -74,12 +85,14 @@ export default function Layout({ children }: ILayout) {
             </Head>
             <AuthGuard>
                 <div className={clsx(fontInter.className)}>
-                    {variant === PopupVariant.THANK_YOU && <ComingSoonPopUp />}
-                    {(variant === PopupVariant.PAYMENT_FAILED ||
-                        variant === PopupVariant.ZERO_CREDITS) && (
-                        <SubscriptionIssuePopUp
-                            issue={variant}
-                            handlePopUp={handleSubscriptionIssuePopUp}
+                    {variant && (
+                        <PopUpVariant
+                            variant={variant}
+                            handlePopUp={
+                                variant === PopupVariant.THANK_YOU
+                                    ? handlePopUp
+                                    : handleSubscriptionIssuePopUp
+                            }
                         />
                     )}
                     <NavBar userInfo={!isLoading && (data?.result || null)} />
