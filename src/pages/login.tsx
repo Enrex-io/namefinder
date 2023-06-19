@@ -58,7 +58,7 @@ export default function Login() {
                                                             : 'inherit'
                                                     }
                                                 >
-                                                    Sign in to continue
+                                                    Login to continue
                                                 </Typography>
                                             </Stack>
                                         </Grid>
@@ -85,6 +85,7 @@ export default function Login() {
                                                     }}
                                                 >
                                                     Don&apos;t have an account?
+                                                    Sign up here!
                                                 </Typography>
                                             </Grid>
                                         </Grid>

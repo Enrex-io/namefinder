@@ -156,7 +156,7 @@ const FirebaseLogin = ({ ...others }) => {
                                 height={16}
                             />
                         </Box>
-                        Sign in with Google
+                        Login with Google
                     </Button>
                 </Grid>
                 <Grid item xs={12}>
@@ -204,7 +204,7 @@ const FirebaseLogin = ({ ...others }) => {
                 >
                     <Box sx={{ mb: 2 }}>
                         <Typography variant="subtitle1">
-                            Sign in with Email address
+                            Login with Email address
                         </Typography>
                     </Box>
                 </Grid>
@@ -421,7 +421,7 @@ const FirebaseLogin = ({ ...others }) => {
                                 type="submit"
                                 variant="contained"
                             >
-                                Sign in
+                                Login
                             </Button>
                         </Box>
                     </form>
