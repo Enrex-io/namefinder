@@ -9,6 +9,7 @@ import {
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import useAuth from '../../../hooks/useAuth';
+import logger from '@/utils/logger';
 
 const AuthForgotPassword = ({ ...others }) => {
     const { resetPassword } = useAuth();
@@ -42,7 +43,7 @@ const AuthForgotPassword = ({ ...others }) => {
                     //     window.location.replace('/login');
                     // }, 1500);
                 } catch (err: any) {
-                    console.error('Reset password error', err);
+                    logger.error('Reset password error', { error: err });
                     // setStatus({ success: false });
                     // setErrors({ submit: err.message });
                     // setSubmitting(false);

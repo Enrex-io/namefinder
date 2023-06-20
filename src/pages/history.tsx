@@ -14,6 +14,7 @@ import Layout from '@/pages/layout';
 import SustainabilityDescription from '@/widgets/SustainabilityDescriptions/SustainabilityDescriptions';
 import MediaPost from '@/widgets/MediaPost/MediaPost';
 import { useRouter } from 'next/router';
+import logger from '@/utils/logger';
 
 function History() {
     const { push, query } = useRouter();
@@ -41,7 +42,7 @@ function History() {
             return historyOrder;
         };
 
-        getHistory().then((r) => console.log(r));
+        getHistory().then((r) => logger.debug('get history result', r));
     }, [query?.order, user]);
 
     const date = new Date(Date.parse(history!.date as string));

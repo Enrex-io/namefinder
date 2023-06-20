@@ -35,6 +35,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from '../../../utils/axios';
 import { SnackbarContext } from '@/contexts/SnackbarContext';
+import logger from '@/utils/logger';
 
 const Google = '/images/social-google.svg';
 
@@ -54,7 +55,7 @@ export const triggerNewcomerEmailGreeting = async (
             }
         );
     } catch (error: unknown) {
-        console.error('Trigger newcomer greeting error', error);
+        logger.error('Trigger newcomer greeting error', { error });
     }
 };
 
@@ -83,8 +84,8 @@ const FirebaseLogin = ({ ...others }) => {
             const token = await userCredentials.user?.getIdToken();
             if (token && isNewUser)
                 triggerNewcomerEmailGreeting(token, isNewUser);
-        } catch (err) {
-            console.error('Google handler error', err);
+        } catch (error) {
+            logger.error('Google handler error', { error });
         }
     };
 
@@ -249,7 +250,7 @@ const FirebaseLogin = ({ ...others }) => {
                             message = 'User not found';
                         }
                         showSnackbar(message, 'error');
-                        console.error(message, err);
+                        logger.error(message, { error: err });
                         // setStatus({ success: false });
                         // setErrors({ submit: err.message });
                         // setSubmitting(false);
