@@ -2,6 +2,8 @@ import firebase from 'firebase/compat';
 import Regions from '@/consts/region';
 import Medias from '@/consts/medias';
 
+export type NodeEnvType = 'development' | 'production' | 'prod' | 'test';
+
 export interface Details {
     region: string;
     media: string;

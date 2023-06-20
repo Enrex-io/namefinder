@@ -1,10 +1,6 @@
+import { CONSOLE_LOGS_ENABLED, IS_PRODUCTION } from '@/config/config';
 import { LoggingLevels } from '../types/logger';
 import axios from './axios';
-
-export type NodeEnvType = 'development' | 'production' | 'prod' | 'test';
-const NODE_ENV = process.env.NODE_ENV as NodeEnvType;
-export const IS_PRODUCTION = NODE_ENV === 'production' || NODE_ENV === 'prod';
-export const CONSOLE_LOGS_ENABLED = !IS_PRODUCTION;
 
 class Logger {
     private async log(
