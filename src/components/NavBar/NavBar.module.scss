@@ -37,7 +37,7 @@
 }
 
 .historyUl {
-  max-height: 48vh;
+  max-height: 40vh;
   overflow-y: auto;
 }
 
@@ -47,7 +47,6 @@
   align-items: center;
   gap: 0.725rem;
   text-align: left;
-  font: normal normal medium 12px/24px Inter;
   color: #6D7C8F;
   cursor: pointer;
   border-top-right-radius: 4px;
@@ -63,14 +62,6 @@
   padding: 10px 20px 10px 30px;
   color: #091F3D;
   font-weight: 600;
-}
-
-.subItemPost:hover(:not(:nth-child(2))) {
-  background-color: #fff;
-}
-
-.ul:nth-child(2) > .subItemPost:hover, .ul:nth-child(1) > .subItemPost:nth-child(1):hover {
-  background-color: #fff;
 }
 
 .subItemPrompt {
@@ -155,6 +146,10 @@
   text-overflow: ellipsis;
 }
 
+.subHover:hover {
+  background-color: #fff !important;
+}
+
 .profilePhoto {
   border-radius: 50%;
 }
@@ -191,7 +186,7 @@
   }
 
   .containerList > ul:nth-child(1) {
-    height: calc(100% - 201px);
+    height: calc(100% - 222px);
   }
 
   .historyUl {
@@ -200,7 +195,7 @@
   }
 
   .containerList > ul:nth-child(2) {
-    height: 201px;
+    height: 222px;
   }
 
   .open {
