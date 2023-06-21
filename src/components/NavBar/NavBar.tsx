@@ -129,7 +129,8 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                         className={clsx(
                             classes.subItemPost,
                             classes.subItem,
-                            activePage === '/' && classes.active
+                            activePage === '/' && classes.active,
+                            classes.subHover
                         )}
                         onClick={() => {
                             setIsOpen(false);
@@ -177,7 +178,8 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                                                 classes.subItemPrompt,
                                                 activePage ===
                                                     `/history&order=${order}` &&
-                                                    classes.active
+                                                    classes.active,
+                                                classes.subHover
                                             )}
                                             key={
                                                 prompt.userId +
@@ -236,7 +238,8 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                         className={clsx(
                             classes.subItemPost,
                             classes.subItem,
-                            classes.subItemProfile
+                            classes.subItemProfile,
+                            classes.subHover
                         )}
                     >
                         {user.photo ? (
@@ -259,12 +262,25 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                             </p>
                         </div>
                     </li>
-                    <li className={clsx(classes.subItemPost, classes.subItem)}>
+                    <li
+                        className={clsx(
+                            classes.subItemPost,
+                            classes.subItem,
+                            classes.subHover
+                        )}
+                        onClick={() => {
+                            push('/subscription');
+                        }}
+                    >
                         <IconCreditCard color="#091F3D" size={20} />
                         <p>Subscription</p>
                     </li>
                     <li
-                        className={clsx(classes.subItemPost, classes.subItem)}
+                        className={clsx(
+                            classes.subItemPost,
+                            classes.subItem,
+                            classes.subHover
+                        )}
                         onClick={() => {
                             push('https://greenifs.ai');
                         }}
@@ -273,7 +289,11 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                         <p>About Greenifs</p>
                     </li>
                     <li
-                        className={clsx(classes.subItemPost, classes.subItem)}
+                        className={clsx(
+                            classes.subItemPost,
+                            classes.subItem,
+                            classes.subHover
+                        )}
                         onClick={() => {
                             setIsOpen(false);
                             handleLogout();
