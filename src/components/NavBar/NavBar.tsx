@@ -277,6 +277,20 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                     <li
                         className={clsx(classes.subItemPost, classes.subItem)}
                         onClick={() => {
+                            push('https://greenifs.ai');
+                        }}
+                    >
+                        <Image
+                            src="/svg/switch.svg"
+                            width={20}
+                            height={20}
+                            alt="Switch"
+                        />
+                        <p>About Greenifs</p>
+                    </li>
+                    <li
+                        className={clsx(classes.subItemPost, classes.subItem)}
+                        onClick={() => {
                             setIsOpen(false);
                             handleLogout();
                         }}

@@ -1,0 +1,5 @@
+<svg id="switch" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+  <path id="Path_536" data-name="Path 536" d="M0,0H18V18H0Z" fill="none"/>
+  <path id="Path_537" data-name="Path 537" d="M15.507,11.507m-1.507,0A1.507,1.507,0,1,0,15.507,10,1.507,1.507,0,0,0,14,11.507" transform="translate(-3.509 -2.507)" fill="none" stroke="#091f3d" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+  <path id="Path_538" data-name="Path 538" d="M2,6m0,4.52A4.508,4.508,0,0,1,6.5,6h5.995a4.508,4.508,0,0,1,4.5,4.52h0a4.508,4.508,0,0,1-4.5,4.52H6.5A4.508,4.508,0,0,1,2,10.52Z" transform="translate(-0.493 -1.52)" fill="none" stroke="#091f3d" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+</svg>
