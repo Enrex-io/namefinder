@@ -112,6 +112,7 @@ export const FirebaseProvider = ({
 
     const verifyEmail = async (code: string) => {
         await firebase.auth().applyActionCode(code);
+        await firebase.auth().currentUser?.reload?.();
         return { isVerifiedEmail: true, firebase };
     };
 

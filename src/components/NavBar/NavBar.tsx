@@ -8,6 +8,7 @@ import {
     IconLogin,
     IconLogout,
     IconProgressCheck,
+    IconToggleRight,
 } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
@@ -283,6 +284,15 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                     >
                         <IconCreditCard color="#091F3D" size={20} />
                         <p>Subscription</p>
+                    </li>
+                    <li
+                        className={clsx(classes.subItemPost, classes.subItem)}
+                        onClick={() => {
+                            push('https://greenifs.ai');
+                        }}
+                    >
+                        <IconToggleRight color="#091F3D" size={20} />
+                        <p>About Greenifs</p>
                     </li>
                     <li
                         className={clsx(classes.subItemPost, classes.subItem)}
