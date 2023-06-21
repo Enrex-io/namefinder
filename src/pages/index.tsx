@@ -7,6 +7,7 @@ import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 import { NextPageWithLayout } from '@/pages/_app';
 import Layout from '@/pages/layout';
 import MarketingRegulations from '@/components/MarketingRegulations/MarketingRegulations';
+import logger from '@/utils/logger';
 
 const Home: NextPageWithLayout = () => {
     const [userInfo, setUserInfo] = useState<IGreenWashingUser | null>(null);
@@ -27,7 +28,7 @@ const Home: NextPageWithLayout = () => {
                     }
                 }
             } catch (e) {
-                console.log('Error while fetching user');
+                logger.error('Error while fetching user', { error: e });
             }
         }
 

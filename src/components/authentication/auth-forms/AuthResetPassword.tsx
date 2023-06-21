@@ -26,6 +26,7 @@ import {
     strengthColor,
     strengthIndicator,
 } from '../../../utils/password-strength';
+import logger from '@/utils/logger';
 
 interface ResetPasswordProps {
     oobCode: string | string[] | undefined;
@@ -158,7 +159,9 @@ const AuthResetPassword: FC<ResetPasswordProps> = ({ oobCode, email }) => {
 
                                                     router.push('/login');
                                                 } catch (err: any) {
-                                                    console.error('error', err);
+                                                    logger.error('error', {
+                                                        error: err,
+                                                    });
                                                     showSnackbar(
                                                         'Error occured',
                                                         'error'

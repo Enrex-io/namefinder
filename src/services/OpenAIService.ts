@@ -1,6 +1,7 @@
 import { isAxiosError } from '@/types/typeGuards';
 import { Details, IGreenWashingUser, IPrompt, ResponsePayload } from '@/types';
 import axios from '../utils/axios';
+import logger from '@/utils/logger';
 
 const DEFAULT_ERROR_MESSAGE =
     'The AI service is experiencing high traffic. Please try again.';
@@ -27,9 +28,9 @@ export class OpenAIApi {
             );
             return response.data;
         } catch (error: unknown) {
-            console.error(
+            logger.error(
                 'OpenAIService.getAssistedBySustainabilityMarketing: ',
-                error
+                { error }
             );
             if (!isAxiosError(error)) return { error: DEFAULT_ERROR_MESSAGE };
             let errorMessage = DEFAULT_ERROR_MESSAGE;
@@ -52,9 +53,9 @@ export class OpenAIApi {
             );
             return response.data;
         } catch (error: unknown) {
-            console.error(
+            logger.error(
                 'OpenAIService.getAssistedBySustainabilityMarketing: ',
-                error
+                { error }
             );
             if (!isAxiosError(error)) return { error: DEFAULT_ERROR_MESSAGE };
         }
@@ -67,7 +68,7 @@ export class OpenAIApi {
             );
             return response.data;
         } catch (error: unknown) {
-            console.error('OpenAIService.getHistory: ', error);
+            logger.error('OpenAIService.getHistory: ', { error });
             if (!isAxiosError(error)) return { error: DEFAULT_ERROR_MESSAGE };
         }
     };

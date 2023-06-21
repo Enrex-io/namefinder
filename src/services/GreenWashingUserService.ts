@@ -1,6 +1,7 @@
 import { isAxiosError } from '../types/typeGuards';
 import { IGreenWashingUser, ResponsePayload } from '@/types';
 import axios from '../utils/axios';
+import logger from '@/utils/logger';
 
 const DEFAULT_ERROR_MESSAGE = 'GreenWashingUserService error';
 
@@ -14,7 +15,7 @@ export class GreenWashingUserService {
             );
             return response.data;
         } catch (error: unknown) {
-            console.error('GreenWashingUserService.getUser: ', error);
+            logger.error('GreenWashingUserService.getUser: ', { error });
             if (!isAxiosError(error)) return { error: DEFAULT_ERROR_MESSAGE };
             let errorMessage = DEFAULT_ERROR_MESSAGE;
 
@@ -31,7 +32,7 @@ export class GreenWashingUserService {
             );
             return response.data;
         } catch (error: unknown) {
-            console.error('GreenWashingUserService.createUser: ', error);
+            logger.error('GreenWashingUserService.createUser: ', { error });
             if (!isAxiosError(error)) return { error: DEFAULT_ERROR_MESSAGE };
             let errorMessage = DEFAULT_ERROR_MESSAGE;
 
@@ -44,7 +45,7 @@ export class GreenWashingUserService {
             await axios.post('/api/sustainabilityMarketing/cancelSubscription');
             return { result: 'Subscription cancelled' };
         } catch (error: unknown) {
-            console.error('GreenWashingUserService.createUser: ', error);
+            logger.error('GreenWashingUserService.createUser: ', { error });
             if (!isAxiosError(error)) return { error: DEFAULT_ERROR_MESSAGE };
             let errorMessage = DEFAULT_ERROR_MESSAGE;
             return { error: errorMessage };
