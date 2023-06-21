@@ -211,13 +211,6 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                         )}
                         onClick={() => {
                             setIsOpen(false);
-                            if (
-                                isCounterMinus &&
-                                userInfo?.subscriptionStatus !==
-                                    SubscriptionStatus.FAILED
-                            ) {
-                                setPopup(PopupVariant.ZERO_CREDITS);
-                            }
                             if (pathname === '/history') {
                                 push('/');
                                 return;
@@ -245,12 +238,6 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                             classes.subItem,
                             classes.subItemProfile
                         )}
-                        onClick={() => {
-                            if (isCounterMinus) {
-                                setPopup(PopupVariant.ZERO_CREDITS);
-                                return;
-                            }
-                        }}
                     >
                         {user.photo ? (
                             <Image
@@ -272,16 +259,7 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                             </p>
                         </div>
                     </li>
-                    <li
-                        className={clsx(classes.subItemPost, classes.subItem)}
-                        onClick={() => {
-                            if (isCounterMinus) {
-                                setPopup(PopupVariant.ZERO_CREDITS);
-                                return;
-                            }
-                            push('/subscription');
-                        }}
-                    >
+                    <li className={clsx(classes.subItemPost, classes.subItem)}>
                         <IconCreditCard color="#091F3D" size={20} />
                         <p>Subscription</p>
                     </li>
