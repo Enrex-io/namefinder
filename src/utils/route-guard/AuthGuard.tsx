@@ -4,8 +4,7 @@ import useAuth from '../../hooks/useAuth';
 import FullscreenLoader from '@/components/Loader/FullscreenLoader';
 
 const AuthGuard = ({ children }: { children: ReactNode | null }) => {
-    const { user } = useAuth();
-    const isLoggedIn = user ? Boolean(user.id) : false;
+    const { isLoggedIn } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
