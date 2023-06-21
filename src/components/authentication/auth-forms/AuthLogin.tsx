@@ -36,6 +36,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from '../../../utils/axios';
 import { SnackbarContext } from '@/contexts/SnackbarContext';
 import logger from '@/utils/logger';
+import firebase from 'firebase/compat';
 
 const Google = '/images/social-google.svg';
 
@@ -231,19 +232,20 @@ const FirebaseLogin = ({ ...others }) => {
                     { setErrors, setStatus, setSubmitting }
                 ) => {
                     try {
-                        await firebaseEmailPasswordSignIn(
-                            values.email,
-                            values.password
-                        );
-                        const isEmailVerified =
-                            await checkFirebaseEmailVerification();
+                        const user: firebase.User | null =
+                            await firebaseEmailPasswordSignIn(
+                                values.email,
+                                values.password
+                            );
 
-                        if (isEmailVerified) {
+                        if (!user) return;
+
+                        if (user?.emailVerified) {
                             setIsVerified(true);
+                            router.push('/');
                         } else {
                             setIsVerified(false);
                         }
-                        router.reload();
                     } catch (err: any) {
                         let message = 'Firebase signin error';
                         if (err.code === 'auth/user-not-found') {
@@ -251,9 +253,6 @@ const FirebaseLogin = ({ ...others }) => {
                         }
                         showSnackbar(message, 'error');
                         logger.error(message, { error: err });
-                        // setStatus({ success: false });
-                        // setErrors({ submit: err.message });
-                        // setSubmitting(false);
                     }
                 }}
             >
@@ -380,24 +379,24 @@ const FirebaseLogin = ({ ...others }) => {
                                 </FormHelperText>
                             </Box>
                         )}
-                        {!isVerified && (
-                            <Box sx={{ mt: 3 }}>
-                                <FormHelperText error>
-                                    Please complete sign-up process. Check your
-                                    inbox for validation email. If is does not
-                                    appear in inbox, check spam or{' '}
-                                    <span
-                                        onClick={handleResend}
-                                        style={{
-                                            cursor: 'pointer',
-                                            fontWeight: '600',
-                                        }}
-                                    >
-                                        RESEND
-                                    </span>
-                                </FormHelperText>
-                            </Box>
-                        )}
+                        {/*{!isVerified && (*/}
+                        {/*    <Box sx={{ mt: 3 }}>*/}
+                        {/*        <FormHelperText error>*/}
+                        {/*            Please complete sign-up process. Check your*/}
+                        {/*            inbox for validation email. If is does not*/}
+                        {/*            appear in inbox, check spam or{' '}*/}
+                        {/*            <span*/}
+                        {/*                onClick={handleResend}*/}
+                        {/*                style={{*/}
+                        {/*                    cursor: 'pointer',*/}
+                        {/*                    fontWeight: '600',*/}
+                        {/*                }}*/}
+                        {/*            >*/}
+                        {/*                RESEND*/}
+                        {/*            </span>*/}
+                        {/*        </FormHelperText>*/}
+                        {/*    </Box>*/}
+                        {/*)}*/}
                         {notification && (
                             <Box sx={{ mt: 3 }}>
                                 {notification === 'sent' ? (
@@ -412,6 +411,23 @@ const FirebaseLogin = ({ ...others }) => {
                                     </Alert>
                                 )}
                             </Box>
+                        )}
+                        {!isVerified && (
+                            <Alert severity="warning">
+                                Please complete sign-up process. Check your
+                                inbox for validation email. If it does not
+                                appear in inbox, check spam or{' '}
+                                <span
+                                    onClick={handleResend}
+                                    style={{
+                                        cursor: 'pointer',
+                                        fontWeight: '600',
+                                        textDecoration: 'underline',
+                                    }}
+                                >
+                                    RESEND
+                                </span>
+                            </Alert>
                         )}
                         <Box sx={{ mt: 2 }}>
                             <Button

@@ -40,7 +40,6 @@ export const FirebaseProvider = ({
                     const tokenResult = await user?.getIdTokenResult(true);
 
                     const userEmailVerified = user.emailVerified;
-                    // localStorage.setItem('emailVerificationGreenifs', userEmailVerified.toString());
 
                     axios.defaults.headers.common.Authorization = `Bearer ${tokenResult.token}`;
                     dispatch({
@@ -88,8 +87,34 @@ export const FirebaseProvider = ({
         return () => axios.interceptors.response.eject(interceptor);
     }, []);
 
-    const firebaseEmailPasswordSignIn = (email: string, password: string) =>
-        firebase.auth().signInWithEmailAndPassword(email, password);
+    const firebaseEmailPasswordSignIn = async (
+        email: string,
+        password: string
+    ) => {
+        const { user } = await firebase
+            .auth()
+            .signInWithEmailAndPassword(email, password);
+        const tokenResult = await user?.getIdTokenResult(true);
+        if (user)
+            dispatch({
+                type: LOGIN,
+                payload: {
+                    isLoggedIn: user?.emailVerified,
+                    isEmailVerified: user?.emailVerified,
+                    user: {
+                        id: user.uid,
+                        email: user.email,
+                        name: user.displayName || '',
+                        token: tokenResult?.token,
+                        claims: tokenResult?.claims,
+                        photo: user.photoURL || '',
+                        phone: user.phoneNumber,
+                        isEmailVerified: user.emailVerified,
+                    },
+                },
+            });
+        return user;
+    };
 
     const firebaseGoogleSignIn = () => {
         const provider = new firebase.auth.GoogleAuthProvider();

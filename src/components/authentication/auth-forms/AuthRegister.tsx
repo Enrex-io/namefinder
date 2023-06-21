@@ -61,7 +61,7 @@ const FirebaseRegister = ({ ...others }) => {
     const matchDownMD = useMediaQuery(theme.breakpoints.down('md'));
     const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
     const [showPassword, setShowPassword] = React.useState(false);
-    const [checked, setChecked] = React.useState(true);
+    const [checked, setChecked] = React.useState(false);
     const [isValidated, setIsValidated] = React.useState<boolean>(false);
 
     const [strength, setStrength] = React.useState(0);
@@ -196,6 +196,13 @@ const FirebaseRegister = ({ ...others }) => {
                     values,
                     { setErrors, setStatus, setSubmitting }
                 ) => {
+                    if (!checked) {
+                        setErrors({
+                            submit: 'To proceed further please agree with agree with Terms & Condition',
+                        });
+                        return;
+                    }
+
                     try {
                         const result = await firebaseRegister(
                             values.email,
@@ -210,10 +217,6 @@ const FirebaseRegister = ({ ...others }) => {
                         });
                         setIsValidated(true);
                         return profile;
-                        // WARNING: do not set any formik state here as formik might be already destroyed here. You may get following error by doing so.
-                        // Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application.
-                        // To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
-                        // github issue: https://github.com/formium/formik/issues/2430
                     } catch (err: any) {
                         logger.error('Firebase register error', { error: err });
                         let message = 'Failed to sign up';
