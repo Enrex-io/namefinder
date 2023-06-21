@@ -12,7 +12,12 @@ import {
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import useAuth from '@/hooks/useAuth';
-import { IGreenWashingUser, IPrompt, PopupVariant } from '@/types';
+import {
+    IGreenWashingUser,
+    IPrompt,
+    PopupVariant,
+    SubscriptionStatus,
+} from '@/types';
 import Chip from '@/components/Chip/Chip';
 import UserPhotoPlaceholder from '@/components/UserPhotoPlaceholder/UserPhotoPlaceholder';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
@@ -205,8 +210,13 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                         )}
                         onClick={() => {
                             setIsOpen(false);
-                            if (isCounterMinus)
-                                setPopup(PopupVariant.THANK_YOU);
+                            if (
+                                isCounterMinus &&
+                                userInfo?.subscriptionStatus !==
+                                    SubscriptionStatus.FAILED
+                            ) {
+                                setPopup(PopupVariant.ZERO_CREDITS);
+                            }
                             if (pathname === '/history') {
                                 push('/');
                                 return;
