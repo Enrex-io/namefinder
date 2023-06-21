@@ -40,6 +40,7 @@ import { StringColorProps } from '../../../types';
 import { SnackbarContext } from '@/contexts/SnackbarContext';
 import { useRouter } from 'next/router';
 import { GreenWashingUserService } from '@/services/GreenWashingUserService';
+import logger from '@/utils/logger';
 const Google = '/images/social-google.svg';
 
 const INITIAL_FORM_VALUES = {
@@ -81,7 +82,7 @@ const FirebaseRegister = ({ ...others }) => {
             const token = await userCredentials.user?.getIdToken();
         } catch (err) {
             showSnackbar('Failed to sign up', 'error');
-            console.error('Google handler error', err);
+            logger.error('Google handler error', { error: err });
         }
     };
 
@@ -221,7 +222,7 @@ const FirebaseRegister = ({ ...others }) => {
                         // To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
                         // github issue: https://github.com/formium/formik/issues/2430
                     } catch (err: any) {
-                        console.error('Firebase register error', err);
+                        logger.error('Firebase register error', { error: err });
                         let message = 'Failed to sign up';
                         if (err.code === 'auth/email-already-in-use') {
                             message =
