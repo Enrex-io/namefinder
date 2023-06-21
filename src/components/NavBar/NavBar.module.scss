@@ -146,11 +146,7 @@
   text-overflow: ellipsis;
 }
 
-.subItemPost:hover(:not(:nth-child(2))) {
-  background-color: #fff !important;
-}
-
-.ul:nth-child(2) > .subItemPost:hover, .ul:nth-child(1) > .subItemPost:nth-child(1):hover {
+.subHover:hover {
   background-color: #fff !important;
 }
 
