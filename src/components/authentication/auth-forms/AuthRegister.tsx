@@ -1,7 +1,6 @@
 import Image from 'next/image';
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Link from 'next/link';
-// material-ui
 import { useTheme } from '@mui/material/styles';
 import {
     Box,
@@ -22,25 +21,19 @@ import {
     useMediaQuery,
 } from '@mui/material';
 
-// third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
-// project imports
 import useAuth from '../../../hooks/useAuth';
-import {
-    strengthColor,
-    strengthIndicator,
-} from '../../../utils/password-strength';
+import { strengthColor, strengthIndicator } from '@/utils/password-strength';
 
-// assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { StringColorProps } from '../../../types';
+import { StringColorProps } from '@/types';
 import { SnackbarContext } from '@/contexts/SnackbarContext';
 import { useRouter } from 'next/router';
-import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 import logger from '@/utils/logger';
+
 const Google = '/images/social-google.svg';
 
 const INITIAL_FORM_VALUES = {
@@ -410,9 +403,9 @@ const FirebaseRegister = ({ ...others }) => {
                                             <Typography
                                                 variant="subtitle1"
                                                 component={Link}
-                                                href="/"
+                                                href="https://www.greenifs.ai/terms-cookies-privacy"
                                             >
-                                                Terms & Condition.
+                                                Terms & Conditions.
                                             </Typography>
                                         </Typography>
                                     }
