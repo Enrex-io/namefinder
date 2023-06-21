@@ -8,6 +8,7 @@ import {
     IconLogin,
     IconLogout,
     IconProgressCheck,
+    IconToggleRight,
 } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
@@ -280,12 +281,7 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                             push('https://greenifs.ai');
                         }}
                     >
-                        <Image
-                            src="/svg/switch.svg"
-                            width={20}
-                            height={20}
-                            alt="Switch"
-                        />
+                        <IconToggleRight color="#091F3D" size={20} />
                         <p>About Greenifs</p>
                     </li>
                     <li
