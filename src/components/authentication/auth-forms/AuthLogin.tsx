@@ -16,9 +16,8 @@ import {
     Grid,
     IconButton,
     InputAdornment,
-    InputLabel,
-    OutlinedInput,
     Stack,
+    TextField,
     Typography,
     useMediaQuery,
 } from '@mui/material';
@@ -272,18 +271,16 @@ const FirebaseLogin = ({ ...others }) => {
                                 fullWidth
                                 error={Boolean(touched.email && errors.email)}
                             >
-                                <InputLabel htmlFor="outlined-adornment-email-login">
-                                    Email Address / Username
-                                </InputLabel>
-                                <OutlinedInput
+                                <TextField
                                     id="outlined-adornment-email-login"
                                     type="email"
+                                    size="small"
+                                    variant="outlined"
                                     value={values.email}
                                     name="email"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     label="Email Address / Username"
-                                    inputProps={{}}
                                 />
                                 {touched.email && errors.email && (
                                     <FormHelperText
@@ -300,39 +297,38 @@ const FirebaseLogin = ({ ...others }) => {
                                     touched.password && errors.password
                                 )}
                             >
-                                <InputLabel htmlFor="outlined-adornment-password-login">
-                                    Password
-                                </InputLabel>
-                                <OutlinedInput
+                                <TextField
                                     id="outlined-adornment-password-login"
+                                    size="small"
                                     type={showPassword ? 'text' : 'password'}
                                     value={values.password}
                                     name="password"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={
-                                                    handleClickShowPassword
-                                                }
-                                                onMouseDown={
-                                                    handleMouseDownPassword
-                                                }
-                                                edge="end"
-                                                size="large"
-                                            >
-                                                {showPassword ? (
-                                                    <Visibility />
-                                                ) : (
-                                                    <VisibilityOff />
-                                                )}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
                                     label="Password"
-                                    inputProps={{}}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={
+                                                        handleClickShowPassword
+                                                    }
+                                                    onMouseDown={
+                                                        handleMouseDownPassword
+                                                    }
+                                                    edge="end"
+                                                    size="large"
+                                                >
+                                                    {showPassword ? (
+                                                        <Visibility />
+                                                    ) : (
+                                                        <VisibilityOff />
+                                                    )}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
                                 />
                                 {touched.password && errors.password && (
                                     <FormHelperText
