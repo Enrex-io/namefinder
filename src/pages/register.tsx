@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid';
 import AuthCardWrapper from '@/components/authentication/AuthCardWrapper';
 import { Divider, Stack, Typography, useMediaQuery } from '@mui/material';
 import AuthRegister from '@/components/authentication/auth-forms/AuthRegister';
+import LoginRegisterSwitcher from '@/components/authentication/LoginRegisterSwitcher';
 
 export default function Register() {
     const matchDownSM = useMediaQuery('(min-width:900px)');
@@ -44,55 +45,24 @@ export default function Register() {
                                         alignItems="center"
                                         justifyContent="center"
                                     >
-                                        <Grid item sx={{ mb: 3 }}>
+                                        <Grid item>
                                             <Link href="#">
                                                 <Logo />
                                             </Link>
                                         </Grid>
                                         <Grid item xs={12}>
-                                            <Grid
-                                                container
-                                                direction={
-                                                    matchDownSM
-                                                        ? 'column-reverse'
-                                                        : 'row'
-                                                }
-                                                alignItems="center"
-                                                justifyContent="center"
+                                            <LoginRegisterSwitcher />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <Typography
+                                                variant="caption"
+                                                fontSize="16px"
+                                                textAlign="center"
+                                                component="p"
                                             >
-                                                <Grid item>
-                                                    <Stack
-                                                        alignItems="center"
-                                                        justifyContent="center"
-                                                        spacing={1}
-                                                    >
-                                                        <Typography
-                                                            color="#009688"
-                                                            gutterBottom
-                                                            variant={
-                                                                matchDownSM
-                                                                    ? 'h3'
-                                                                    : 'h2'
-                                                            }
-                                                        >
-                                                            Sign up
-                                                        </Typography>
-                                                        <Typography
-                                                            variant="caption"
-                                                            fontSize="16px"
-                                                            textAlign={
-                                                                matchDownSM
-                                                                    ? 'center'
-                                                                    : 'inherit'
-                                                            }
-                                                        >
-                                                            Enter your
-                                                            credentials to
-                                                            continue
-                                                        </Typography>
-                                                    </Stack>
-                                                </Grid>
-                                            </Grid>
+                                                Enter your credentials to
+                                                continue
+                                            </Typography>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <AuthRegister />
