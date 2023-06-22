@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement } from 'react';
 import classes from './subscription.module.scss';
 import useAuth from '@/hooks/useAuth';
 import Script from 'next/script';
@@ -7,10 +7,8 @@ import Layout from '@/pages/layout';
 import useSWR from 'swr';
 import axios from '@/utils/axios';
 import { IGreenWashingUser } from '@/types';
-import Button from '@/components/Button/Button';
 import FullscreenLoader from '@/components/Loader/FullscreenLoader';
-import { SnackbarContext } from '@/contexts/SnackbarContext';
-import { useRouter } from 'next/router';
+import ActiveSubscription from '@/components/Subscription/ActiveSubscription/ActiveSubscription';
 
 const HEADING_TEXT = 'Subscription';
 const STRIPE_PRICING_TABLE_ID = process.env.NEXT_PUBLIC_STRIPE_PRICING_TABLE_ID;
@@ -18,8 +16,6 @@ const STRIPE_PUBLISHABLE_ID = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_ID;
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const Subscription = () => {
-    const router = useRouter();
-    const { showSnackbar } = useContext(SnackbarContext);
     const { user } = useAuth();
     const { data, isLoading } = useSWR<{ result: IGreenWashingUser }>(
         '/api/sustainabilityMarketing/user',
@@ -40,33 +36,8 @@ const Subscription = () => {
         userInfo?.counter > 0 &&
         userInfo.subscriptionId;
 
-    const handlePortalLinkClick = async () => {
-        try {
-            const link = process.env.NEXT_PUBLIC_STRIPE_CUSTOMER_PORTAL_LINK;
-            if (!link) {
-                throw new Error();
-            }
-            router.push(link);
-        } catch (e) {
-            showSnackbar('Subscription cancellation failed');
-        }
-    };
-
     if (isActiveSubscription) {
-        return (
-            <Stack
-                className={classes.container}
-                spacing={1.25}
-                direction="column"
-            >
-                <h2 className={classes.heading}>{HEADING_TEXT}</h2>
-                <div style={{ maxWidth: '280px' }}>
-                    <Button onClick={handlePortalLinkClick}>
-                        Manage your subscription
-                    </Button>
-                </div>
-            </Stack>
-        );
+        return <ActiveSubscription headingText={HEADING_TEXT} />;
     }
 
     return (

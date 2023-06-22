@@ -112,3 +112,22 @@ export interface StringColorProps {
 export type StringBoolFunc = (s: string) => boolean;
 export type StringNumFunc = (s: string) => number;
 export type NumbColorFunc = (n: number) => StringColorProps | undefined;
+
+export interface SubscriptionData {
+    priceId: string;
+    priceName?: string;
+    price: number | null;
+    interval?: 'day' | 'month' | 'week' | 'year';
+    subscriptionStartDate: number;
+    nextPaymentDate: number;
+    counter: number;
+    status:
+        | 'active'
+        | 'canceled'
+        | 'incomplete'
+        | 'incomplete_expired'
+        | 'past_due'
+        | 'paused'
+        | 'trialing'
+        | 'unpaid';
+}
