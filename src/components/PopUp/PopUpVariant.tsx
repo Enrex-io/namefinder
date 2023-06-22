@@ -22,7 +22,7 @@ const popUpVariantSettings: PopupVariants = {
     [PopupVariant.PAYMENT_FAILED]: {
         title: 'Subscription payment failed or missing',
         image: '/images/subscription-failed.png',
-        mainActionTitle: 'Upgrade',
+        mainActionTitle: 'Manage Payment',
         imageAlt: 'Subscription failed',
         buttonColor: 'secondary',
         content:
@@ -31,7 +31,7 @@ const popUpVariantSettings: PopupVariants = {
     [PopupVariant.ZERO_CREDITS]: {
         title: 'All subscription credits were used',
         image: '/images/subscription-credits-used.png',
-        mainActionTitle: 'All credits used',
+        mainActionTitle: 'Upgrade Subscription',
         imageAlt: 'Subscription failed',
         buttonColor: 'secondary',
         content:
