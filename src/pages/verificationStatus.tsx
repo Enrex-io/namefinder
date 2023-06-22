@@ -19,14 +19,17 @@ export default function Verification() {
         (async () => {
             try {
                 if (typeof oobCode !== 'string') {
-                    throw new Error('Action code error');
+                    console.log('Action code error');
+                    return;
+                    // throw new Error('Action code error');
                 }
                 const res = await checkActionCode(oobCode);
                 if (res.data.email) {
                     setEmail(res.data.email);
                 }
             } catch (e) {
-                setActionCodeError('Action code error');
+                console.log('Action code error');
+                // setActionCodeError('Action code error');
             }
         })();
     }, [oobCode, checkActionCode]);

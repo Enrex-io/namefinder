@@ -9,10 +9,9 @@ const AuthGuard = ({ children }: { children: ReactNode | null }) => {
 
     useEffect(() => {
         if (!user?.isEmailVerified) {
-            router.push('/login');
+            router.push('/login').then((route) => console.log(route));
         }
-        // eslint-disable-next-line
-    }, [user?.isEmailVerified]);
+    }, [router, user?.isEmailVerified]);
 
     if (!user?.isEmailVerified) {
         return <FullscreenLoader />;

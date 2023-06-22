@@ -60,8 +60,6 @@ export const triggerNewcomerEmailGreeting = async (
     }
 };
 
-// ============================|| FIREBASE - LOGIN ||============================ //
-
 const FirebaseLogin = ({ ...others }) => {
     const matchDownSM = useMediaQuery('(min-width:900px)');
     const [checked, setChecked] = React.useState(true);
@@ -72,11 +70,11 @@ const FirebaseLogin = ({ ...others }) => {
         firebaseEmailPasswordSignIn,
         firebaseGoogleSignIn,
         firebaseResendEmailVerification,
-        checkFirebaseEmailVerification,
         user,
-        isEmailVerified,
     } = useAuth();
     const [notification, setNotification] = React.useState<string>('');
+
+    console.log(user);
 
     const googleHandler = async () => {
         try {
@@ -84,7 +82,7 @@ const FirebaseLogin = ({ ...others }) => {
             const isNewUser = !!userCredentials.additionalUserInfo?.isNewUser;
             const token = await userCredentials.user?.getIdToken();
             if (token && isNewUser)
-                triggerNewcomerEmailGreeting(token, isNewUser);
+                await triggerNewcomerEmailGreeting(token, isNewUser);
         } catch (error) {
             logger.error('Google handler error', { error });
         }
@@ -110,15 +108,15 @@ const FirebaseLogin = ({ ...others }) => {
 
     useEffect(() => {
         if (user) {
+            console.log(user.isEmailVerified);
             if (
                 user.claims?.firebase?.sign_in_provider === 'google.com' ||
-                isEmailVerified ||
                 user.isEmailVerified
             ) {
-                router.push('/');
+                router.push('/').then((route) => console.log(route));
             }
         }
-    }, [user, isEmailVerified, router]);
+    }, [user, router]);
 
     return (
         <>
@@ -181,7 +179,7 @@ const FirebaseLogin = ({ ...others }) => {
                                 py: 0.5,
                                 px: 7,
                                 borderColor: '#f5f5f5',
-                                color: `${'#212121'}!important`,
+                                color: `#212121 !important`,
                                 fontWeight: 500,
                                 borderRadius: `${16}px`,
                             }}
@@ -227,10 +225,7 @@ const FirebaseLogin = ({ ...others }) => {
                         .max(255)
                         .required('Password is required'),
                 })}
-                onSubmit={async (
-                    values,
-                    { setErrors, setStatus, setSubmitting }
-                ) => {
+                onSubmit={async (values) => {
                     try {
                         const user: firebase.User | null =
                             await firebaseEmailPasswordSignIn(
@@ -238,16 +233,13 @@ const FirebaseLogin = ({ ...others }) => {
                                 values.password
                             );
 
-                        if (!user) return;
-
-                        if (user?.emailVerified) {
-                            setIsVerified(true);
+                        if (user && user?.emailVerified) {
                             router.push('/');
                         } else {
                             setIsVerified(false);
                         }
                     } catch (err: any) {
-                        let message = 'Firebase signin error';
+                        let message = 'Firebase Sign In error';
                         if (err.code === 'auth/user-not-found') {
                             message = 'User not found';
                         }

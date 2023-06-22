@@ -63,8 +63,6 @@ export interface IGreenWashingUser {
 }
 
 export type FirebaseContextType = {
-    isLoggedIn: boolean;
-    isEmailVerified?: boolean;
     isInitialized?: boolean;
     user?: UserProfile | null | undefined;
     logout: () => Promise<void>;
@@ -81,8 +79,11 @@ export type FirebaseContextType = {
     firebaseResendEmailVerification: () => Promise<void>;
     resetPassword: (email: string) => Promise<void>;
     updateUserPassword: (code: string, newPassword: string) => Promise<void>;
-    updateProfile: (name: string, email: string) => Promise<void>;
-    updatePhoto: (photoUrl: string) => Promise<void>;
+    updateProfile: (
+        name: string,
+        email: string
+    ) => Promise<firebase.User | null>;
+    updatePhoto: (photoUrl: string) => Promise<firebase.User | null>;
     verifyEmail: (
         code: string
     ) => Promise<{ isVerifiedEmail: boolean; firebase: typeof firebase }>;
@@ -91,8 +92,6 @@ export type FirebaseContextType = {
 };
 
 export interface InitialLoginContextProps {
-    isLoggedIn: boolean;
-    isEmailVerified?: boolean;
     isInitialized?: boolean;
     user?: UserProfile | null | undefined;
 }
