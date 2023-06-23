@@ -1,10 +1,4 @@
-import React, {
-    Dispatch,
-    SetStateAction,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
+import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
 import Paper from '@/components/Paper/Paper';
 import { Details, IGreenWashingUser } from '@/types';
 import { OpenAIApi } from '@/services/OpenAIService';
@@ -40,6 +34,18 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
     const [disabled, setDisabled] = useState<boolean>(false);
 
     const handleSubmitDescription = async (details: Details) => {
+        const resp = (await OpenAIApi.checkRelevanceOfText(
+            details.description
+        )) as { answer: string };
+
+        console.log(resp);
+
+        if (resp.answer === 'No') {
+            return setError(
+                'Please provide more relevant text and please try once again'
+            );
+        }
+
         const chars = getMediaCharByMedia(details.media as Medias);
         const res = await OpenAIApi.getAssistedBySustainabilityMarketing(
             details,
