@@ -198,7 +198,7 @@ const FirebaseRegister = ({ ...others }) => {
                 ) => {
                     if (!checked) {
                         setErrors({
-                            submit: 'To proceed further please agree with agree with Terms & Condition',
+                            submit: 'To proceed further please agree with Terms & Condition',
                         });
                         return;
                     }
