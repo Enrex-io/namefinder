@@ -122,9 +122,10 @@ export const FirebaseProvider = ({
 
     const verifyEmail = async (code: string) => {
         const user = firebase.auth().currentUser;
+        if (!user) return { isVerifiedEmail: false, firebase };
+
         await firebase.auth().applyActionCode(code);
         await firebase.auth().currentUser?.reload?.();
-        if (!user) return null;
         const tokenResult = await user?.getIdTokenResult(true);
         dispatch({
             type: LOGIN,
