@@ -13,8 +13,6 @@ import {
     Grid,
     IconButton,
     InputAdornment,
-    InputLabel,
-    OutlinedInput,
     Stack,
     TextField,
     Typography,
@@ -242,6 +240,7 @@ const FirebaseRegister = ({ ...others }) => {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
+                                    size="small"
                                     label="First Name"
                                     margin="normal"
                                     name="fname"
@@ -254,6 +253,7 @@ const FirebaseRegister = ({ ...others }) => {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
+                                    size="small"
                                     label="Last Name"
                                     margin="normal"
                                     name="lname"
@@ -269,11 +269,9 @@ const FirebaseRegister = ({ ...others }) => {
                                 fullWidth
                                 error={Boolean(touched.email && errors.email)}
                             >
-                                <InputLabel htmlFor="outlined-adornment-email-register">
-                                    Email Address / Username
-                                </InputLabel>
-                                <OutlinedInput
+                                <TextField
                                     id="outlined-adornment-email-register"
+                                    size="small"
                                     type="email"
                                     value={values.email}
                                     name="email"
@@ -298,11 +296,9 @@ const FirebaseRegister = ({ ...others }) => {
                                     touched.password && errors.password
                                 )}
                             >
-                                <InputLabel htmlFor="outlined-adornment-password-register">
-                                    Password
-                                </InputLabel>
-                                <OutlinedInput
+                                <TextField
                                     id="outlined-adornment-password-register"
+                                    size="small"
                                     type={showPassword ? 'text' : 'password'}
                                     value={values.password}
                                     name="password"
@@ -312,27 +308,29 @@ const FirebaseRegister = ({ ...others }) => {
                                         handleChange(e);
                                         changePassword(e.target.value);
                                     }}
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={
-                                                    handleClickShowPassword
-                                                }
-                                                onMouseDown={
-                                                    handleMouseDownPassword
-                                                }
-                                                edge="end"
-                                                size="large"
-                                            >
-                                                {showPassword ? (
-                                                    <Visibility />
-                                                ) : (
-                                                    <VisibilityOff />
-                                                )}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={
+                                                        handleClickShowPassword
+                                                    }
+                                                    onMouseDown={
+                                                        handleMouseDownPassword
+                                                    }
+                                                    edge="end"
+                                                    size="large"
+                                                >
+                                                    {showPassword ? (
+                                                        <Visibility />
+                                                    ) : (
+                                                        <VisibilityOff />
+                                                    )}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
                                     inputProps={{}}
                                 />
                                 {touched.password && errors.password && (
