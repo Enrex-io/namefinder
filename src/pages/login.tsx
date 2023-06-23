@@ -7,6 +7,7 @@ import AuthWrapper1 from '@/components/authentication/AuthWrapper1';
 import Grid from '@mui/material/Grid';
 import AuthCardWrapper from '@/components/authentication/AuthCardWrapper';
 import { Divider, Stack, Typography, useMediaQuery } from '@mui/material';
+import LoginRegisterSwitcher from '@/components/authentication/LoginRegisterSwitcher';
 
 export default function Login() {
     const matchDownSM = useMediaQuery('(min-width:900px)');
@@ -45,22 +46,25 @@ export default function Login() {
                                         justifyContent="center"
                                     >
                                         <Grid item>
-                                            <Stack spacing={1}>
-                                                <Link href="#">
-                                                    <Logo />
-                                                </Link>
-                                                <Typography
-                                                    variant="caption"
-                                                    fontSize="16px"
-                                                    textAlign={
-                                                        matchDownSM
-                                                            ? 'center'
-                                                            : 'inherit'
-                                                    }
-                                                >
-                                                    Login to continue
-                                                </Typography>
-                                            </Stack>
+                                            <Link href="#">
+                                                <Logo />
+                                            </Link>
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <LoginRegisterSwitcher />
+                                        </Grid>
+                                        <Grid item>
+                                            <Typography
+                                                variant="caption"
+                                                fontSize="16px"
+                                                textAlign={
+                                                    matchDownSM
+                                                        ? 'center'
+                                                        : 'inherit'
+                                                }
+                                            >
+                                                Login to continue
+                                            </Typography>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <AuthLogin />

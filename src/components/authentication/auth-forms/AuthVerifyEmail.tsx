@@ -27,7 +27,6 @@ const Verification: FC<VerificationProps> = ({ oobCode, email }) => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
     const { showSnackbar } = useContext(SnackbarContext);
-
     return (
         <AuthWrapper1>
             <Grid
@@ -131,7 +130,7 @@ const Verification: FC<VerificationProps> = ({ oobCode, email }) => {
                                                             await result.firebase
                                                                 .auth()
                                                                 .currentUser?.getIdToken();
-                                                        router.push('/login');
+                                                        router.push('/');
                                                     }
                                                 } catch (e) {
                                                     showSnackbar(

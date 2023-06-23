@@ -3,8 +3,7 @@ import {
     Button,
     FormControl,
     FormHelperText,
-    InputLabel,
-    OutlinedInput,
+    TextField,
 } from '@mui/material';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -64,18 +63,16 @@ const AuthForgotPassword = ({ ...others }) => {
                         fullWidth
                         error={Boolean(touched.email && errors.email)}
                     >
-                        <InputLabel htmlFor="outlined-adornment-email-forgot">
-                            Email Address / Username
-                        </InputLabel>
-                        <OutlinedInput
+                        <TextField
                             id="outlined-adornment-email-forgot"
+                            size="small"
+                            variant="outlined"
                             type="email"
                             value={values.email}
                             name="email"
                             onBlur={handleBlur}
                             onChange={handleChange}
                             label="Email Address / Username"
-                            inputProps={{}}
                         />
                         {touched.email && errors.email && (
                             <FormHelperText
