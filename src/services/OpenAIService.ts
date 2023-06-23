@@ -61,6 +61,19 @@ export class OpenAIApi {
         }
     };
 
+    public static checkRelevanceOfText = async (post: string) => {
+        try {
+            const response = await axios.post(
+                '/api/sustainabilityMarketing/checkRelevanceOfText',
+                { post: post }
+            );
+            return response.data;
+        } catch (error: unknown) {
+            logger.error('OpenAIService.checkRelevanceOfText: ', { error });
+            if (!isAxiosError(error)) return { error: DEFAULT_ERROR_MESSAGE };
+        }
+    };
+
     public static getHistory = async (userId: string) => {
         try {
             const response = await axios.get(
