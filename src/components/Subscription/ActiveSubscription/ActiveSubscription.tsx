@@ -13,12 +13,16 @@ import clsx from 'clsx';
 
 interface ActiveSubscriptionProps {
     headingText: string;
+    showManageButton: boolean;
+    zeroVerticalMargin?: boolean;
 }
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const ActiveSubscription: React.FC<ActiveSubscriptionProps> = ({
     headingText,
+    showManageButton,
+    zeroVerticalMargin = false,
 }) => {
     const router = useRouter();
     const { showSnackbar } = useContext(SnackbarContext);
@@ -52,7 +56,13 @@ const ActiveSubscription: React.FC<ActiveSubscriptionProps> = ({
     }, [data]);
 
     return (
-        <Stack className={classes.container} spacing={1.25} direction="column">
+        <Stack
+            className={clsx(classes.container, {
+                [classes.containerZeroMargin]: zeroVerticalMargin,
+            })}
+            spacing={1.25}
+            direction="column"
+        >
             <Paper className={classes.paper} direction="column" hasBorder>
                 <h2 className={classes.heading}>{headingText}</h2>
                 {isLoading && <Loader height={40} />}
@@ -93,14 +103,16 @@ const ActiveSubscription: React.FC<ActiveSubscriptionProps> = ({
                     </table>
                 )}
             </Paper>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <Button
-                    onClick={handlePortalLinkClick}
-                    className={classes.button}
-                >
-                    Manage subscription
-                </Button>
-            </div>
+            {showManageButton && (
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button
+                        onClick={handlePortalLinkClick}
+                        className={classes.button}
+                    >
+                        Manage subscription
+                    </Button>
+                </div>
+            )}
         </Stack>
     );
 };

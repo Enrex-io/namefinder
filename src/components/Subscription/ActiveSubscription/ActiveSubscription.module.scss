@@ -1,10 +1,11 @@
 .container {
+  width: 100%;
   max-width: 730px;
-  margin: 2rem auto 5rem;
-  @media screen and (max-width: 980px) {
-    margin-top: 4rem;
-    padding: 1rem;
-  }
+  margin: 2rem auto;
+}
+
+.containerZeroMargin {
+  margin: 0 auto;
 }
 
 .paper {

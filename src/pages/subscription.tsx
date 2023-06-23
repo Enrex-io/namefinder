@@ -28,15 +28,31 @@ const Subscription = () => {
     const userInfo = data?.result;
     const isActiveSubscription =
         userInfo?.plan !== 'freemium' &&
-        typeof userInfo?.counter === 'number' &&
-        userInfo?.counter > 0 &&
-        userInfo.subscriptionId;
+        userInfo?.subscriptionStatus !== 'failed';
 
-    if (isActiveSubscription) {
-        return <ActiveSubscription headingText={HEADING_TEXT} />;
+    const isCounterPositive =
+        typeof userInfo?.counter === 'number' && userInfo?.counter > 0;
+
+    if (isActiveSubscription && isCounterPositive) {
+        return (
+            <ActiveSubscription
+                headingText={HEADING_TEXT}
+                showManageButton={true}
+            />
+        );
     }
 
-    return <PricingTable headingText={HEADING_TEXT} userId={user?.id} />;
+    return (
+        <PricingTable headingText={HEADING_TEXT} userId={user?.id}>
+            {!isCounterPositive && (
+                <ActiveSubscription
+                    headingText={'Current subscription'}
+                    showManageButton={false}
+                    zeroVerticalMargin
+                />
+            )}
+        </PricingTable>
+    );
 };
 
 Subscription.getLayout = function getLayout(page: ReactElement) {
