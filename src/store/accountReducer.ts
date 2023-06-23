@@ -5,9 +5,7 @@ import { InitialLoginContextProps } from '../types';
 // ==============================|| ACCOUNT REDUCER ||============================== //
 
 const initialState: InitialLoginContextProps = {
-    isLoggedIn: false,
     isInitialized: false,
-    isEmailVerified: false,
     user: null,
 };
 
@@ -27,10 +25,9 @@ const accountReducer = (state = initialState, action: AccountReducerActionProps)
             };
         }
         case LOGIN: {
-            const { user, isLoggedIn } = action.payload!;
+            const { user } = action.payload!;
             return {
                 ...state,
-                isLoggedIn,
                 isInitialized: true,
                 user,
             };

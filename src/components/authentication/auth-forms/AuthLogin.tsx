@@ -16,9 +16,8 @@ import {
     Grid,
     IconButton,
     InputAdornment,
-    InputLabel,
-    OutlinedInput,
     Stack,
+    TextField,
     Typography,
     useMediaQuery,
 } from '@mui/material';
@@ -36,6 +35,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from '../../../utils/axios';
 import { SnackbarContext } from '@/contexts/SnackbarContext';
 import logger from '@/utils/logger';
+import firebase from 'firebase/compat';
 
 const Google = '/images/social-google.svg';
 
@@ -59,8 +59,6 @@ export const triggerNewcomerEmailGreeting = async (
     }
 };
 
-// ============================|| FIREBASE - LOGIN ||============================ //
-
 const FirebaseLogin = ({ ...others }) => {
     const matchDownSM = useMediaQuery('(min-width:900px)');
     const [checked, setChecked] = React.useState(true);
@@ -71,11 +69,11 @@ const FirebaseLogin = ({ ...others }) => {
         firebaseEmailPasswordSignIn,
         firebaseGoogleSignIn,
         firebaseResendEmailVerification,
-        checkFirebaseEmailVerification,
         user,
-        isEmailVerified,
     } = useAuth();
     const [notification, setNotification] = React.useState<string>('');
+
+    console.log(user);
 
     const googleHandler = async () => {
         try {
@@ -83,7 +81,7 @@ const FirebaseLogin = ({ ...others }) => {
             const isNewUser = !!userCredentials.additionalUserInfo?.isNewUser;
             const token = await userCredentials.user?.getIdToken();
             if (token && isNewUser)
-                triggerNewcomerEmailGreeting(token, isNewUser);
+                await triggerNewcomerEmailGreeting(token, isNewUser);
         } catch (error) {
             logger.error('Google handler error', { error });
         }
@@ -109,15 +107,15 @@ const FirebaseLogin = ({ ...others }) => {
 
     useEffect(() => {
         if (user) {
+            console.log(user.isEmailVerified);
             if (
                 user.claims?.firebase?.sign_in_provider === 'google.com' ||
-                isEmailVerified ||
                 user.isEmailVerified
             ) {
-                router.push('/');
+                router.push('/').then((route) => console.log(route));
             }
         }
-    }, [user, isEmailVerified, router]);
+    }, [user, router]);
 
     return (
         <>
@@ -180,7 +178,7 @@ const FirebaseLogin = ({ ...others }) => {
                                 py: 0.5,
                                 px: 7,
                                 borderColor: '#f5f5f5',
-                                color: `${'#212121'}!important`,
+                                color: `#212121 !important`,
                                 fontWeight: 500,
                                 borderRadius: `${16}px`,
                             }}
@@ -226,34 +224,26 @@ const FirebaseLogin = ({ ...others }) => {
                         .max(255)
                         .required('Password is required'),
                 })}
-                onSubmit={async (
-                    values,
-                    { setErrors, setStatus, setSubmitting }
-                ) => {
+                onSubmit={async (values) => {
                     try {
-                        await firebaseEmailPasswordSignIn(
-                            values.email,
-                            values.password
-                        );
-                        const isEmailVerified =
-                            await checkFirebaseEmailVerification();
+                        const user: firebase.User | null =
+                            await firebaseEmailPasswordSignIn(
+                                values.email,
+                                values.password
+                            );
 
-                        if (isEmailVerified) {
-                            setIsVerified(true);
+                        if (user && user?.emailVerified) {
+                            router.push('/');
                         } else {
                             setIsVerified(false);
                         }
-                        router.reload();
                     } catch (err: any) {
-                        let message = 'Firebase signin error';
+                        let message = 'Firebase Sign In error';
                         if (err.code === 'auth/user-not-found') {
                             message = 'User not found';
                         }
                         showSnackbar(message, 'error');
                         logger.error(message, { error: err });
-                        // setStatus({ success: false });
-                        // setErrors({ submit: err.message });
-                        // setSubmitting(false);
                     }
                 }}
             >
@@ -272,18 +262,16 @@ const FirebaseLogin = ({ ...others }) => {
                                 fullWidth
                                 error={Boolean(touched.email && errors.email)}
                             >
-                                <InputLabel htmlFor="outlined-adornment-email-login">
-                                    Email Address / Username
-                                </InputLabel>
-                                <OutlinedInput
+                                <TextField
                                     id="outlined-adornment-email-login"
                                     type="email"
+                                    size="small"
+                                    variant="outlined"
                                     value={values.email}
                                     name="email"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     label="Email Address / Username"
-                                    inputProps={{}}
                                 />
                                 {touched.email && errors.email && (
                                     <FormHelperText
@@ -300,39 +288,38 @@ const FirebaseLogin = ({ ...others }) => {
                                     touched.password && errors.password
                                 )}
                             >
-                                <InputLabel htmlFor="outlined-adornment-password-login">
-                                    Password
-                                </InputLabel>
-                                <OutlinedInput
+                                <TextField
                                     id="outlined-adornment-password-login"
+                                    size="small"
                                     type={showPassword ? 'text' : 'password'}
                                     value={values.password}
                                     name="password"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={
-                                                    handleClickShowPassword
-                                                }
-                                                onMouseDown={
-                                                    handleMouseDownPassword
-                                                }
-                                                edge="end"
-                                                size="large"
-                                            >
-                                                {showPassword ? (
-                                                    <Visibility />
-                                                ) : (
-                                                    <VisibilityOff />
-                                                )}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
                                     label="Password"
-                                    inputProps={{}}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={
+                                                        handleClickShowPassword
+                                                    }
+                                                    onMouseDown={
+                                                        handleMouseDownPassword
+                                                    }
+                                                    edge="end"
+                                                    size="large"
+                                                >
+                                                    {showPassword ? (
+                                                        <Visibility />
+                                                    ) : (
+                                                        <VisibilityOff />
+                                                    )}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
                                 />
                                 {touched.password && errors.password && (
                                     <FormHelperText
@@ -380,24 +367,24 @@ const FirebaseLogin = ({ ...others }) => {
                                 </FormHelperText>
                             </Box>
                         )}
-                        {!isVerified && (
-                            <Box sx={{ mt: 3 }}>
-                                <FormHelperText error>
-                                    Please complete sign-up process. Check your
-                                    inbox for validation email. If is does not
-                                    appear in inbox, check spam or{' '}
-                                    <span
-                                        onClick={handleResend}
-                                        style={{
-                                            cursor: 'pointer',
-                                            fontWeight: '600',
-                                        }}
-                                    >
-                                        RESEND
-                                    </span>
-                                </FormHelperText>
-                            </Box>
-                        )}
+                        {/*{!isVerified && (*/}
+                        {/*    <Box sx={{ mt: 3 }}>*/}
+                        {/*        <FormHelperText error>*/}
+                        {/*            Please complete sign-up process. Check your*/}
+                        {/*            inbox for validation email. If is does not*/}
+                        {/*            appear in inbox, check spam or{' '}*/}
+                        {/*            <span*/}
+                        {/*                onClick={handleResend}*/}
+                        {/*                style={{*/}
+                        {/*                    cursor: 'pointer',*/}
+                        {/*                    fontWeight: '600',*/}
+                        {/*                }}*/}
+                        {/*            >*/}
+                        {/*                RESEND*/}
+                        {/*            </span>*/}
+                        {/*        </FormHelperText>*/}
+                        {/*    </Box>*/}
+                        {/*)}*/}
                         {notification && (
                             <Box sx={{ mt: 3 }}>
                                 {notification === 'sent' ? (
@@ -412,6 +399,23 @@ const FirebaseLogin = ({ ...others }) => {
                                     </Alert>
                                 )}
                             </Box>
+                        )}
+                        {!isVerified && (
+                            <Alert severity="warning">
+                                Please complete sign-up process. Check your
+                                inbox for validation email. If it does not
+                                appear in inbox, check spam or{' '}
+                                <span
+                                    onClick={handleResend}
+                                    style={{
+                                        cursor: 'pointer',
+                                        fontWeight: '600',
+                                        textDecoration: 'underline',
+                                    }}
+                                >
+                                    RESEND
+                                </span>
+                            </Alert>
                         )}
                         <Box sx={{ mt: 2 }}>
                             <Button

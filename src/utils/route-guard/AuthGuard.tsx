@@ -4,17 +4,16 @@ import useAuth from '../../hooks/useAuth';
 import FullscreenLoader from '@/components/Loader/FullscreenLoader';
 
 const AuthGuard = ({ children }: { children: ReactNode | null }) => {
-    const { isLoggedIn } = useAuth();
+    const { user } = useAuth();
     const router = useRouter();
 
     useEffect(() => {
-        if (!isLoggedIn) {
-            router.push('/login');
+        if (!user?.isEmailVerified) {
+            router.push('/login').then((route) => console.log(route));
         }
-        // eslint-disable-next-line
-    }, [isLoggedIn]);
+    }, [router, user?.isEmailVerified]);
 
-    if (!isLoggedIn) {
+    if (!user?.isEmailVerified) {
         return <FullscreenLoader />;
     }
 

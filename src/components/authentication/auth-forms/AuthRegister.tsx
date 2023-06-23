@@ -13,8 +13,6 @@ import {
     Grid,
     IconButton,
     InputAdornment,
-    InputLabel,
-    OutlinedInput,
     Stack,
     TextField,
     Typography,
@@ -61,7 +59,7 @@ const FirebaseRegister = ({ ...others }) => {
     const matchDownMD = useMediaQuery(theme.breakpoints.down('md'));
     const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
     const [showPassword, setShowPassword] = React.useState(false);
-    const [checked, setChecked] = React.useState(true);
+    const [checked, setChecked] = React.useState(false);
     const [isValidated, setIsValidated] = React.useState<boolean>(false);
 
     const [strength, setStrength] = React.useState(0);
@@ -196,6 +194,13 @@ const FirebaseRegister = ({ ...others }) => {
                     values,
                     { setErrors, setStatus, setSubmitting }
                 ) => {
+                    if (!checked) {
+                        setErrors({
+                            submit: 'To proceed further please agree with Terms & Condition',
+                        });
+                        return;
+                    }
+
                     try {
                         const result = await firebaseRegister(
                             values.email,
@@ -210,10 +215,6 @@ const FirebaseRegister = ({ ...others }) => {
                         });
                         setIsValidated(true);
                         return profile;
-                        // WARNING: do not set any formik state here as formik might be already destroyed here. You may get following error by doing so.
-                        // Warning: Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application.
-                        // To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
-                        // github issue: https://github.com/formium/formik/issues/2430
                     } catch (err: any) {
                         logger.error('Firebase register error', { error: err });
                         let message = 'Failed to sign up';
@@ -242,6 +243,7 @@ const FirebaseRegister = ({ ...others }) => {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
+                                    size="small"
                                     label="First Name"
                                     margin="normal"
                                     name="fname"
@@ -254,6 +256,7 @@ const FirebaseRegister = ({ ...others }) => {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
+                                    size="small"
                                     label="Last Name"
                                     margin="normal"
                                     name="lname"
@@ -269,11 +272,9 @@ const FirebaseRegister = ({ ...others }) => {
                                 fullWidth
                                 error={Boolean(touched.email && errors.email)}
                             >
-                                <InputLabel htmlFor="outlined-adornment-email-register">
-                                    Email Address / Username
-                                </InputLabel>
-                                <OutlinedInput
+                                <TextField
                                     id="outlined-adornment-email-register"
+                                    size="small"
                                     type="email"
                                     value={values.email}
                                     name="email"
@@ -298,11 +299,9 @@ const FirebaseRegister = ({ ...others }) => {
                                     touched.password && errors.password
                                 )}
                             >
-                                <InputLabel htmlFor="outlined-adornment-password-register">
-                                    Password
-                                </InputLabel>
-                                <OutlinedInput
+                                <TextField
                                     id="outlined-adornment-password-register"
+                                    size="small"
                                     type={showPassword ? 'text' : 'password'}
                                     value={values.password}
                                     name="password"
@@ -312,27 +311,29 @@ const FirebaseRegister = ({ ...others }) => {
                                         handleChange(e);
                                         changePassword(e.target.value);
                                     }}
-                                    endAdornment={
-                                        <InputAdornment position="end">
-                                            <IconButton
-                                                aria-label="toggle password visibility"
-                                                onClick={
-                                                    handleClickShowPassword
-                                                }
-                                                onMouseDown={
-                                                    handleMouseDownPassword
-                                                }
-                                                edge="end"
-                                                size="large"
-                                            >
-                                                {showPassword ? (
-                                                    <Visibility />
-                                                ) : (
-                                                    <VisibilityOff />
-                                                )}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    aria-label="toggle password visibility"
+                                                    onClick={
+                                                        handleClickShowPassword
+                                                    }
+                                                    onMouseDown={
+                                                        handleMouseDownPassword
+                                                    }
+                                                    edge="end"
+                                                    size="large"
+                                                >
+                                                    {showPassword ? (
+                                                        <Visibility />
+                                                    ) : (
+                                                        <VisibilityOff />
+                                                    )}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        ),
+                                    }}
                                     inputProps={{}}
                                 />
                                 {touched.password && errors.password && (

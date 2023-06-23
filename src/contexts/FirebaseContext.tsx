@@ -1,9 +1,9 @@
 import React, { createContext, useEffect, useReducer } from 'react';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
-import { LOGIN, LOGOUT } from '../store/actions';
+import { LOGIN, LOGOUT } from '@/store/actions';
 import accountReducer from '../store/accountReducer';
-import { FirebaseContextType, InitialLoginContextProps } from '../types';
+import { FirebaseContextType, InitialLoginContextProps } from '@/types';
 import axios from '../utils/axios';
 import { firebaseConfig } from '@/config/firebaseApp.config';
 import { AxiosError, AxiosResponse } from 'axios';
@@ -16,13 +16,9 @@ if (!firebase.apps.length) {
 
 // const
 const initialState: InitialLoginContextProps = {
-    isLoggedIn: false,
-    isEmailVerified: false,
     isInitialized: false,
     user: null,
 };
-
-// ==============================|| FIREBASE CONTEXT & PROVIDER ||============================== //
 
 const FirebaseContext = createContext<FirebaseContextType | null>(null);
 
@@ -32,22 +28,15 @@ export const FirebaseProvider = ({
     children: React.ReactElement;
 }) => {
     const [state, dispatch] = useReducer(accountReducer, initialState);
-
     useEffect(
         () =>
             firebase.auth().onAuthStateChanged(async (user) => {
                 if (user) {
                     const tokenResult = await user?.getIdTokenResult(true);
-
-                    const userEmailVerified = user.emailVerified;
-                    // localStorage.setItem('emailVerificationGreenifs', userEmailVerified.toString());
-
                     axios.defaults.headers.common.Authorization = `Bearer ${tokenResult.token}`;
                     dispatch({
                         type: LOGIN,
                         payload: {
-                            isLoggedIn: userEmailVerified,
-                            isEmailVerified: userEmailVerified,
                             user: {
                                 id: user.uid,
                                 email: user.email,
@@ -56,7 +45,7 @@ export const FirebaseProvider = ({
                                 claims: tokenResult.claims,
                                 photo: user.photoURL || '',
                                 phone: user.phoneNumber,
-                                isEmailVerified: userEmailVerified,
+                                isEmailVerified: user.emailVerified || false,
                             },
                         },
                     });
@@ -80,7 +69,7 @@ export const FirebaseProvider = ({
                     error.response?.status === 401 ||
                     error.response?.status === 403
                 ) {
-                    logout();
+                    logout().then((r) => console.log(r));
                 }
                 return Promise.reject(error);
             }
@@ -88,12 +77,35 @@ export const FirebaseProvider = ({
         return () => axios.interceptors.response.eject(interceptor);
     }, []);
 
-    const firebaseEmailPasswordSignIn = (email: string, password: string) =>
-        firebase.auth().signInWithEmailAndPassword(email, password);
+    const firebaseEmailPasswordSignIn = async (
+        email: string,
+        password: string
+    ) => {
+        const { user } = await firebase
+            .auth()
+            .signInWithEmailAndPassword(email, password);
+        const tokenResult = await user?.getIdTokenResult(true);
+        if (user)
+            dispatch({
+                type: LOGIN,
+                payload: {
+                    user: {
+                        id: user.uid,
+                        email: user.email,
+                        name: user.displayName || '',
+                        token: tokenResult?.token,
+                        claims: tokenResult?.claims,
+                        photo: user.photoURL || '',
+                        phone: user.phoneNumber,
+                        isEmailVerified: user.emailVerified,
+                    },
+                },
+            });
+        return user;
+    };
 
     const firebaseGoogleSignIn = () => {
         const provider = new firebase.auth.GoogleAuthProvider();
-
         return firebase.auth().signInWithPopup(provider);
     };
 
@@ -105,34 +117,45 @@ export const FirebaseProvider = ({
         return userCredential;
     };
 
-    const firebaseResendEmailVerification = async () => {
-        const data = await firebase.auth().currentUser?.sendEmailVerification();
-        return data;
-    };
+    const firebaseResendEmailVerification = async () =>
+        await firebase.auth().currentUser?.sendEmailVerification();
 
     const verifyEmail = async (code: string) => {
+        const user = firebase.auth().currentUser;
         await firebase.auth().applyActionCode(code);
         await firebase.auth().currentUser?.reload?.();
+        if (!user) return null;
+        const tokenResult = await user?.getIdTokenResult(true);
+        dispatch({
+            type: LOGIN,
+            payload: {
+                user: {
+                    id: user.uid,
+                    email: user.email,
+                    name: user.displayName || '',
+                    token: tokenResult?.token,
+                    claims: tokenResult?.claims,
+                    photo: user.photoURL || '',
+                    phone: user.phoneNumber,
+                    isEmailVerified: true,
+                },
+            },
+        });
         return { isVerifiedEmail: true, firebase };
     };
 
-    const checkActionCode = async (code: string) => {
-        const info = await firebase.auth().checkActionCode(code);
-        return info;
-    };
+    const checkActionCode = async (code: string) =>
+        await firebase.auth().checkActionCode(code);
 
-    const checkFirebaseEmailVerification = async () => {
-        const data = await firebase.auth().currentUser?.emailVerified;
-        return data;
-    };
+    const checkFirebaseEmailVerification = async () =>
+        await firebase.auth().currentUser?.emailVerified;
 
     const resetPassword = async (email: string) => {
         await firebase.auth().sendPasswordResetEmail(email);
     };
 
-    const updateUserPassword = async (code: string, newPassword: string) => {
+    const updateUserPassword = async (code: string, newPassword: string) =>
         await firebase.auth().confirmPasswordReset(code, newPassword);
-    };
 
     const updateProfile = async (name: string, email: string) => {
         const user = firebase.auth().currentUser;
@@ -142,6 +165,7 @@ export const FirebaseProvider = ({
         if (user?.displayName !== name) {
             await user?.updateProfile({ displayName: name });
         }
+        return user;
     };
 
     const updatePhoto = async (photoUrl: string) => {
@@ -149,6 +173,7 @@ export const FirebaseProvider = ({
         if (user?.photoURL !== photoUrl) {
             await user?.updateProfile({ photoURL: photoUrl });
         }
+        return user;
     };
 
     if (state.isInitialized !== undefined && !state.isInitialized) {

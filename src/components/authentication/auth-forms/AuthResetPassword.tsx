@@ -10,9 +10,8 @@ import {
     Divider,
     FormControl,
     FormHelperText,
-    InputLabel,
-    OutlinedInput,
     Stack,
+    TextField,
     Typography,
     useMediaQuery,
     useTheme,
@@ -205,11 +204,9 @@ const AuthResetPassword: FC<ResetPasswordProps> = ({ oobCode, email }) => {
                                                                         errors.password
                                                                 )}
                                                             >
-                                                                <InputLabel htmlFor="outlined-adornment-new-password">
-                                                                    New password
-                                                                </InputLabel>
-                                                                <OutlinedInput
+                                                                <TextField
                                                                     id="outlined-adornment-new-password"
+                                                                    size="small"
                                                                     type="password"
                                                                     value={
                                                                         values.password
@@ -243,12 +240,9 @@ const AuthResetPassword: FC<ResetPasswordProps> = ({ oobCode, email }) => {
                                                                         errors.confirmedPassword
                                                                 )}
                                                             >
-                                                                <InputLabel htmlFor="outlined-adornment-confirmed-password">
-                                                                    Confirm your
-                                                                    password
-                                                                </InputLabel>
-                                                                <OutlinedInput
+                                                                <TextField
                                                                     id="outlined-adornment-confirmed-password"
+                                                                    size="small"
                                                                     type="password"
                                                                     value={
                                                                         values.confirmedPassword
