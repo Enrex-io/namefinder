@@ -6,6 +6,7 @@ import AuthResetPassword from '@/components/authentication/auth-forms/AuthResetP
 import useAuth from '@/hooks/useAuth';
 import { useContext, useEffect, useState } from 'react';
 import { SnackbarContext } from '@/contexts/SnackbarContext';
+import AuthSignInProceed from '@/components/authentication/auth-forms/AuthSignInProceed';
 
 export default function Verification() {
     const router = useRouter();
@@ -15,8 +16,13 @@ export default function Verification() {
     const [email, setEmail] = useState<string>('');
     const [actionCodeError, setActionCodeError] = useState<string | null>(null);
 
+    const isPasswordResetMode = mode === 'resetPassword';
+    const isEmailVerificationMode = mode === 'verifyEmail';
+    const isSignInMode = mode === 'signIn';
+
     useEffect(() => {
         (async () => {
+            if (isSignInMode) return;
             try {
                 if (typeof oobCode !== 'string') {
                     console.log('Action code error');
@@ -32,7 +38,7 @@ export default function Verification() {
                 // setActionCodeError('Action code error');
             }
         })();
-    }, [oobCode, checkActionCode]);
+    }, [oobCode, checkActionCode, isSignInMode]);
 
     useEffect(() => {
         if (actionCodeError) {
@@ -40,8 +46,6 @@ export default function Verification() {
         }
     }, [actionCodeError]);
 
-    const isPasswordResetMode = mode === 'resetPassword';
-    const isEmailVerificationMode = mode === 'verifyEmail';
     return (
         <>
             <Head>
@@ -58,6 +62,11 @@ export default function Verification() {
             )}
             {isPasswordResetMode && (
                 <AuthResetPassword oobCode={oobCode} email={email} />
+            )}
+            {isSignInMode && (
+                <AuthSignInProceed
+                    email={localStorage.getItem('emailForSignIn')}
+                />
             )}
         </>
     );

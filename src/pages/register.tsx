@@ -5,13 +5,11 @@ import Logo from '@/components/Logo/Logo';
 import AuthWrapper1 from '@/components/authentication/AuthWrapper1';
 import Grid from '@mui/material/Grid';
 import AuthCardWrapper from '@/components/authentication/AuthCardWrapper';
-import { Divider, Stack, Typography, useMediaQuery } from '@mui/material';
+import { Typography } from '@mui/material';
 import AuthRegister from '@/components/authentication/auth-forms/AuthRegister';
 import LoginRegisterSwitcher from '@/components/authentication/LoginRegisterSwitcher';
 
 export default function Register() {
-    const matchDownSM = useMediaQuery('(min-width:900px)');
-
     return (
         <>
             <Head>
@@ -66,29 +64,6 @@ export default function Register() {
                                         </Grid>
                                         <Grid item xs={12}>
                                             <AuthRegister />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Divider />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Grid
-                                                item
-                                                container
-                                                direction="column"
-                                                alignItems="center"
-                                                xs={12}
-                                            >
-                                                <Typography
-                                                    component={Link}
-                                                    href="/login"
-                                                    variant="subtitle1"
-                                                    sx={{
-                                                        textDecoration: 'none',
-                                                    }}
-                                                >
-                                                    Already have an account?
-                                                </Typography>
-                                            </Grid>
                                         </Grid>
                                     </Grid>
                                 </AuthCardWrapper>

@@ -6,8 +6,7 @@ import AuthLogin from '@/components/authentication/auth-forms/AuthLogin';
 import AuthWrapper1 from '@/components/authentication/AuthWrapper1';
 import Grid from '@mui/material/Grid';
 import AuthCardWrapper from '@/components/authentication/AuthCardWrapper';
-import { Divider, Stack, Typography, useMediaQuery } from '@mui/material';
-import LoginRegisterSwitcher from '@/components/authentication/LoginRegisterSwitcher';
+import { Typography, useMediaQuery } from '@mui/material';
 
 export default function Login() {
     const matchDownSM = useMediaQuery('(min-width:900px)');
@@ -51,47 +50,17 @@ export default function Login() {
                                             </Link>
                                         </Grid>
                                         <Grid item xs={12}>
-                                            <LoginRegisterSwitcher />
-                                        </Grid>
-                                        <Grid item>
                                             <Typography
+                                                component="p"
                                                 variant="caption"
                                                 fontSize="16px"
-                                                textAlign={
-                                                    matchDownSM
-                                                        ? 'center'
-                                                        : 'inherit'
-                                                }
+                                                textAlign="center"
                                             >
                                                 Login to continue
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <AuthLogin />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Divider />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Grid
-                                                item
-                                                container
-                                                direction="column"
-                                                alignItems="center"
-                                                xs={12}
-                                            >
-                                                <Typography
-                                                    component={Link}
-                                                    href="/register"
-                                                    variant="subtitle1"
-                                                    sx={{
-                                                        textDecoration: 'none',
-                                                    }}
-                                                >
-                                                    Don&apos;t have an account?
-                                                    Sign up here!
-                                                </Typography>
-                                            </Grid>
                                         </Grid>
                                     </Grid>
                                 </AuthCardWrapper>
