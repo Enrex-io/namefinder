@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import classes from './NavBar.module.scss';
 import Image from 'next/image';
 import {
@@ -13,17 +13,11 @@ import {
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import useAuth from '@/hooks/useAuth';
-import {
-    IGreenWashingUser,
-    IPrompt,
-    PopupVariant,
-    SubscriptionStatus,
-} from '@/types';
+import { IGreenWashingUser, IPrompt } from '@/types';
 import Chip from '@/components/Chip/Chip';
 import UserPhotoPlaceholder from '@/components/UserPhotoPlaceholder/UserPhotoPlaceholder';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import useWindowSize from '@/hooks/useWindowSize';
-import { usePopup } from '@/contexts/PopupContext';
 
 interface ProfileMenuProps {
     userInfo: IGreenWashingUser | null;
@@ -31,11 +25,9 @@ interface ProfileMenuProps {
 
 function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
     const { user, logout } = useAuth();
-    const { setPopup } = usePopup();
-    const { push, pathname, query, events, reload } = useRouter();
+    const { push, pathname, query, reload } = useRouter();
     const isCounterMinus = Number(userInfo?.counter?.toFixed(0)) <= 0;
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [activePage, setActivePage] = useState<string>('/');
     const ref = useRef(null);
     const { height } = useWindowSize();
     useOnClickOutside(ref, (event: MouseEvent | TouchEvent) => {
@@ -56,21 +48,6 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
         await logout?.();
         push('/login');
     };
-
-    const getActiveList = () => {
-        if (pathname === '/') {
-            setActivePage('/');
-        } else if (pathname === '/history') {
-            setActivePage(`/history&order=${query.order}`);
-        }
-        return;
-    };
-
-    useEffect(() => {
-        events.on('routeChangeComplete', () => {
-            getActiveList();
-        });
-    }, [events, getActiveList]);
 
     if (!user) {
         return (
@@ -129,7 +106,7 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                         className={clsx(
                             classes.subItemPost,
                             classes.subItem,
-                            activePage === '/' && classes.active,
+                            pathname === '/' && classes.active,
                             classes.subHover
                         )}
                         onClick={() => {
@@ -172,12 +149,14 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                                     index: number
                                 ): React.ReactElement => {
                                     const order = arr.length - 1 - index;
+                                    const isActiveHistoryItem =
+                                        pathname === `/history` &&
+                                        Number(query.order) === order;
                                     return (
                                         <li
                                             className={clsx(
                                                 classes.subItemPrompt,
-                                                activePage ===
-                                                    `/history&order=${order}` &&
+                                                isActiveHistoryItem &&
                                                     classes.active,
                                                 classes.subHover
                                             )}
@@ -266,7 +245,8 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                         className={clsx(
                             classes.subItemPost,
                             classes.subItem,
-                            classes.subHover
+                            classes.subHover,
+                            pathname === '/subscription' && classes.active
                         )}
                         onClick={() => {
                             push('/subscription');

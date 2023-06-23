@@ -115,7 +115,9 @@ export type NumbColorFunc = (n: number) => StringColorProps | undefined;
 export interface SubscriptionData {
     priceId: string;
     priceName?: string;
+    productName: string | null;
     price: number | null;
+    currency: string;
     interval?: 'day' | 'month' | 'week' | 'year';
     subscriptionStartDate: number;
     nextPaymentDate: number;
