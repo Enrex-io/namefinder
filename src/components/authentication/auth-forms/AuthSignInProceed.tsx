@@ -24,7 +24,7 @@ interface SingInProceedProps {
 const SignInProceed: FC<SingInProceedProps> = ({ email }) => {
     const signInAttempt = useRef(false);
     const [signInLoading, setSignInLoading] = useState(false);
-    const { signInWithEmailLink } = useAuth();
+    const { signInWithEmailLink, firebaseIsNewUser } = useAuth();
     const router = useRouter();
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
@@ -43,7 +43,9 @@ const SignInProceed: FC<SingInProceedProps> = ({ email }) => {
             }
             try {
                 await signInWithEmailLink(email, window.location.href);
-                await router.push('/');
+                firebaseIsNewUser()
+                    ? await router.push('/welcome')
+                    : await router.push('/');
             } catch (e) {
                 showSnackbar('Email verification failed', 'error');
             }
