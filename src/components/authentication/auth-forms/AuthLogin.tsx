@@ -1,6 +1,5 @@
 import Image from 'next/image';
-import React, { useContext, useEffect, useState } from 'react';
-import Link from 'next/link';
+import React, { useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 // material-ui
@@ -14,28 +13,18 @@ import {
     FormControlLabel,
     FormHelperText,
     Grid,
-    IconButton,
-    InputAdornment,
     Stack,
     TextField,
     Typography,
     useMediaQuery,
 } from '@mui/material';
-
 // third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-
-// project imports
 import useAuth from '../../../hooks/useAuth';
-
-// assets
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from '../../../utils/axios';
 import { SnackbarContext } from '@/contexts/SnackbarContext';
 import logger from '@/utils/logger';
-import firebase from 'firebase/compat';
 
 const Google = '/images/social-google.svg';
 
@@ -70,6 +59,7 @@ const FirebaseLogin = ({ ...others }) => {
         firebaseGoogleSignIn,
         firebaseResendEmailVerification,
         firebaseIsNewUser,
+        sendSignInLink,
         user,
     } = useAuth();
     const [notification, setNotification] = React.useState<string>('');
@@ -83,24 +73,6 @@ const FirebaseLogin = ({ ...others }) => {
                 await triggerNewcomerEmailGreeting(token, isNewUser);
         } catch (error) {
             logger.error('Google handler error', { error });
-        }
-    };
-
-    const [showPassword, setShowPassword] = React.useState(false);
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
-
-    const handleMouseDownPassword = (event: React.SyntheticEvent) => {
-        event.preventDefault();
-    };
-
-    const handleResend = async () => {
-        try {
-            await firebaseResendEmailVerification();
-            setNotification('sent');
-        } catch (e: any) {
-            setNotification(e.message);
         }
     };
 
@@ -202,7 +174,7 @@ const FirebaseLogin = ({ ...others }) => {
                 >
                     <Box sx={{ mb: 2 }}>
                         <Typography variant="subtitle1">
-                            Login with Email address
+                            Login with Email address and magic link
                         </Typography>
                     </Box>
                 </Grid>
@@ -211,7 +183,6 @@ const FirebaseLogin = ({ ...others }) => {
             <Formik
                 initialValues={{
                     email: '',
-                    password: '',
                     submit: null,
                 }}
                 validationSchema={Yup.object().shape({
@@ -219,23 +190,15 @@ const FirebaseLogin = ({ ...others }) => {
                         .email('Must be a valid email')
                         .max(255)
                         .required('Email is required'),
-                    password: Yup.string()
-                        .max(255)
-                        .required('Password is required'),
                 })}
                 onSubmit={async (values) => {
                     try {
-                        const user: firebase.User | null =
-                            await firebaseEmailPasswordSignIn(
-                                values.email,
-                                values.password
-                            );
-
-                        if (user && user?.emailVerified) {
-                            router.push('/');
-                        } else {
-                            setIsVerified(false);
-                        }
+                        localStorage.setItem('emailForSignIn', values.email);
+                        const currentWebsiteUrl = `${window.location.protocol}//${window.location.host}`;
+                        await sendSignInLink(
+                            values.email,
+                            `${currentWebsiteUrl}/verificationStatus`
+                        );
                     } catch (err: any) {
                         let message = 'Firebase Sign In error';
                         if (err.code === 'auth/user-not-found') {
@@ -254,182 +217,87 @@ const FirebaseLogin = ({ ...others }) => {
                     isSubmitting,
                     touched,
                     values,
-                }) => (
-                    <form noValidate onSubmit={handleSubmit} {...others}>
-                        <Stack spacing={2}>
-                            <FormControl
-                                fullWidth
-                                error={Boolean(touched.email && errors.email)}
-                            >
-                                <TextField
-                                    id="outlined-adornment-email-login"
-                                    type="email"
-                                    size="small"
-                                    variant="outlined"
-                                    value={values.email}
-                                    name="email"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    label="Email Address / Username"
-                                />
-                                {touched.email && errors.email && (
-                                    <FormHelperText
-                                        error
-                                        id="standard-weight-helper-text-email-login"
-                                    >
-                                        {errors.email}
-                                    </FormHelperText>
-                                )}
-                            </FormControl>
-                            <FormControl
-                                fullWidth
-                                error={Boolean(
-                                    touched.password && errors.password
-                                )}
-                            >
-                                <TextField
-                                    id="outlined-adornment-password-login"
-                                    size="small"
-                                    type={showPassword ? 'text' : 'password'}
-                                    value={values.password}
-                                    name="password"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    label="Password"
-                                    InputProps={{
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    aria-label="toggle password visibility"
-                                                    onClick={
-                                                        handleClickShowPassword
-                                                    }
-                                                    onMouseDown={
-                                                        handleMouseDownPassword
-                                                    }
-                                                    edge="end"
-                                                    size="large"
-                                                >
-                                                    {showPassword ? (
-                                                        <Visibility />
-                                                    ) : (
-                                                        <VisibilityOff />
-                                                    )}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                                {touched.password && errors.password && (
-                                    <FormHelperText
-                                        error
-                                        id="standard-weight-helper-text-password-login"
-                                    >
-                                        {errors.password}
-                                    </FormHelperText>
-                                )}
-                            </FormControl>
-                        </Stack>
-                        <Stack
-                            direction="row"
-                            alignItems="center"
-                            justifyContent="space-between"
-                            spacing={1}
-                        >
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={checked}
-                                        onChange={(event) =>
-                                            setChecked(event.target.checked)
-                                        }
-                                        name="checked"
-                                        color="primary"
-                                    />
-                                }
-                                label="Remember me"
-                            />
-                            <Typography
-                                variant="subtitle1"
-                                component={Link}
-                                href="/forgot"
-                                color="secondary"
-                                sx={{ textDecoration: 'none' }}
-                            >
-                                Forgot Password?
-                            </Typography>
-                        </Stack>
-                        {errors.submit && (
-                            <Box sx={{ mt: 3 }}>
-                                <FormHelperText error>
-                                    {errors.submit}
-                                </FormHelperText>
-                            </Box>
-                        )}
-                        {/*{!isVerified && (*/}
-                        {/*    <Box sx={{ mt: 3 }}>*/}
-                        {/*        <FormHelperText error>*/}
-                        {/*            Please complete sign-up process. Check your*/}
-                        {/*            inbox for validation email. If is does not*/}
-                        {/*            appear in inbox, check spam or{' '}*/}
-                        {/*            <span*/}
-                        {/*                onClick={handleResend}*/}
-                        {/*                style={{*/}
-                        {/*                    cursor: 'pointer',*/}
-                        {/*                    fontWeight: '600',*/}
-                        {/*                }}*/}
-                        {/*            >*/}
-                        {/*                RESEND*/}
-                        {/*            </span>*/}
-                        {/*        </FormHelperText>*/}
-                        {/*    </Box>*/}
-                        {/*)}*/}
-                        {notification && (
-                            <Box sx={{ mt: 3 }}>
-                                {notification === 'sent' ? (
-                                    <Alert severity="success">
-                                        Verification email was sent. Please
-                                        check your email
-                                    </Alert>
-                                ) : (
-                                    <Alert severity="error">
-                                        Verification email was not sent:{' '}
-                                        {notification}
-                                    </Alert>
-                                )}
-                            </Box>
-                        )}
-                        {!isVerified && (
-                            <Alert severity="warning">
-                                Please complete sign-up process. Check your
-                                inbox for validation email. If it does not
-                                appear in inbox, check spam or{' '}
-                                <span
-                                    onClick={handleResend}
-                                    style={{
-                                        cursor: 'pointer',
-                                        fontWeight: '600',
-                                        textDecoration: 'underline',
-                                    }}
+                    submitCount,
+                }) => {
+                    return (
+                        <form noValidate onSubmit={handleSubmit} {...others}>
+                            <Stack spacing={2}>
+                                <FormControl
+                                    fullWidth
+                                    error={Boolean(
+                                        touched.email && errors.email
+                                    )}
                                 >
-                                    RESEND
-                                </span>
-                            </Alert>
-                        )}
-                        <Box sx={{ mt: 2 }}>
-                            <Button
-                                disableElevation
-                                disabled={isSubmitting}
-                                fullWidth
-                                size="large"
-                                type="submit"
-                                variant="contained"
+                                    <TextField
+                                        id="outlined-adornment-email-login"
+                                        type="email"
+                                        size="small"
+                                        variant="outlined"
+                                        value={values.email}
+                                        name="email"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        label="Email Address / Username"
+                                    />
+                                    {touched.email && errors.email && (
+                                        <FormHelperText
+                                            error
+                                            id="standard-weight-helper-text-email-login"
+                                        >
+                                            {errors.email}
+                                        </FormHelperText>
+                                    )}
+                                </FormControl>
+                            </Stack>
+                            <Stack
+                                direction="row"
+                                alignItems="center"
+                                justifyContent="space-between"
+                                spacing={1}
                             >
-                                Login
-                            </Button>
-                        </Box>
-                    </form>
-                )}
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={checked}
+                                            onChange={(event) =>
+                                                setChecked(event.target.checked)
+                                            }
+                                            name="checked"
+                                            color="primary"
+                                        />
+                                    }
+                                    label="Remember me"
+                                />
+                            </Stack>
+                            {errors.submit && (
+                                <Box sx={{ mt: 3 }}>
+                                    <FormHelperText error>
+                                        {errors.submit}
+                                    </FormHelperText>
+                                </Box>
+                            )}
+                            {Boolean(submitCount) && !errors.submit && (
+                                <Alert severity="warning">
+                                    Check your inbox for email with sign in
+                                    link. If it does not appear in inbox, check
+                                    spam or try again
+                                </Alert>
+                            )}
+                            <Box sx={{ mt: 2 }}>
+                                <Button
+                                    disableElevation
+                                    disabled={isSubmitting}
+                                    fullWidth
+                                    size="large"
+                                    type="submit"
+                                    variant="contained"
+                                >
+                                    Send me magic link
+                                </Button>
+                            </Box>
+                        </form>
+                    );
+                }}
             </Formik>
         </>
     );

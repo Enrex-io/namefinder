@@ -77,6 +77,40 @@ export const FirebaseProvider = ({
         return () => axios.interceptors.response.eject(interceptor);
     }, []);
 
+    const sendSignInLink = (email: string, url: string) => {
+        return firebase.auth().sendSignInLinkToEmail(email, {
+            url,
+            handleCodeInApp: true,
+        });
+    };
+
+    const signInWithEmailLink = async (email: string, emailLink: string) => {
+        const userCredential = await firebase
+            .auth()
+            .signInWithEmailLink(email, emailLink);
+        const { user } = userCredential;
+        const tokenResult = await user?.getIdTokenResult(true);
+        if (user) {
+            dispatch({
+                type: LOGIN,
+                payload: {
+                    user: {
+                        id: user?.uid,
+                        email: user.email,
+                        name: user.displayName || '',
+                        token: tokenResult?.token,
+                        claims: tokenResult?.claims,
+                        photo: user.photoURL || '',
+                        phone: user.phoneNumber,
+                        isEmailVerified: user.emailVerified,
+                    },
+                },
+            });
+        }
+
+        return userCredential;
+    };
+
     const firebaseEmailPasswordSignIn = async (
         email: string,
         password: string
@@ -203,6 +237,8 @@ export const FirebaseProvider = ({
                 ...state,
                 firebaseRegister,
                 firebaseEmailPasswordSignIn,
+                sendSignInLink,
+                signInWithEmailLink,
                 login: () => {},
                 firebaseGoogleSignIn,
                 logout,
