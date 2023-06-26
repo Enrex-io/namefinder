@@ -89,7 +89,6 @@ export const FirebaseProvider = ({
             .auth()
             .signInWithEmailLink(email, emailLink);
         const { user } = userCredential;
-        console.dir(userCredential);
         const tokenResult = await user?.getIdTokenResult(true);
         if (user) {
             dispatch({

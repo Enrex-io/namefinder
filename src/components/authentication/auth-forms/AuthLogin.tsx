@@ -69,7 +69,6 @@ const FirebaseLogin = ({ ...others }) => {
 
     useEffect(() => {
         if (user) {
-            console.log(user.isEmailVerified);
             if (
                 user.claims?.firebase?.sign_in_provider === 'google.com' ||
                 user.isEmailVerified
@@ -186,7 +185,6 @@ const FirebaseLogin = ({ ...others }) => {
                     try {
                         localStorage.setItem('emailForSignIn', values.email);
                         const currentWebsiteUrl = `${window.location.protocol}//${window.location.host}`;
-                        console.log(currentWebsiteUrl);
                         await sendSignInLink(
                             values.email,
                             `${currentWebsiteUrl}/verificationStatus`
@@ -211,7 +209,6 @@ const FirebaseLogin = ({ ...others }) => {
                     values,
                     submitCount,
                 }) => {
-                    console.log(submitCount);
                     return (
                         <form noValidate onSubmit={handleSubmit} {...others}>
                             <Stack spacing={2}>

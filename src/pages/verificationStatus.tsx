@@ -25,7 +25,6 @@ export default function Verification() {
             if (isSignInMode) return;
             try {
                 if (typeof oobCode !== 'string') {
-                    console.log('Action code error');
                     return;
                     // throw new Error('Action code error');
                 }

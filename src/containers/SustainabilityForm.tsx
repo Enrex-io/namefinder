@@ -38,8 +38,6 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
             details.description
         )) as { answer: string };
 
-        console.log(resp);
-
         if (resp.answer === 'No') {
             return setError(
                 'Please provide more relevant text and please try once again'

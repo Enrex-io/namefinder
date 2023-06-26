@@ -36,7 +36,6 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
 const LoginRegisterSwitcher = () => {
     const router = useRouter();
     const handleSwitch = (_event: React.SyntheticEvent, newRoute: string) => {
-        console.log(router);
         if (!newRoute || router.pathname === newRoute) return;
         router.push(newRoute);
     };
