@@ -34,9 +34,14 @@ export default function Layout({ children }: ILayout) {
     const handleSubscriptionIssuePopUp = () => {
         if (router.pathname === '/subscription') {
             hidePopup();
+            router.push('/subscription').then(() => hidePopup());
             return;
         }
-        router.push('/subscription').then(() => hidePopup());
+        if (router.pathname === '/welcome') {
+            hidePopup();
+            router.push('/').then(() => hidePopup());
+            return;
+        }
     };
 
     const subscriptionIssue: PopupVariant | null = useMemo(() => {

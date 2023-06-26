@@ -1,6 +1,9 @@
 import React, { FC } from 'react';
 import PopUp from './PopUp';
 import { PopupVariant } from '@/types';
+import { FREE_CHECKS } from '@/consts/variables';
+import { Property } from 'csstype';
+import TextAlign = Property.TextAlign;
 
 interface IPopUpVariant {
     handlePopUp: () => void;
@@ -14,6 +17,9 @@ interface PopupSettings {
     image: string;
     imageAlt: string;
     buttonColor: 'primary' | 'secondary';
+    width?: number;
+    align?: TextAlign;
+    children?: React.ReactNode;
 }
 
 type PopupVariants = Record<PopupVariant, PopupSettings>;
@@ -46,6 +52,43 @@ const popUpVariantSettings: PopupVariants = {
         content:
             'Stay tuned, as our subscription plans will be ready soon. Thank you for your patience!',
     },
+    [PopupVariant.WELCOME]: {
+        title: 'Welcome to the Sustainability Marketing Assistant App!🌿',
+        image: '/images/worldMail.png',
+        mainActionTitle: `Let's start`,
+        imageAlt: 'Logo',
+        buttonColor: 'secondary',
+        content: '',
+        width: 650,
+        align: 'left',
+        children: (
+            <>
+                <p
+                    style={{
+                        textAlign: 'left',
+                    }}
+                >
+                    Were thrilled to have you on board as we work together to
+                    combat greenwashing and promote genuine eco-friendly
+                    practices. As a first-time user, you have {FREE_CHECKS}
+                    FREE post checks to help you identify any potential flaws in
+                    your social media content related to greenwashing.
+                </p>
+                <p>
+                    Lets make a positive impact on our planet by ensuring our
+                    marketing efforts are truly sustainable and transparent.
+                    Together, we can create a greener future! 🌱
+                </p>
+                <p
+                    style={{
+                        width: '100%',
+                    }}
+                >
+                    Happy analyzing! 🌎💚
+                </p>
+            </>
+        ),
+    },
 };
 
 const PopUpVariant: FC<IPopUpVariant> = ({ handlePopUp, variant }) => {
@@ -58,7 +101,11 @@ const PopUpVariant: FC<IPopUpVariant> = ({ handlePopUp, variant }) => {
             imageAlt={popUpVariantSettings[variant].imageAlt}
             content={popUpVariantSettings[variant].content}
             buttonColor={popUpVariantSettings[variant].buttonColor}
-        />
+            width={popUpVariantSettings[variant].width}
+            align={popUpVariantSettings[variant].align}
+        >
+            {popUpVariantSettings[variant].children}
+        </PopUp>
     );
 };
 

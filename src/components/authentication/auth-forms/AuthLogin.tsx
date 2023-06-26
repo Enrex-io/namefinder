@@ -53,7 +53,16 @@ const FirebaseLogin = ({ ...others }) => {
     const [checked, setChecked] = React.useState(true);
     const router = useRouter();
     const { showSnackbar } = useContext(SnackbarContext);
-    const { sendSignInLink, firebaseGoogleSignIn, user } = useAuth();
+    const [isVerified, setIsVerified] = useState<boolean>(true);
+    const {
+        firebaseEmailPasswordSignIn,
+        firebaseGoogleSignIn,
+        firebaseResendEmailVerification,
+        firebaseIsNewUser,
+        sendSignInLink,
+        user,
+    } = useAuth();
+    const [notification, setNotification] = React.useState<string>('');
 
     const googleHandler = async () => {
         try {
@@ -72,9 +81,10 @@ const FirebaseLogin = ({ ...others }) => {
             if (
                 user.claims?.firebase?.sign_in_provider === 'google.com' ||
                 user.isEmailVerified
-            ) {
-                router.push('/').then((route) => console.log(route));
-            }
+            )
+                firebaseIsNewUser()
+                    ? router.push('/welcome')
+                    : router.push('/');
         }
     }, [user, router]);
 

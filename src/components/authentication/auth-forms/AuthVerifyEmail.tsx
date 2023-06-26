@@ -130,7 +130,7 @@ const Verification: FC<VerificationProps> = ({ oobCode, email }) => {
                                                             await result.firebase
                                                                 .auth()
                                                                 .currentUser?.getIdToken();
-                                                        router.push('/');
+                                                        router.push('/welcome');
                                                     }
                                                 } catch (e) {
                                                     showSnackbar(

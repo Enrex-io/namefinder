@@ -9,7 +9,7 @@ const AuthGuard = ({ children }: { children: ReactNode | null }) => {
 
     useEffect(() => {
         if (!user?.isEmailVerified) {
-            router.push('/login').then((route) => console.log(route));
+            router.push('/login');
         }
     }, [router, user?.isEmailVerified]);
 

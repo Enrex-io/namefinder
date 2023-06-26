@@ -1,6 +1,6 @@
 // action - state management
 import { LOGIN, LOGOUT, REGISTER } from './actions';
-import { InitialLoginContextProps } from '../types';
+import { InitialLoginContextProps } from '@/types';
 
 // ==============================|| ACCOUNT REDUCER ||============================== //
 
@@ -36,7 +36,6 @@ const accountReducer = (state = initialState, action: AccountReducerActionProps)
             return {
                 ...state,
                 isInitialized: true,
-                isLoggedIn: false,
                 user: null,
             };
         }
