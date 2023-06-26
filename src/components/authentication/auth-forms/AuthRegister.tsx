@@ -94,7 +94,7 @@ const FirebaseRegister = ({ ...others }) => {
     useEffect(() => {
         if (user) {
             if (user.claims?.firebase?.sign_in_provider === 'google.com') {
-                router.push('/');
+                router.push('/welcome');
             }
         }
     }, [user, router]);
@@ -135,7 +135,6 @@ const FirebaseRegister = ({ ...others }) => {
                             <Image
                                 src={Google}
                                 alt="Google"
-                                layout="intrinsic"
                                 width={16}
                                 height={16}
                             />

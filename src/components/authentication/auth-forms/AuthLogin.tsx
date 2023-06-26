@@ -69,11 +69,10 @@ const FirebaseLogin = ({ ...others }) => {
         firebaseEmailPasswordSignIn,
         firebaseGoogleSignIn,
         firebaseResendEmailVerification,
+        firebaseIsNewUser,
         user,
     } = useAuth();
     const [notification, setNotification] = React.useState<string>('');
-
-    console.log(user);
 
     const googleHandler = async () => {
         try {
@@ -107,13 +106,13 @@ const FirebaseLogin = ({ ...others }) => {
 
     useEffect(() => {
         if (user) {
-            console.log(user.isEmailVerified);
             if (
                 user.claims?.firebase?.sign_in_provider === 'google.com' ||
                 user.isEmailVerified
-            ) {
-                router.push('/').then((route) => console.log(route));
-            }
+            )
+                firebaseIsNewUser()
+                    ? router.push('/welcome')
+                    : router.push('/');
         }
     }, [user, router]);
 

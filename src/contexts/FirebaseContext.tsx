@@ -69,7 +69,7 @@ export const FirebaseProvider = ({
                     error.response?.status === 401 ||
                     error.response?.status === 403
                 ) {
-                    logout().then((r) => console.log(r));
+                    logout();
                 }
                 return Promise.reject(error);
             }
@@ -84,6 +84,10 @@ export const FirebaseProvider = ({
         const { user } = await firebase
             .auth()
             .signInWithEmailAndPassword(email, password);
+        // .then((res) => {
+        //     const details = getAdditionalUserInfo(res);
+        //     return user;
+        // });
         const tokenResult = await user?.getIdTokenResult(true);
         if (user)
             dispatch({
@@ -102,6 +106,18 @@ export const FirebaseProvider = ({
                 },
             });
         return user;
+    };
+
+    const firebaseIsNewUser = (): boolean => {
+        const auth: firebase.auth.Auth = firebase.auth();
+
+        if (!auth.currentUser) return false;
+
+        const metadata: firebase.auth.UserMetadata = auth.currentUser.metadata;
+
+        console.log(metadata.creationTime, metadata.lastSignInTime);
+
+        return metadata.creationTime == metadata.lastSignInTime;
     };
 
     const firebaseGoogleSignIn = () => {
@@ -198,6 +214,7 @@ export const FirebaseProvider = ({
                 verifyEmail,
                 checkFirebaseEmailVerification,
                 checkActionCode,
+                firebaseIsNewUser,
             }}
         >
             {children}
