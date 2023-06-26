@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 // material-ui
@@ -54,8 +54,6 @@ const FirebaseLogin = ({ ...others }) => {
     const router = useRouter();
     const { showSnackbar } = useContext(SnackbarContext);
     const { sendSignInLink, firebaseGoogleSignIn, user } = useAuth();
-
-    console.log(user);
 
     const googleHandler = async () => {
         try {
@@ -187,7 +185,12 @@ const FirebaseLogin = ({ ...others }) => {
                 onSubmit={async (values) => {
                     try {
                         localStorage.setItem('emailForSignIn', values.email);
-                        await sendSignInLink(values.email);
+                        const currentWebsiteUrl = `${window.location.protocol}//${window.location.host}`;
+                        console.log(currentWebsiteUrl);
+                        await sendSignInLink(
+                            values.email,
+                            `${currentWebsiteUrl}/verificationStatus`
+                        );
                     } catch (err: any) {
                         let message = 'Firebase Sign In error';
                         if (err.code === 'auth/user-not-found') {

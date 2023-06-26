@@ -77,14 +77,14 @@ export const FirebaseProvider = ({
         return () => axios.interceptors.response.eject(interceptor);
     }, []);
 
-    const sendSignInLink = (email: string) => {
+    const sendSignInLink = (email: string, url: string) => {
         return firebase.auth().sendSignInLinkToEmail(email, {
-            url: 'http://localhost:3000/verificationStatus',
+            url,
             handleCodeInApp: true,
         });
     };
 
-    const signInWighEmailLink = async (email: string, emailLink: string) => {
+    const signInWithEmailLink = async (email: string, emailLink: string) => {
         const userCredential = await firebase
             .auth()
             .signInWithEmailLink(email, emailLink);
@@ -223,7 +223,7 @@ export const FirebaseProvider = ({
                 firebaseRegister,
                 firebaseEmailPasswordSignIn,
                 sendSignInLink,
-                signInWighEmailLink,
+                signInWithEmailLink,
                 login: () => {},
                 firebaseGoogleSignIn,
                 logout,
