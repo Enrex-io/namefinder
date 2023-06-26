@@ -24,6 +24,7 @@ export enum PopupVariant {
     PAYMENT_FAILED = 'paymentFailed',
     ZERO_CREDITS = 'zeroCredits',
     THANK_YOU = 'thankYou',
+    WELCOME = 'welcome',
 }
 
 type PopupVariantType = (typeof PopupVariant)[keyof typeof PopupVariant];
@@ -89,6 +90,7 @@ export type FirebaseContextType = {
     ) => Promise<{ isVerifiedEmail: boolean; firebase: typeof firebase }>;
     checkFirebaseEmailVerification: () => Promise<boolean | undefined>;
     checkActionCode: (code: string) => Promise<firebase.auth.ActionCodeInfo>;
+    firebaseIsNewUser: () => boolean;
 };
 
 export interface InitialLoginContextProps {
