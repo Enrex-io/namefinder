@@ -31,14 +31,14 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
     >([]);
     const detailsRef = useRef<Details | null>(null);
     const [post, setPost] = useState<string>('');
-    const [disabled, setDisabled] = useState<boolean>(false);
+    const [disabled] = useState<boolean>(false);
 
     const handleSubmitDescription = async (details: Details) => {
         const resp = (await OpenAIApi.checkRelevanceOfText(
             details.description
-        )) as { answer: string };
+        )) as { answer: boolean };
 
-        if (resp.answer === 'No') {
+        if (!resp.answer) {
             return setError(
                 'Please provide more relevant text and please try once again'
             );
@@ -71,7 +71,7 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
         const summary: string = data.slice(colonSummaryIndex, termsIndex);
         const terms: string[] = data
             .slice(colonTermsIndex, postIndex)
-            .split('\n±±±±±± ');
+            .split('\n+++++');
 
         const post: string = data?.slice(quotePostIndex);
 

@@ -27,9 +27,9 @@ function SustainabilityDescription({ descriptions }: Props) {
                         )
                             return <></>;
                         const firstIndex: number =
-                            description.indexOf('±±±±±±') === -1
+                            description.indexOf('+++++') === -1
                                 ? 0
-                                : description.indexOf('±±±±±±');
+                                : description.indexOf('+++++');
                         const heading: string = description.slice(
                             0,
                             firstIndex
@@ -44,7 +44,7 @@ function SustainabilityDescription({ descriptions }: Props) {
                                 direction={'column'}
                             >
                                 <p className={classes.goalDescription}>
-                                    <span>{heading}</span>
+                                    <span>{heading + ' '}</span>
                                     <span>{subHeading}</span>
                                 </p>
                             </Paper>
