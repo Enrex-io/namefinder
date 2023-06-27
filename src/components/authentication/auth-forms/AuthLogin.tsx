@@ -1,8 +1,7 @@
 import Image from 'next/image';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-// material-ui
 import {
     Alert,
     Box,
@@ -18,7 +17,6 @@ import {
     Typography,
     useMediaQuery,
 } from '@mui/material';
-// third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import useAuth from '../../../hooks/useAuth';
