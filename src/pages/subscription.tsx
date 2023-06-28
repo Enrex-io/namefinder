@@ -44,7 +44,7 @@ const Subscription = () => {
 
     return (
         <PricingTable headingText={HEADING_TEXT} userId={user?.id}>
-            {!isCounterPositive && (
+            {!isCounterPositive && isActiveSubscription && (
                 <ActiveSubscription
                     headingText={'Current subscription'}
                     showManageButton={false}
