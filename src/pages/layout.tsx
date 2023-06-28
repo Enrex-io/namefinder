@@ -31,17 +31,17 @@ export default function Layout({ children }: ILayout) {
     );
 
     const { variant, setPopup, hidePopup } = usePopup();
-    const handleSubscriptionIssuePopUp = () => {
-        if (router.pathname === '/subscription') {
-            hidePopup();
-            router.push('/subscription').then(() => hidePopup());
-            return;
-        }
-        if (router.pathname === '/welcome') {
+    const handlePopUp = () => {
+        if (variant === PopupVariant.WELCOME) {
             hidePopup();
             router.push('/').then(() => hidePopup());
             return;
         }
+        if (router.pathname === '/subscription') {
+            hidePopup();
+            return;
+        }
+        router.push('/subscription').then(() => hidePopup());
     };
 
     const subscriptionIssue: PopupVariant | null = useMemo(() => {
@@ -88,7 +88,7 @@ export default function Layout({ children }: ILayout) {
                     {variant && (
                         <PopUpVariant
                             variant={variant}
-                            handlePopUp={handleSubscriptionIssuePopUp}
+                            handlePopUp={handlePopUp}
                         />
                     )}
                     <NavBar userInfo={!isLoading && (data?.result || null)} />
