@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Paper from '@/components/Paper/Paper';
 import { Details, IGreenWashingUser } from '@/types';
 import { OpenAIApi } from '@/services/OpenAIService';
@@ -14,17 +14,19 @@ import MediaPost from '@/widgets/MediaPost/MediaPost';
 import Medias from '@/consts/medias';
 import Regions from '@/consts/region';
 import useAuth from '@/hooks/useAuth';
+import useSWR from 'swr';
 
-interface SustainabilityFormProps {
-    userInfo: IGreenWashingUser | null;
-    setUserInfo: Dispatch<SetStateAction<IGreenWashingUser | null>>;
-}
+interface SustainabilityFormProps {}
 
-const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
-    setUserInfo,
-    userInfo,
-}) => {
+const SustainabilityForm: React.FC<SustainabilityFormProps> = () => {
     const { user } = useAuth();
+    const { data, isLoading, mutate } = useSWR<{ result: IGreenWashingUser }>(
+        '/api/sustainabilityMarketing/user',
+        {
+            refreshInterval: 5000,
+        }
+    );
+    const userInfo = data?.result;
     const [error, setError] = useState<string | null>(null);
     const [generatedDescription, setGeneratedDescription] = useState<
         string[] | []
@@ -53,7 +55,7 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
 
         const userData = res.result?.userData;
         if (userData) {
-            setUserInfo(userData);
+            mutate({ result: userData });
         }
 
         setError(null);

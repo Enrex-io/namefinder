@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import { SnackbarContext } from '@/contexts/SnackbarContext';
 import useSWR from 'swr';
 import { SubscriptionData } from '@/types';
-import axios from '@/utils/axios';
 import Loader from '@/components/Loader/Loader';
 import Paper from '@/components/Paper/Paper';
 import clsx from 'clsx';
@@ -17,8 +16,6 @@ interface ActiveSubscriptionProps {
     zeroVerticalMargin?: boolean;
 }
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
 const ActiveSubscription: React.FC<ActiveSubscriptionProps> = ({
     headingText,
     showManageButton,
@@ -28,7 +25,6 @@ const ActiveSubscription: React.FC<ActiveSubscriptionProps> = ({
     const { showSnackbar } = useContext(SnackbarContext);
     const { data, isLoading } = useSWR<SubscriptionData>(
         '/api/payments/subscription',
-        fetcher,
         {
             refreshInterval: 5000,
         }
