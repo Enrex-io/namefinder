@@ -24,10 +24,7 @@ const ActiveSubscription: React.FC<ActiveSubscriptionProps> = ({
     const router = useRouter();
     const { showSnackbar } = useContext(SnackbarContext);
     const { data, isLoading } = useSWR<SubscriptionData>(
-        '/api/payments/subscription',
-        {
-            refreshInterval: 5000,
-        }
+        '/api/payments/subscription'
     );
 
     const handlePortalLinkClick = async () => {

@@ -12,10 +12,7 @@ const HEADING_TEXT = 'Subscription';
 const Subscription = () => {
     const { user } = useAuth();
     const { data, isLoading } = useSWR<{ result: IGreenWashingUser }>(
-        '/api/sustainabilityMarketing/user',
-        {
-            refreshInterval: 5000,
-        }
+        '/api/sustainabilityMarketing/user'
     );
 
     if (isLoading) {

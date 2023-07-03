@@ -21,10 +21,7 @@ interface SustainabilityFormProps {}
 const SustainabilityForm: React.FC<SustainabilityFormProps> = () => {
     const { user } = useAuth();
     const { data, isLoading, mutate } = useSWR<{ result: IGreenWashingUser }>(
-        '/api/sustainabilityMarketing/user',
-        {
-            refreshInterval: 5000,
-        }
+        '/api/sustainabilityMarketing/user'
     );
     const userInfo = data?.result;
     const [error, setError] = useState<string | null>(null);

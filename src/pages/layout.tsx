@@ -24,10 +24,7 @@ export default function Layout({ children }: ILayout) {
     const router = useRouter();
     const { user } = useAuth();
     const { data, isLoading, mutate } = useSWR<{ result: IGreenWashingUser }>(
-        user ? '/api/sustainabilityMarketing/user' : null,
-        {
-            refreshInterval: 5000,
-        }
+        user ? '/api/sustainabilityMarketing/user' : null
     );
 
     useEffect(() => {

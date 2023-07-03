@@ -28,7 +28,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
                         <SWRConfig
                             value={{
                                 provider: () => new Map(),
-                                refreshInterval: 10000,
+                                refreshInterval: 5000,
                                 fetcher: (url: string) =>
                                     axios.get(url).then((res) => res.data),
                             }}
