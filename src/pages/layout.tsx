@@ -6,15 +6,15 @@ import classes from './layout.module.scss';
 import Head from 'next/head';
 import { META } from '@/consts/meta';
 import useSWR from 'swr';
-import axios from '@/utils/axios';
 import { IGreenWashingUser, PopupVariant, SubscriptionStatus } from '@/types';
 import FullscreenLoader from '@/components/Loader/FullscreenLoader';
 import { useRouter } from 'next/router';
 import PopUpVariant from '@/components/PopUp/PopUpVariant';
 import { usePopup } from '@/contexts/PopupContext';
 import AuthGuard from '@/utils/route-guard/AuthGuard';
-
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+import useAuth from '@/hooks/useAuth';
+import { GreenWashingUserService } from '@/services/GreenWashingUserService';
+import logger from '@/utils/logger';
 
 interface ILayout {
     children: React.ReactElement;
@@ -22,13 +22,28 @@ interface ILayout {
 
 export default function Layout({ children }: ILayout) {
     const router = useRouter();
-    const { data, isLoading } = useSWR<{ result: IGreenWashingUser }>(
-        '/api/sustainabilityMarketing/user',
-        fetcher,
-        {
-            refreshInterval: 5000,
-        }
+    const { user } = useAuth();
+    const { data, isLoading, mutate } = useSWR<{ result: IGreenWashingUser }>(
+        user ? '/api/sustainabilityMarketing/user' : null
     );
+
+    useEffect(() => {
+        async function createUser() {
+            try {
+                const createUserData =
+                    await GreenWashingUserService.createUser();
+                if (createUserData.result) {
+                    mutate({ result: createUserData.result });
+                }
+            } catch (e) {
+                logger.error('Error while fetching user', { error: e });
+            }
+        }
+
+        if (user && !data?.result) {
+            createUser();
+        }
+    }, [user, data, mutate]);
 
     const { variant, setPopup, hidePopup } = usePopup();
     const handlePopUp = () => {
