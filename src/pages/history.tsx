@@ -61,7 +61,7 @@ function History() {
                                 <span>Your post {dateText}</span>
                             </h3>
                             <Paper
-                                key={history.unparsedResponse}
+                                key={history.unparsedResponse + history.userId}
                                 className={classes.paper}
                                 direction="column"
                                 spacing={1}

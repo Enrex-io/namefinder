@@ -163,6 +163,7 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                                             key={
                                                 prompt.userId +
                                                 prompt.unparsedResponse +
+                                                index +
                                                 prompt.date
                                             }
                                             onClick={() => {
