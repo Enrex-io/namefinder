@@ -163,6 +163,7 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                                             key={
                                                 prompt.userId +
                                                 prompt.unparsedResponse +
+                                                index +
                                                 prompt.date
                                             }
                                             onClick={() => {
@@ -207,7 +208,7 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                                 isCounterMinus
                                     ? '0'
                                     : String(
-                                          userInfo?.counter?.toFixed(0) || '-1'
+                                          userInfo?.counter?.toFixed(0) || '5'
                                       )
                             }
                             className={classes.checksChip}
