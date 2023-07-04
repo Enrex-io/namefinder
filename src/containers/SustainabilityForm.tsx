@@ -1,19 +1,30 @@
-import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import Paper from '@/components/Paper/Paper';
-import { Details, IGreenWashingUser } from '@/types';
+import { Details, IGreenWashingUser, PopupVariant } from '@/types';
 import { OpenAIApi } from '@/services/OpenAIService';
 import Stack from '@/components/Stack/Stack';
-import { getMediaCharByMedia } from '@/utils/helpers';
+import { getMediaCharByMedia, parseDetails } from '@/utils/helpers';
 import WindowScrollControls from '@/components/WindowScrollControls/WindowScrollControls';
 import StatusDisplay from '@/components/StatusDisplay/StatusDisplay';
 import SustainabilityDescription from '@/widgets/SustainabilityDescriptions/SustainabilityDescriptions';
-import Sustainability from '@/widgets/Sustainability/Sustainability';
 import classes from './SustainabilityForm.module.scss';
 import Reset from '@/widgets/Reset/Reset';
 import MediaPost from '@/widgets/MediaPost/MediaPost';
-import Medias from '@/consts/medias';
-import Regions from '@/consts/region';
+import Medias, { MEDIAS_OPTIONS } from '@/consts/medias';
+import Regions, { REGIONS_OPTIONS } from '@/consts/region';
 import useAuth from '@/hooks/useAuth';
+import { Field, Form } from 'react-final-form';
+import SelectField from '@/components/SelectField/SelectField';
+import TextArea from '@/components/TextArea/TextArea';
+import Button from '@/components/Button/Button';
+import Image from 'next/image';
+import { usePopup } from '@/contexts/PopupContext';
+import {
+    validateDescription,
+    validateMedia,
+    validateRegion,
+} from '@/utils/validators';
+import { FormApi } from 'final-form';
 
 interface SustainabilityFormProps {
     userInfo: IGreenWashingUser | null;
@@ -29,9 +40,9 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
     const [generatedDescription, setGeneratedDescription] = useState<
         string[] | []
     >([]);
-    const detailsRef = useRef<Details | null>(null);
     const [post, setPost] = useState<string>('');
     const [disabled] = useState<boolean>(false);
+    const { setPopup } = usePopup();
 
     const handleSubmitDescription = async (details: Details) => {
         const resp = (await OpenAIApi.checkRelevanceOfText(
@@ -98,52 +109,236 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
 
         return res;
     };
-    const handleResetClick = () => {
+    const handleResetClick = (form: FormApi, values: Details) => {
+        setGeneratedDescription([]);
+        setPost('');
+        form.reset({ ...values, description: '' });
+    };
+
+    const HEADING_TEXT: string = 'Fill information';
+    const SUBMIT_BUTTON_TEXT: string = 'Check post';
+
+    const countChars = (values: any) => {
+        let countOfChars = 0;
+        const media = parseDetails(values).media;
+        if (media) countOfChars = getMediaCharByMedia(media as Medias);
+        return countOfChars;
+    };
+
+    const handleSubmit = async (
+        values: Record<string, any>,
+        form: FormApi
+    ): Promise<void> => {
+        if ((userInfo?.counter || 0) < 1) {
+            setPopup(PopupVariant.ZERO_CREDITS);
+            return;
+        }
+        const result: Details = parseDetails(values);
+        await handleSubmitDescription(result);
+        form.reset(result);
+    };
+
+    const handleDirtyForm = () => {
         setGeneratedDescription([]);
         setPost('');
     };
 
     return (
         <Paper spacing={1.25} direction="column" className={classes.container}>
-            <Sustainability
-                onSubmitDetails={async (details) => {
-                    handleResetClick();
-                    await handleSubmitDescription(details);
-                }}
-                valuesRef={detailsRef}
-                disabled={disabled}
-                description={generatedDescription[0]}
-                isCounterZero={(userInfo?.counter || 0) < 1}
-            />
-            <>
-                <div id="descriptionsAnchor" className={classes.anchor} />
-                {generatedDescription[0] && (
-                    <SustainabilityDescription
-                        descriptions={generatedDescription}
-                    />
-                )}
-                {post && (
-                    <MediaPost
-                        media={detailsRef.current?.media || ''}
-                        post={post}
-                    />
-                )}
-                {post && <Reset onClick={handleResetClick} />}
-            </>
-            {error && (
-                <Stack
-                    className={classes.errorContainer}
-                    alignItems="center"
-                    justifyContent="center"
-                >
-                    <StatusDisplay
-                        message={error}
-                        severity="warning"
-                        onReset={() => setError(null)}
-                    />
-                </Stack>
-            )}
-            <WindowScrollControls />
+            <div className={classes.sustainabilityContainer}>
+                <Form
+                    validate={(values) => {
+                        return {
+                            media: validateMedia(values.media),
+                            region: validateRegion(values.region),
+                            description: validateDescription(
+                                values.description,
+                                countChars(values)
+                            ),
+                        };
+                    }}
+                    onSubmit={(values, form) => handleSubmit(values, form)}
+                    render={({
+                        form,
+                        handleSubmit,
+                        dirty,
+                        errors,
+                        submitting,
+                        values,
+                    }) => {
+                        return (
+                            <form
+                                onSubmit={handleSubmit}
+                                onChange={() => {
+                                    if (
+                                        dirty &&
+                                        generatedDescription[0] &&
+                                        post
+                                    )
+                                        handleDirtyForm();
+                                }}
+                                className={classes.form}
+                            >
+                                <Paper className={classes.paper}>
+                                    <div className={classes.fieldsContainer}>
+                                        <h2 className={classes.heading}>
+                                            {HEADING_TEXT}
+                                        </h2>
+                                        <div
+                                            className={
+                                                classes.fieldsContainerFirst
+                                            }
+                                        >
+                                            <Field
+                                                name="media"
+                                                defaultValue={
+                                                    MEDIAS_OPTIONS[2].label
+                                                }
+                                                render={({ input, meta }) => (
+                                                    <SelectField
+                                                        tabIndex={1}
+                                                        hasAsterisk
+                                                        label="Select social media platform"
+                                                        options={MEDIAS_OPTIONS}
+                                                        disabled={disabled}
+                                                        isError={
+                                                            meta.touched &&
+                                                            meta.error
+                                                        }
+                                                        helperMessage={
+                                                            meta.touched &&
+                                                            meta.error
+                                                        }
+                                                        {...input}
+                                                    />
+                                                )}
+                                            />
+                                            <Field
+                                                name="region"
+                                                defaultValue={
+                                                    REGIONS_OPTIONS[0].label
+                                                }
+                                                render={({ input, meta }) => (
+                                                    <SelectField
+                                                        tabIndex={1}
+                                                        hasAsterisk
+                                                        label="Select Region"
+                                                        options={
+                                                            REGIONS_OPTIONS
+                                                        }
+                                                        disabled={disabled}
+                                                        isError={
+                                                            meta.touched &&
+                                                            meta.error
+                                                        }
+                                                        helperMessage={
+                                                            meta.touched &&
+                                                            meta.error
+                                                        }
+                                                        {...input}
+                                                    />
+                                                )}
+                                            />
+                                        </div>
+                                        <div
+                                            className={
+                                                classes.fieldsContainerSecond
+                                            }
+                                        >
+                                            <Field
+                                                className={
+                                                    classes.fieldDescription
+                                                }
+                                                name="description"
+                                                render={({ input, meta }) => (
+                                                    <TextArea
+                                                        tabIndex={1}
+                                                        label="Insert your post here"
+                                                        placeholder="Enter text here"
+                                                        disabled={disabled}
+                                                        isError={
+                                                            meta.touched &&
+                                                            meta.error
+                                                        }
+                                                        helperMessage={
+                                                            meta.touched &&
+                                                            meta.error
+                                                        }
+                                                        maxLength={countChars(
+                                                            values
+                                                        )}
+                                                        {...input}
+                                                    />
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
+                                </Paper>
+                                {!generatedDescription?.[0] && (
+                                    <Button
+                                        tabIndex={1}
+                                        type="submit"
+                                        className={classes.button}
+                                        isDisabled={
+                                            !dirty ||
+                                            !!Object.keys(errors || {}).length
+                                        }
+                                        isSubmitting={submitting}
+                                        funnyLoadingMessage
+                                    >
+                                        <Image
+                                            src={'/svg/check.svg'}
+                                            alt={'Check'}
+                                            width={18}
+                                            height={18}
+                                        />
+                                        <span>{SUBMIT_BUTTON_TEXT}</span>
+                                    </Button>
+                                )}
+                                <div
+                                    id="descriptionsAnchor"
+                                    className={classes.anchor}
+                                />
+                                {generatedDescription[0] && (
+                                    <SustainabilityDescription
+                                        descriptions={generatedDescription}
+                                    />
+                                )}
+                                {post && (
+                                    <MediaPost
+                                        media={values.media}
+                                        post={post}
+                                    />
+                                )}
+                                {post && (
+                                    <Reset
+                                        onClick={() =>
+                                            handleResetClick(
+                                                form,
+                                                values as Details
+                                            )
+                                        }
+                                    />
+                                )}
+                                {error && (
+                                    <Stack
+                                        className={classes.errorContainer}
+                                        alignItems="center"
+                                        justifyContent="center"
+                                    >
+                                        <StatusDisplay
+                                            message={error}
+                                            severity="warning"
+                                            onReset={() => setError(null)}
+                                        />
+                                    </Stack>
+                                )}
+                                <WindowScrollControls />
+                            </form>
+                        );
+                    }}
+                />
+            </div>
         </Paper>
     );
 };
