@@ -2,23 +2,17 @@ import React, { ReactElement } from 'react';
 import useAuth from '@/hooks/useAuth';
 import Layout from '@/pages/layout';
 import useSWR from 'swr';
-import axios from '@/utils/axios';
 import { IGreenWashingUser } from '@/types';
 import FullscreenLoader from '@/components/Loader/FullscreenLoader';
 import ActiveSubscription from '@/components/Subscription/ActiveSubscription/ActiveSubscription';
 import PricingTable from '@/components/Subscription/PricingTable/PricingTable';
 
 const HEADING_TEXT = 'Subscription';
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 const Subscription = () => {
     const { user } = useAuth();
     const { data, isLoading } = useSWR<{ result: IGreenWashingUser }>(
-        '/api/sustainabilityMarketing/user',
-        fetcher,
-        {
-            refreshInterval: 5000,
-        }
+        '/api/sustainabilityMarketing/user'
     );
 
     if (isLoading) {
