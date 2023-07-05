@@ -172,7 +172,8 @@ const FirebaseLogin = ({ ...others }) => {
                 >
                     <Box sx={{ mb: 2 }}>
                         <Typography variant="subtitle1">
-                            Login with Email address and magic link
+                            Enter your email to receive a unique link for
+                            instant sign-up / login.
                         </Typography>
                     </Box>
                 </Grid>
