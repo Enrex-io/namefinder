@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import classes from './layout.module.scss';
 import Head from 'next/head';
 import { META } from '@/consts/meta';
-import useSWR, { mutate as swrMutate } from 'swr';
+import useSWR from 'swr';
 import { IGreenWashingUser, PopupVariant, SubscriptionStatus } from '@/types';
 import FullscreenLoader from '@/components/Loader/FullscreenLoader';
 import { useRouter } from 'next/router';
