@@ -208,10 +208,15 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                                 isCounterMinus
                                     ? '0'
                                     : String(
-                                          userInfo?.counter?.toFixed(0) || '5'
+                                          userInfo?.counter?.toFixed(0) || '↺'
                                       )
                             }
-                            className={classes.checksChip}
+                            className={clsx(
+                                classes.checksChip,
+                                !isCounterMinus &&
+                                    !userInfo?.counter?.toFixed(0) &&
+                                    classes.spinAnimation
+                            )}
                         />
                     </li>
                     <li

@@ -8,6 +8,7 @@ import { ReactElement, ReactNode } from 'react';
 import { NextPage } from 'next';
 import { SWRConfig } from 'swr';
 import { PopupProvider } from '@/contexts/PopupContext';
+import axios from '@/utils/axios';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -27,11 +28,9 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
                         <SWRConfig
                             value={{
                                 provider: () => new Map(),
-                                refreshInterval: 10000,
-                                fetcher: (resource, init) =>
-                                    fetch(resource, init).then((res) =>
-                                        res.json()
-                                    ),
+                                refreshInterval: 5000,
+                                fetcher: (url: string) =>
+                                    axios.get(url).then((res) => res.data),
                             }}
                         >
                             {getLayout(<Component {...pageProps} />)}

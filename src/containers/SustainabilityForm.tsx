@@ -25,17 +25,15 @@ import {
     validateRegion,
 } from '@/utils/validators';
 import { FormApi } from 'final-form';
+import useSWR from 'swr';
+interface SustainabilityFormProps {}
 
-interface SustainabilityFormProps {
-    userInfo: IGreenWashingUser | null;
-    setUserInfo: Dispatch<SetStateAction<IGreenWashingUser | null>>;
-}
-
-const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
-    setUserInfo,
-    userInfo,
-}) => {
+const SustainabilityForm: React.FC<SustainabilityFormProps> = () => {
     const { user } = useAuth();
+    const { data, isLoading, mutate } = useSWR<{ result: IGreenWashingUser }>(
+        '/api/sustainabilityMarketing/user'
+    );
+    const userInfo = data?.result;
     const [error, setError] = useState<string | null>(null);
     const [generatedDescription, setGeneratedDescription] = useState<
         string[] | []
@@ -64,7 +62,7 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = ({
 
         const userData = res.result?.userData;
         if (userData) {
-            setUserInfo(userData);
+            mutate({ result: userData });
         }
 
         setError(null);
