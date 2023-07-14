@@ -171,9 +171,18 @@ const FirebaseLogin = ({ ...others }) => {
                     justifyContent="center"
                 >
                     <Box sx={{ mb: 2 }}>
-                        <Typography variant="subtitle1">
-                            Enter your email to receive a unique link for
-                            instant sign-up / login.
+                        <Typography
+                            variant="subtitle1"
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                textAlign: 'center',
+                            }}
+                        >
+                            <span>
+                                Enter your email to receive a unique link
+                            </span>
+                            <span>for instant sign-up / login</span>
                         </Typography>
                     </Box>
                 </Grid>
