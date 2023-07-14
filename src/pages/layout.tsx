@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import classes from './layout.module.scss';
 import Head from 'next/head';
 import { META } from '@/consts/meta';
-import useSWR from 'swr';
+import useSWR, { mutate as swrMutate } from 'swr';
 import { IGreenWashingUser, PopupVariant, SubscriptionStatus } from '@/types';
 import FullscreenLoader from '@/components/Loader/FullscreenLoader';
 import { useRouter } from 'next/router';
@@ -15,6 +15,7 @@ import AuthGuard from '@/utils/route-guard/AuthGuard';
 import useAuth from '@/hooks/useAuth';
 import { GreenWashingUserService } from '@/services/GreenWashingUserService';
 import logger from '@/utils/logger';
+import { AxiosError } from 'axios';
 
 interface ILayout {
     children: React.ReactElement;
@@ -23,9 +24,12 @@ interface ILayout {
 export default function Layout({ children }: ILayout) {
     const router = useRouter();
     const { user } = useAuth();
-    const { data, isLoading, mutate } = useSWR<{ result: IGreenWashingUser }>(
-        user ? '/api/sustainabilityMarketing/user' : null
-    );
+    const { data, isLoading, mutate, error } = useSWR<
+        {
+            result: IGreenWashingUser | null;
+        },
+        AxiosError
+    >(user ? '/api/sustainabilityMarketing/user' : null);
 
     useEffect(() => {
         async function createUser() {
@@ -40,10 +44,10 @@ export default function Layout({ children }: ILayout) {
             }
         }
 
-        if (user && !data?.result) {
+        if (user && error?.response?.status === 500) {
             createUser();
         }
-    }, [user, data, mutate]);
+    }, [user, data, mutate, error]);
 
     const { variant, setPopup, hidePopup } = usePopup();
     const handlePopUp = () => {
