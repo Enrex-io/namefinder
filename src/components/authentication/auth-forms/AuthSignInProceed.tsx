@@ -1,61 +1,27 @@
-import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { FC, useState } from 'react';
 import Link from 'next/link';
 import Logo from '@/components/Logo/Logo';
 import AuthWrapper1 from '@/components/authentication/AuthWrapper1';
 import Grid from '@mui/material/Grid';
 import AuthCardWrapper from '@/components/authentication/AuthCardWrapper';
 import {
-    Button,
     Divider,
     Stack,
     Typography,
     useMediaQuery,
     useTheme,
 } from '@mui/material';
-import useAuth from '@/hooks/useAuth';
-import { useRouter } from 'next/router';
-import { SnackbarContext } from '@/contexts/SnackbarContext';
 import Loader from '@/components/Loader/Loader';
-
+import AuthSignInNewDevice from './AuthSignInNewDevice';
+import AuthSignInSameDevice from './AuthSignInSameDevice';
 interface SingInProceedProps {
     email: string | null;
 }
 
 const SignInProceed: FC<SingInProceedProps> = ({ email }) => {
-    const signInAttempt = useRef(false);
     const [signInLoading, setSignInLoading] = useState(false);
-    const { signInWithEmailLink, firebaseIsNewUser } = useAuth();
-    const router = useRouter();
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-    const { showSnackbar } = useContext(SnackbarContext);
-
-    useEffect(() => {
-        const signIn = async () => {
-            signInAttempt.current = true;
-            setSignInLoading(true);
-            if (!email) {
-                showSnackbar(
-                    'Please open the link on the same device',
-                    'error'
-                );
-                return;
-            }
-            try {
-                await signInWithEmailLink(email, window.location.href);
-                firebaseIsNewUser()
-                    ? await router.push('/welcome')
-                    : await router.push('/');
-            } catch (e) {
-                showSnackbar('Email verification failed', 'error');
-            }
-
-            setSignInLoading(false);
-        };
-        if (!signInAttempt.current) {
-            signIn();
-        }
-    }, [email, router, showSnackbar, signInWithEmailLink]);
 
     return (
         <AuthWrapper1>
@@ -173,22 +139,21 @@ const SignInProceed: FC<SingInProceedProps> = ({ email }) => {
                                                     </Typography>
                                                 </Grid>
                                             </Grid>
-                                            <Grid item xs={12}>
-                                                <Button
-                                                    disableElevation
-                                                    fullWidth
-                                                    size="large"
-                                                    type="submit"
-                                                    variant="outlined"
-                                                    color="secondary"
-                                                    onClick={() => {
-                                                        router.push('/login');
-                                                    }}
-                                                >
-                                                    Sustainability marketing
-                                                    assistant login page
-                                                </Button>
-                                            </Grid>
+                                            {email && (
+                                                <AuthSignInSameDevice
+                                                    email={email}
+                                                    setLoading={(v) =>
+                                                        setSignInLoading(v)
+                                                    }
+                                                />
+                                            )}
+                                            {!email && (
+                                                <AuthSignInNewDevice
+                                                    setLoading={(v) =>
+                                                        setSignInLoading(v)
+                                                    }
+                                                />
+                                            )}
                                         </>
                                     )}
                                 </Grid>
