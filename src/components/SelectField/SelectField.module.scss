@@ -57,3 +57,13 @@
     color: var(--clr-white-main);
   }
 }
+
+.disabled_option {
+  background-color: rgba(0, 0, 1, 0.05);
+  cursor: initial;
+
+  &:hover {
+    background-color: rgba(0, 0, 1, 0.05);
+    color: inherit;
+  }
+}
