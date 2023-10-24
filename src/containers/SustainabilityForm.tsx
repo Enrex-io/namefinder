@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import Paper from '@/components/Paper/Paper';
 import { Details, IGreenWashingUser, PopupVariant } from '@/types';
 import { OpenAIApi } from '@/services/OpenAIService';
@@ -26,6 +26,7 @@ import {
 } from '@/utils/validators';
 import { FormApi } from 'final-form';
 import useSWR from 'swr';
+
 interface SustainabilityFormProps {}
 
 const SustainabilityForm: React.FC<SustainabilityFormProps> = () => {
@@ -190,7 +191,7 @@ const SustainabilityForm: React.FC<SustainabilityFormProps> = () => {
                                             <Field
                                                 name="media"
                                                 defaultValue={
-                                                    MEDIAS_OPTIONS[2].label
+                                                    MEDIAS_OPTIONS[0].label
                                                 }
                                                 render={({ input, meta }) => (
                                                     <SelectField
