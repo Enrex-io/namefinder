@@ -12,6 +12,9 @@ import TextField from '@/components/TextField/TextField';
 import ToggleButton from '@/components/ToggleButton/ToggleButton';
 import { debounce } from '@/utils/debounce';
 import classes from './SelectField.module.scss';
+import { REGIONS_OPTIONS } from '@/consts/region';
+import { MEDIAS_OPTIONS } from '@/consts/medias';
+import clsx from 'clsx';
 
 export type SelectOption = {
     label: string;
@@ -135,8 +138,21 @@ const SelectField = ({
                                 <div
                                     key={option.value}
                                     data-value={option.value}
-                                    onClick={handleSelect}
-                                    className={classes.option}
+                                    onClick={
+                                        option.value ===
+                                            REGIONS_OPTIONS[0].label ||
+                                        option.value === MEDIAS_OPTIONS[0].label
+                                            ? handleSelect
+                                            : () => {}
+                                    }
+                                    className={clsx(
+                                        classes.option,
+                                        option.value !==
+                                            REGIONS_OPTIONS[0].label &&
+                                            option.value !==
+                                                MEDIAS_OPTIONS[0].label &&
+                                            classes.disabled_option
+                                    )}
                                 >
                                     {option.label}
                                 </div>
