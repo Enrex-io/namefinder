@@ -4,7 +4,7 @@ import { REGIONS_OPTIONS } from '@/consts/region';
 export const validateDescription = (value: string, maxChars: number) => {
     if (!value) return 'Text is required';
     if (value.length < 3)
-        return "Description doesn't look like a realDescription";
+        return "Description doesn't look like a real description";
     if (value.length > maxChars) return 'Text is too big';
 };
 
