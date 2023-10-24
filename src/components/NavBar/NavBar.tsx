@@ -3,7 +3,6 @@ import classes from './NavBar.module.scss';
 import Image from 'next/image';
 import {
     IconCirclePlus,
-    IconCreditCard,
     IconHistory,
     IconLogin,
     IconLogout,
@@ -246,20 +245,6 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                                 {user.email || ''}
                             </p>
                         </div>
-                    </li>
-                    <li
-                        className={clsx(
-                            classes.subItemPost,
-                            classes.subItem,
-                            classes.subHover,
-                            pathname === '/subscription' && classes.active
-                        )}
-                        onClick={() => {
-                            push('/subscription');
-                        }}
-                    >
-                        <IconCreditCard color="#091F3D" size={20} />
-                        <p>Subscription</p>
                     </li>
                     <li
                         className={clsx(
