@@ -9,7 +9,7 @@ const local = {
 };
 
 const dev = {
-    g4gUrl: 'https://social-dev.g4green.com',
+    g4gUrl: 'https://dev-10101.greenifs.com',
 };
 
 const test = {
@@ -17,7 +17,7 @@ const test = {
 };
 
 const prod = {
-    g4gUrl: 'https://social.g4green.com',
+    g4gUrl: 'https://app.greenifs.ai',
 };
 
 function getConfig(environment?: string) {
