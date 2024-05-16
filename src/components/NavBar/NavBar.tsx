@@ -8,6 +8,7 @@ import {
     IconLogout,
     IconProgressCheck,
     IconToggleRight,
+    IconArrowBack,
 } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
@@ -17,6 +18,7 @@ import Chip from '@/components/Chip/Chip';
 import UserPhotoPlaceholder from '@/components/UserPhotoPlaceholder/UserPhotoPlaceholder';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import useWindowSize from '@/hooks/useWindowSize';
+import config from '@/config/config';
 
 interface ProfileMenuProps {
     userInfo: IGreenWashingUser | null;
@@ -86,7 +88,7 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
             <div className={classes.logo}>
                 <Image
                     priority={true}
-                    src={'/svg/logo.svg'}
+                    src={'/svg/logog4g.svg'}
                     alt={'Logo'}
                     width={105}
                     height={30}
@@ -253,11 +255,11 @@ function NavBar({ userInfo }: ProfileMenuProps): React.ReactElement {
                             classes.subHover
                         )}
                         onClick={() => {
-                            push('https://greenifs.ai');
+                            push(`${config.g4gUrl}/sustainability-profile`);
                         }}
                     >
-                        <IconToggleRight color="#091F3D" size={20} />
-                        <p>About Greenifs</p>
+                        <IconArrowBack color="#091F3D" size={20} />
+                        <p>Back to G4G</p>
                     </li>
                     <li
                         className={clsx(

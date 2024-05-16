@@ -9,6 +9,8 @@ import { NextPage } from 'next';
 import { SWRConfig } from 'swr';
 import { PopupProvider } from '@/contexts/PopupContext';
 import axios from '@/utils/axios';
+import NextAdapterApp from 'next-query-params/app';
+import { QueryParamProvider } from 'use-query-params';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -25,16 +27,18 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
             <SnackbarProvider>
                 <PopupProvider>
                     <ThemeProvider theme={theme}>
-                        <SWRConfig
-                            value={{
-                                provider: () => new Map(),
-                                refreshInterval: 5000,
-                                fetcher: (url: string) =>
-                                    axios.get(url).then((res) => res.data),
-                            }}
-                        >
-                            {getLayout(<Component {...pageProps} />)}
-                        </SWRConfig>
+                        <QueryParamProvider adapter={NextAdapterApp}>
+                            <SWRConfig
+                                value={{
+                                    provider: () => new Map(),
+                                    refreshInterval: 5000,
+                                    fetcher: (url: string) =>
+                                        axios.get(url).then((res) => res.data),
+                                }}
+                            >
+                                {getLayout(<Component {...pageProps} />)}
+                            </SWRConfig>
+                        </QueryParamProvider>
                     </ThemeProvider>
                 </PopupProvider>
             </SnackbarProvider>
