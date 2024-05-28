@@ -2,6 +2,7 @@ import { isAxiosError } from '@/types/typeGuards';
 import { Details, IGreenWashingUser, IPrompt, ResponsePayload } from '@/types';
 import axios from '../utils/axios';
 import logger from '@/utils/logger';
+import firebase from 'firebase/compat/app';
 
 const DEFAULT_ERROR_MESSAGE =
     'The AI service is experiencing high traffic. Please try again.';
@@ -14,6 +15,7 @@ export class OpenAIApi {
         ResponsePayload<{ text: string; userData: IGreenWashingUser }>
     > => {
         try {
+            const userId = firebase.auth().currentUser?.uid;
             const { description, media, region } = details;
             const response = await axios.post(
                 '/api/sustainabilityMarketing/getAssistedBySustainabilityMarketing',
@@ -24,6 +26,12 @@ export class OpenAIApi {
                         chars,
                         description,
                     },
+                }
+            );
+            await axios.post(
+                `${process.env.NEXT_PUBLIC_G4G_API_URL}/api/activity/used-ai`,
+                {
+                    userId,
                 }
             );
             return response.data;
@@ -63,10 +71,18 @@ export class OpenAIApi {
 
     public static checkRelevanceOfText = async (post: string) => {
         try {
+            const userId = firebase.auth().currentUser?.uid;
             const response = await axios.post(
                 '/api/sustainabilityMarketing/checkRelevanceOfText',
                 { post: post }
             );
+            await axios.post(
+                `${process.env.NEXT_PUBLIC_G4G_API_URL}/api/activity/used-ai`,
+                {
+                    userId,
+                }
+            );
+
             return response.data;
         } catch (error: unknown) {
             logger.error('OpenAIService.checkRelevanceOfText: ', { error });
